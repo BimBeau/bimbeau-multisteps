@@ -1163,7 +1163,7 @@ function isPreviousStepCompleted($current_step) {
 /**
  * Journalise les messages dans un fichier de log spécifique 
  */
-function custom_log($message) { 
+function custom_log($message) {
     // Définir le fuseau horaire pour garantir que les horodatages sont corrects
     date_default_timezone_set('Europe/Paris');
 
@@ -1188,5 +1188,39 @@ function custom_log($message) {
     // Enregistrement du message dans le fichier de journal
     error_log($log_entry, 3, $log_file);
 }
+
+/**
+ * Envoie un email de rappel pour une demande d'estimation.
+ *
+ * @param int|string $uniqueId Identifiant unique lié à la demande d'estimation.
+ */
+function send_estimation_reminder($uniqueId) {
+    // Récupérer les informations stockées avec l'identifiant unique
+    $estimationDetails = get_option('estimation_reminder_' . $uniqueId);
+    if (!$estimationDetails) {
+        error_log("Les détails de l'estimation pour l'ID $uniqueId n'ont pas été récupérés");
+        return;
+    }
+
+    // Extraction des informations
+    $prenom            = htmlspecialchars($estimationDetails['prenom']);
+    $nom               = htmlspecialchars($estimationDetails['nom']);
+    $dateEstimation    = $estimationDetails['dateEstimation'];
+    $emailAdmin        = $estimationDetails['emailAdmin'];
+    $detailsEstimation = $estimationDetails['detailsEstimation'];
+
+    // Construction et envoi de l'email
+    $subjectAdmin = "[Secret Déco] L'estimation travaux de " . $prenom . ' ' . $nom . " est attendue pour le " . $dateEstimation;
+    $headerAdmin  = 'Rappel demande d\'estimation';
+    $startAdmin   = '<h2>Bonjour !</h2><p>Voici les détails de la demande d\'estimation :</p>';
+    $endAdmin     = '<p>Cette personne attend une estimation pour le ' . $dateEstimation . '.</p>';
+    $contentAdmin = $startAdmin . $detailsEstimation . $endAdmin;
+
+    sendCustomEmail($emailAdmin, $subjectAdmin, $contentAdmin, $headerAdmin, false);
+
+    // Nettoyage de l'option temporaire
+    delete_option('estimation_reminder_' . $uniqueId);
+}
+add_action('send_estimation_reminder', 'send_estimation_reminder', 10, 1);
 
 
