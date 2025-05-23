@@ -37,9 +37,9 @@ wp-config.php
 
 # All plugins
 #
-# Note: If you wish to whitelist plugins,
-# uncomment the next line
-#/wp-content/plugins
+# Only track the bimbeau-multisteps plugin
+/wp-content/plugins/*
+!/wp-content/plugins/bimbeau-multisteps/
 
 # All themes
 #
