@@ -36,8 +36,6 @@ add_action('admin_menu', function() {
         'bimbeau_ms_options_page',
         $icon
     );
-});
-
 
     add_submenu_page(
         'bimbeau-multisteps',
@@ -48,7 +46,7 @@ add_action('admin_menu', function() {
         'bimbeau_ms_options_page'
     );
 
-add_submenu_page(
+    add_submenu_page(
         'bimbeau-multisteps',
         'Gérer les étapes',
         'Gérer les étapes',
