@@ -273,7 +273,6 @@ function bimbeau_ms_send_multi_step_reminder($uniqueId) {
     $nom               = htmlspecialchars($multi_stepDetails['nom']);
     $dateMulti_step    = $multi_stepDetails['dateMulti_step'];
     $emailAdmin        = $multi_stepDetails['emailAdmin'];
-    $emailClient       = isset($multi_stepDetails['emailClient']) ? $multi_stepDetails['emailClient'] : '';
     $detailsMulti_step = $multi_stepDetails['detailsMulti_step'];
     $subjectAdmin = str_replace(
         ['{prenom}','{nom}','{date}'],
@@ -288,20 +287,6 @@ function bimbeau_ms_send_multi_step_reminder($uniqueId) {
     );
     bimbeau_ms_sendCustomEmail($emailAdmin, $subjectAdmin, $bodyAdmin, $headerAdmin, false);
 
-    if ($emailClient) {
-        $subjectClient = str_replace(
-            ['{prenom}','{nom}','{date}'],
-            [$prenom, $nom, $dateMulti_step],
-            get_option('bimbeau_ms_reminder_client_subject')
-        );
-        $headerClient = 'Rappel de votre demande';
-        $bodyClient   = str_replace(
-            ['{prenom}','{nom}','{date}','{details}'],
-            [$prenom, $nom, $dateMulti_step, $detailsMulti_step],
-            get_option('bimbeau_ms_reminder_client_body')
-        );
-        bimbeau_ms_sendCustomEmail($emailClient, $subjectClient, $bodyClient, $headerClient, false);
-    }
     delete_option('multi_step_reminder_' . $uniqueId);
 }
 add_action('send_multi_step_reminder', 'bimbeau_ms_send_multi_step_reminder', 10, 1);

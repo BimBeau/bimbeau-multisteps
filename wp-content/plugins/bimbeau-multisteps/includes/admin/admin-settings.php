@@ -197,12 +197,6 @@ function bimbeau_ms_email_page() {
         if (isset($_POST['confirm_admin_body'])) {
             update_option('bimbeau_ms_confirm_admin_body', wp_kses_post($_POST['confirm_admin_body']));
         }
-        if (isset($_POST['reminder_client_subject'])) {
-            update_option('bimbeau_ms_reminder_client_subject', wp_kses_post($_POST['reminder_client_subject']));
-        }
-        if (isset($_POST['reminder_client_body'])) {
-            update_option('bimbeau_ms_reminder_client_body', wp_kses_post($_POST['reminder_client_body']));
-        }
         if (isset($_POST['reminder_admin_subject'])) {
             update_option('bimbeau_ms_reminder_admin_subject', wp_kses_post($_POST['reminder_admin_subject']));
         }
@@ -222,8 +216,6 @@ function bimbeau_ms_email_page() {
     $confirmClientBody     = get_option('bimbeau_ms_confirm_client_body');
     $confirmAdminSubject   = get_option('bimbeau_ms_confirm_admin_subject');
     $confirmAdminBody      = get_option('bimbeau_ms_confirm_admin_body');
-    $reminderClientSubject = get_option('bimbeau_ms_reminder_client_subject');
-    $reminderClientBody    = get_option('bimbeau_ms_reminder_client_body');
     $reminderAdminSubject  = get_option('bimbeau_ms_reminder_admin_subject');
     $reminderAdminBody     = get_option('bimbeau_ms_reminder_admin_body');
     $reminderDays          = get_option('bimbeau_ms_reminder_days_before', 1);
@@ -245,7 +237,7 @@ function bimbeau_ms_email_page() {
                 <table class="form-table" role="presentation">
                     <tr>
                         <th scope="row"><label for="confirm_client_subject">Sujet</label></th>
-                        <td><input type="text" id="confirm_client_subject" name="confirm_client_subject" value="<?php echo esc_attr($confirmClientSubject); ?>" class="regular-text" /></td>
+                        <td><input type="text" id="confirm_client_subject" name="confirm_client_subject" value="<?php echo esc_attr($confirmClientSubject); ?>" class="regular-text" style="width:40em;" /></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="confirm_client_body">Corps</label></th>
@@ -257,7 +249,7 @@ function bimbeau_ms_email_page() {
                 <table class="form-table" role="presentation">
                     <tr>
                         <th scope="row"><label for="confirm_admin_subject">Sujet</label></th>
-                        <td><input type="text" id="confirm_admin_subject" name="confirm_admin_subject" value="<?php echo esc_attr($confirmAdminSubject); ?>" class="regular-text" /></td>
+                        <td><input type="text" id="confirm_admin_subject" name="confirm_admin_subject" value="<?php echo esc_attr($confirmAdminSubject); ?>" class="regular-text" style="width:40em;" /></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="confirm_admin_body">Corps</label></th>
@@ -265,23 +257,11 @@ function bimbeau_ms_email_page() {
                     </tr>
                 </table>
             <?php else : ?>
-                <h2>Rappel Client</h2>
-                <table class="form-table" role="presentation">
-                    <tr>
-                        <th scope="row"><label for="reminder_client_subject">Sujet</label></th>
-                        <td><input type="text" id="reminder_client_subject" name="reminder_client_subject" value="<?php echo esc_attr($reminderClientSubject); ?>" class="regular-text" /></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="reminder_client_body">Corps</label></th>
-                        <td><?php wp_editor($reminderClientBody, 'reminder_client_body_editor', ['textarea_name' => 'reminder_client_body']); ?></td>
-                    </tr>
-                </table>
-
                 <h2>Rappel Admin</h2>
                 <table class="form-table" role="presentation">
                     <tr>
                         <th scope="row"><label for="reminder_admin_subject">Sujet</label></th>
-                        <td><input type="text" id="reminder_admin_subject" name="reminder_admin_subject" value="<?php echo esc_attr($reminderAdminSubject); ?>" class="regular-text" /></td>
+                        <td><input type="text" id="reminder_admin_subject" name="reminder_admin_subject" value="<?php echo esc_attr($reminderAdminSubject); ?>" class="regular-text" style="width:40em;" /></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="reminder_admin_body">Corps</label></th>
