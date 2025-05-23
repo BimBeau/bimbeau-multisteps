@@ -59,14 +59,14 @@ function bimbeau_ms_options_page() {
         return;
     }
     if (isset($_POST['bimbeau_ms_save'])) {
-        update_option('bimbeau_ms_mode', sanitize_text_field($_POST['mode']));
-        update_option('bimbeau_ms_payment_link', sanitize_text_field($_POST['payment_link_prod']));
-        update_option('bimbeau_ms_payment_link_test', sanitize_text_field($_POST['payment_link_test']));
-        update_option('bimbeau_ms_secret_key', sanitize_text_field($_POST['secret_key']));
-        update_option('bimbeau_ms_secret_key_test', sanitize_text_field($_POST['secret_key_test']));
-        update_option('bimbeau_ms_admin_email', sanitize_email($_POST['admin_email']));
-        update_option('bimbeau_ms_menu_label', sanitize_text_field($_POST['menu_label']));
-        update_option('bimbeau_ms_menu_icon', sanitize_text_field($_POST['menu_icon']));
+        update_option('bimbeau_ms_mode', sanitize_text_field(wp_unslash($_POST['mode'])));
+        update_option('bimbeau_ms_payment_link', sanitize_text_field(wp_unslash($_POST['payment_link_prod'])));
+        update_option('bimbeau_ms_payment_link_test', sanitize_text_field(wp_unslash($_POST['payment_link_test'])));
+        update_option('bimbeau_ms_secret_key', sanitize_text_field(wp_unslash($_POST['secret_key'])));
+        update_option('bimbeau_ms_secret_key_test', sanitize_text_field(wp_unslash($_POST['secret_key_test'])));
+        update_option('bimbeau_ms_admin_email', sanitize_email(wp_unslash($_POST['admin_email'])));
+        update_option('bimbeau_ms_menu_label', sanitize_text_field(wp_unslash($_POST['menu_label'])));
+        update_option('bimbeau_ms_menu_icon', sanitize_text_field(wp_unslash($_POST['menu_icon'])));
         echo '<div class="updated"><p>Options enregistrées.</p></div>';
     }
     $mode = get_option('bimbeau_ms_mode', 'PROD');
@@ -137,7 +137,7 @@ function bimbeau_ms_steps_page() {
     $custom_steps = get_option('bimbeau_ms_custom_steps', []);
 
     if (isset($_POST['bimbeau_ms_add_step']) && !empty($_POST['step_name'])) {
-        $step_name = sanitize_text_field($_POST['step_name']);
+        $step_name = sanitize_text_field(wp_unslash($_POST['step_name']));
         $custom_steps[] = $step_name;
         update_option('bimbeau_ms_custom_steps', $custom_steps);
         echo '<div class="updated"><p>Étape ajoutée.</p></div>';
@@ -186,28 +186,28 @@ function bimbeau_ms_email_page() {
 
     if (isset($_POST['bimbeau_ms_save_emails'])) {
         if (isset($_POST['confirm_client_subject'])) {
-            update_option('bimbeau_ms_confirm_client_subject', wp_kses_post($_POST['confirm_client_subject']));
+            update_option('bimbeau_ms_confirm_client_subject', wp_kses_post(wp_unslash($_POST['confirm_client_subject'])));
         }
         if (isset($_POST['confirm_client_body'])) {
-            update_option('bimbeau_ms_confirm_client_body', wp_kses_post($_POST['confirm_client_body']));
+            update_option('bimbeau_ms_confirm_client_body', wp_kses_post(wp_unslash($_POST['confirm_client_body'])));
         }
         if (isset($_POST['confirm_admin_subject'])) {
-            update_option('bimbeau_ms_confirm_admin_subject', wp_kses_post($_POST['confirm_admin_subject']));
+            update_option('bimbeau_ms_confirm_admin_subject', wp_kses_post(wp_unslash($_POST['confirm_admin_subject'])));
         }
         if (isset($_POST['confirm_admin_body'])) {
-            update_option('bimbeau_ms_confirm_admin_body', wp_kses_post($_POST['confirm_admin_body']));
+            update_option('bimbeau_ms_confirm_admin_body', wp_kses_post(wp_unslash($_POST['confirm_admin_body'])));
         }
         if (isset($_POST['reminder_admin_subject'])) {
-            update_option('bimbeau_ms_reminder_admin_subject', wp_kses_post($_POST['reminder_admin_subject']));
+            update_option('bimbeau_ms_reminder_admin_subject', wp_kses_post(wp_unslash($_POST['reminder_admin_subject'])));
         }
         if (isset($_POST['reminder_admin_body'])) {
-            update_option('bimbeau_ms_reminder_admin_body', wp_kses_post($_POST['reminder_admin_body']));
+            update_option('bimbeau_ms_reminder_admin_body', wp_kses_post(wp_unslash($_POST['reminder_admin_body'])));
         }
         if (isset($_POST['reminder_days_before'])) {
-            update_option('bimbeau_ms_reminder_days_before', intval($_POST['reminder_days_before']));
+            update_option('bimbeau_ms_reminder_days_before', intval(wp_unslash($_POST['reminder_days_before'])));
         }
         if (isset($_POST['reminder_time'])) {
-            update_option('bimbeau_ms_reminder_time', sanitize_text_field($_POST['reminder_time']));
+            update_option('bimbeau_ms_reminder_time', sanitize_text_field(wp_unslash($_POST['reminder_time'])));
         }
         echo '<div class="updated"><p>Options enregistrées.</p></div>';
     }
