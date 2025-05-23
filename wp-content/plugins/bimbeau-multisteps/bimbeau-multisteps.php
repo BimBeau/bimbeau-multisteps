@@ -62,3 +62,15 @@ register_activation_hook(__FILE__, function() {
     add_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
 });
 
+function bimbeau_ms_elementor_missing_notice_main() {
+    echo '<div class="notice notice-error"><p>' .
+        'BimBeau MultiSteps requiert le plugin Elementor pour fonctionner.' .
+        '</p></div>';
+}
+
+add_action('admin_init', function () {
+    if (!class_exists('\\Elementor\\Plugin')) {
+        add_action('admin_notices', 'bimbeau_ms_elementor_missing_notice_main');
+    }
+});
+
