@@ -1,0 +1,7 @@
+[2025-05-23 13:19:53] Une erreur est survenue lors de l'envoi des emails.
+Données de la demande :
+
+Date d'estimation : 31/05/2025
+Email Admin : hello@secretdeco.fr
+Email Client : 
+
