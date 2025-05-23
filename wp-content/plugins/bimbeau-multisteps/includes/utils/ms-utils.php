@@ -38,79 +38,79 @@ $GLOBALS['projetOptions'] = [
 $GLOBALS['accompagnementOptions'] = [
     'renovation' => [
         'label'       => 'Rénovation',
-        'description' => 'Cette prestation est pour moi si j\xE2\x80\x99ai besoin de recomposer les volumes, décloisonner, réagencer l\xE2\x80\x99espace intérieur de ma maison ou mon appartement, qu\xE2\x80\x99il soit neuf ou ancien.'
+        'description' => 'Cette prestation est pour moi si j’ai besoin de recomposer les volumes, décloisonner, réagencer l’espace intérieur de ma maison ou mon appartement, qu’il soit neuf ou ancien.'
     ],
     'construction' => [
         'label'       => 'Construction',
-        'description' => 'Cette prestation est pour moi si mon logement est en cours de construction, et que j\xE2\x80\x99ai besoin de conseils pour peaufiner mon projet et faire des choix durables.'
+        'description' => 'Cette prestation est pour moi si mon logement est en cours de construction, et que j’ai besoin de conseils pour peaufiner mon projet et faire des choix durables.'
     ],
     'amenagement' => [
         'label'       => 'Aménagement',
-        'description' => 'Cette prestation est pour moi si j\xE2\x80\x99ai besoin d\xE2\x80\x99aménager et décorer mes espaces existants sans toucher à la structure de ma maison ou de mon appartement.'
+        'description' => 'Cette prestation est pour moi si j’ai besoin d’aménager et décorer mes espaces existants sans toucher à la structure de ma maison ou de mon appartement.'
     ]
 ];
 
 $GLOBALS['superficieOptions'] = [
-    'moins-10'     => '- de 10 m\xC2\xB2',
-    'entre-10-20'  => 'Entre 10 et 20 m\xC2\xB2',
-    'entre-20-30'  => 'Entre 20 et 30 m\xC2\xB2',
-    'entre-30-40'  => 'Entre 30 et 40 m\xC2\xB2',
-    'entre-40-50'  => 'Entre 40 et 50 m\xC2\xB2',
-    'entre-50-60'  => 'Entre 50 et 60 m\xC2\xB2',
-    'entre-60-70'  => 'Entre 60 et 70 m\xC2\xB2',
-    'entre-70-80'  => 'Entre 70 et 80 m\xC2\xB2',
-    'entre-80-90'  => 'Entre 80 et 90 m\xC2\xB2',
-    'entre-90-100' => 'Entre 90 et 100 m\xC2\xB2',
-    'entre-100-110'=> 'Entre 100 et 110 m\xC2\xB2',
-    'entre-110-120'=> 'Entre 110 et 120 m\xC2\xB2',
-    'entre-120-130'=> 'Entre 120 et 130 m\xC2\xB2',
-    'entre-130-140'=> 'Entre 130 et 140 m\xC2\xB2',
-    'entre-140-150'=> 'Entre 140 et 150 m\xC2\xB2',
-    'plus-150'     => '+ de 150 m\xC2\xB2'
+    'moins-10'     => '- de 10 m²',
+    'entre-10-20'  => 'Entre 10 et 20 m²',
+    'entre-20-30'  => 'Entre 20 et 30 m²',
+    'entre-30-40'  => 'Entre 30 et 40 m²',
+    'entre-40-50'  => 'Entre 40 et 50 m²',
+    'entre-50-60'  => 'Entre 50 et 60 m²',
+    'entre-60-70'  => 'Entre 60 et 70 m²',
+    'entre-70-80'  => 'Entre 70 et 80 m²',
+    'entre-80-90'  => 'Entre 80 et 90 m²',
+    'entre-90-100' => 'Entre 90 et 100 m²',
+    'entre-100-110'=> 'Entre 100 et 110 m²',
+    'entre-110-120'=> 'Entre 110 et 120 m²',
+    'entre-120-130'=> 'Entre 120 et 130 m²',
+    'entre-130-140'=> 'Entre 130 et 140 m²',
+    'entre-140-150'=> 'Entre 140 et 150 m²',
+    'plus-150'     => '+ de 150 m²'
 ];
 
 $GLOBALS['besoinsOptions'] = [
     'renovation' => [
         'restructurer-espaces'     => 'Je souhaite restructurer mes espaces intérieurs',
-        'renover-investissement'   => 'Je souhaite rénover mon logement destiné à de l\xE2\x80\x99investissement locatif',
-        'renover-total'            => 'Je souhaite rénover l\xE2\x80\x99intégralité de mon logement',
+        'renover-investissement'   => 'Je souhaite rénover mon logement destiné à de l’investissement locatif',
+        'renover-total'            => 'Je souhaite rénover l’intégralité de mon logement',
         'renover-pieces'           => 'Je souhaite rénover une ou plusieurs pièces : <span class="efs_field_description">salon, salle à manger, chambre, dressing…</span>',
         'renover-pieces-techniques'=> 'Je souhaite rénover une ou plusieurs pièces techniques : <span class="efs_field_description">salle de bains, WC, cuisine, suite parentale, buanderie…</span>',
         'renover-sols'             => 'Je souhaite rénover mes sols',
         'renover-murs'             => 'Je souhaite rénover mes murs',
-        'logement-non-adapte'      => 'Mon logement n\xE2\x80\x99est pas adapté à mes habitudes de vie',
-        'nouveau-bureau-chambre'   => 'J\xE2\x80\x99ai besoin d\xE2\x80\x99un nouveau bureau, d\xE2\x80\x99une nouvelle chambre d\xE2\x80\x99amis…',
-        'support-visuel'           => 'J\xE2\x80\x99ai du mal à me projeter, j\xE2\x80\x99ai besoin d\xE2\x80\x99un support visuel (rendu 3D)',
+        'logement-non-adapte'      => 'Mon logement n’est pas adapté à mes habitudes de vie',
+        'nouveau-bureau-chambre'   => 'J’ai besoin d’un nouveau bureau, d’une nouvelle chambre d’amis…',
+        'support-visuel'           => 'J’ai du mal à me projeter, j’ai besoin d’un support visuel (rendu 3D)',
         'amenager-exterieur'       => 'Je souhaite aussi aménager mon extérieur: <span class="efs_field_description">balcon, terrasse, véranda, jardin, abords de piscine ou autre</span>',
         'liste-deco'               => 'Je souhaite recevoir ma liste personnalisée de références déco & matériaux proposés par Dounia'
     ],
     'construction' => [
-        'configuration-optimale' => 'J\xE2\x80\x99ai besoin d\xE2\x80\x99aide pour trouver la meilleure configuration possible',
-        'repartir-espaces'       => 'J\xE2\x80\x99ai besoin d\xE2\x80\x99aide pour répartir les espaces',
-        'optimiser-investissement' => 'J\xE2\x80\x99ai besoin d\xE2\x80\x99aide pour optimiser un investissement locatif',
-        'choix-materiaux'        => 'J\xE2\x80\x99ai besoin d\xE2\x80\x99aide pour choisir des matériaux de construction au meilleur rapport qualité/prix',
-        'oeil-professionnel'     => 'J\xE2\x80\x99ai besoin d\xE2\x80\x99un œil professionnel pour confirmer mes choix',
-        'trouver-style'          => 'J\xE2\x80\x99ai besoin d\xE2\x80\x99aide pour trouver mon style',
-        'couleurs-interieur'     => 'J\xE2\x80\x99ai besoin d\xE2\x80\x99aide pour mettre des couleurs dans mon intérieur',
-        'eclairage-pieces'       => 'J\xE2\x80\x99ai besoin d\xE2\x80\x99aide pour penser l\xE2\x80\x99éclairage de mes pièces',
-        'maison-chaleureuse'     => 'J\xE2\x80\x99ai besoin d\xE2\x80\x99aide pour rendre ma nouvelle maison chaleureuse',
-        'manque-inspiration'     => 'Je manque d\xE2\x80\x99inspiration pour ma cuisine, mon salon, ma chambre…',
-        'support-visuel'         => 'J\xE2\x80\x99ai du mal à me projeter, j\xE2\x80\x99ai besoin d\xE2\x80\x99un support visuel (rendu 3D)',
+        'configuration-optimale' => 'J’ai besoin d’aide pour trouver la meilleure configuration possible',
+        'repartir-espaces'       => 'J’ai besoin d’aide pour répartir les espaces',
+        'optimiser-investissement' => 'J’ai besoin d’aide pour optimiser un investissement locatif',
+        'choix-materiaux'        => 'J’ai besoin d’aide pour choisir des matériaux de construction au meilleur rapport qualité/prix',
+        'oeil-professionnel'     => 'J’ai besoin d’un œil professionnel pour confirmer mes choix',
+        'trouver-style'          => 'J’ai besoin d’aide pour trouver mon style',
+        'couleurs-interieur'     => 'J’ai besoin d’aide pour mettre des couleurs dans mon intérieur',
+        'eclairage-pieces'       => 'J’ai besoin d’aide pour penser l’éclairage de mes pièces',
+        'maison-chaleureuse'     => 'J’ai besoin d’aide pour rendre ma nouvelle maison chaleureuse',
+        'manque-inspiration'     => 'Je manque d’inspiration pour ma cuisine, mon salon, ma chambre…',
+        'support-visuel'         => 'J’ai du mal à me projeter, j’ai besoin d’un support visuel (rendu 3D)',
         'amenager-exterieur'     => 'Je souhaite aussi aménager mon extérieur : <span class="efs_field_description">balcon, terrasse, véranda, jardin, abords de piscine ou autre</span>',
         'liste-deco'             => 'Je souhaite recevoir ma liste personnalisée de références déco & matériaux proposés par Dounia'
     ],
     'amenagement' => [
         'salon-chambre-cuisine' => 'Mon salon, ma chambre ou ma cuisine ne me plaisent plus',
         'deco-personnelle'      => 'Je veux une déco qui me ressemble',
-        'changement-mobilier'    => 'Je change de mobilier, j\xE2\x80\x99ai besoin d\xE2\x80\x99aide pour faire mon choix',
-        'optimiser-espaces'     => 'J\xE2\x80\x99ai besoin d\xE2\x80\x99optimiser mes espaces',
-        'plus-rangements'       => 'J\xE2\x80\x99ai besoin de plus de rangements',
-        'plus-lumiere'          => 'J\xE2\x80\x99ai besoin de plus de lumière',
-        'evolution-famille'     => 'Ma vie de famille évolue : la famille s\xE2\x80\x99agrandit / les enfants deviennent grands / les enfants quittent le nid',
+        'changement-mobilier'    => 'Je change de mobilier, j’ai besoin d’aide pour faire mon choix',
+        'optimiser-espaces'     => 'J’ai besoin d’optimiser mes espaces',
+        'plus-rangements'       => 'J’ai besoin de plus de rangements',
+        'plus-lumiere'          => 'J’ai besoin de plus de lumière',
+        'evolution-famille'     => 'Ma vie de famille évolue : la famille s’agrandit / les enfants deviennent grands / les enfants quittent le nid',
         'garder-meubles'        => 'Je veux garder certains de mes meubles ou tous mes meubles',
-        'choix-durables'        => 'Je veux m\xE2\x80\x99assurer de faire des choix cohérents et durables',
+        'choix-durables'        => 'Je veux m’assurer de faire des choix cohérents et durables',
         'amenagement-locatif'   => 'Je souhaite aménager mon bien pour un investissement locatif',
-        'support-visuel'        => 'J\xE2\x80\x99ai du mal à me projeter, j\xE2\x80\x99ai besoin d\xE2\x80\x99un support visuel (rendu 3D)',
+        'support-visuel'        => 'J’ai du mal à me projeter, j’ai besoin d’un support visuel (rendu 3D)',
         'amenager-exterieur'    => 'Je souhaite aussi aménager mon extérieur : balcon, terrasse, véranda, jardin, abords de piscine ou autre',
         'liste-deco'            => 'Je souhaite recevoir ma liste personnalisée de références déco & matériaux proposés par Dounia'
     ]
@@ -119,14 +119,14 @@ $GLOBALS['besoinsOptions'] = [
 $GLOBALS['demarrageOptions'] = [
     'des-que-possible' => 'Le plus tôt possible',
     'date-precise'     => 'À une date précise',
-    'non-decide'       => 'Ce n\xE2\x80\x99est pas encore décidé'
+    'non-decide'       => 'Ce n’est pas encore décidé'
 ];
 
 $GLOBALS['budgetOptions'] = [
-    'moins-5000'       => '- de 5 000 \xE2\x82\xAC',
-    'entre-5000-10000' => 'Entre 5 000 \xE2\x82\xAC et 10 000 \xE2\x82\xAC',
-    'entre-10000-20000'=> 'Entre 10 000 \xE2\x82\xAC et 20 000 \xE2\x82\xAC',
-    'plus-20000'       => '+ de 20 000 \xE2\x82\xAC'
+    'moins-5000'       => '- de 5 000 €',
+    'entre-5000-10000' => 'Entre 5 000 € et 10 000 €',
+    'entre-10000-20000'=> 'Entre 10 000 € et 20 000 €',
+    'plus-20000'       => '+ de 20 000 €'
 ];
 
 $GLOBALS['delaiOptions'] = [
