@@ -79,6 +79,10 @@ register_activation_hook(__FILE__, function() {
     add_option('bimbeau_ms_reminder_admin_subject', '[Secret Déco] Rappel : demande de {prenom} {nom} pour le {date}');
     add_option('bimbeau_ms_reminder_admin_body', "<h2>Bonjour !</h2><p>Voici un rappel de la demande :</p>{details}<p>Cette personne attend un retour le {date}.</p>");
 
+    // Options de délai pour le rappel
+    add_option('bimbeau_ms_reminder_days_before', 1);
+    add_option('bimbeau_ms_reminder_time', '10:00');
+
     // Capability for email management (editor and above)
     $role = get_role('editor');
     if ($role && !$role->has_cap('bimbeau_ms_manage_emails')) {
