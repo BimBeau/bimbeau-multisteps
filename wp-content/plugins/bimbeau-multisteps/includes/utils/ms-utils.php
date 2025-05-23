@@ -2,16 +2,18 @@
 // Utility and configuration for BimBeau MultiSteps plugin
 
 // Stripe and general options
-$modeStripe = get_option('bimbeau_ms_mode', 'PROD');
+$modeStripe     = get_option('bimbeau_ms_mode', 'PROD');
+$prodSecretKey  = getenv('BIMBEAU_MS_SECRET_KEY') ?: get_option('bimbeau_ms_secret_key', '');
+$testSecretKey  = getenv('BIMBEAU_MS_SECRET_KEY_TEST') ?: get_option('bimbeau_ms_secret_key_test', '');
 if ($modeStripe === 'PROD') {
     $GLOBALS['stripeOptions'] = [
         'payment-link' => get_option('bimbeau_ms_payment_link', 'https://buy.stripe.com/14k5mzfDf86f7U4cO6'),
-        'secret-key'   => get_option('bimbeau_ms_secret_key', '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')
+        'secret-key'   => $prodSecretKey
     ];
 } else {
     $GLOBALS['stripeOptions'] = [
         'payment-link' => get_option('bimbeau_ms_payment_link_test', 'https://buy.stripe.com/test_bIY2bbckteyjgbm4gg'),
-        'secret-key'   => get_option('bimbeau_ms_secret_key_test', 'sk_test_51JUCdyHKX5FyumXs1WF9dsIgDPgJu2a05VtBgspxxA86CDwrkGy3cPadlSXx9LyZhP5iDitOcQ8m62dvEgsWESoT007cVCjJiA')
+        'secret-key'   => $testSecretKey
     ];
 }
 
