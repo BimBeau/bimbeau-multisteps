@@ -1,27 +1,27 @@
 <?php
-// unset($_SESSION['estimation']);
+// unset($_SESSION['multi_step']);
 require_once dirname(__DIR__) . '/utils/ms-utils.php';
 
 /**
- * Traitement des données des formulaires des pages "Estimation"
+ * Traitement des données des formulaires des pages "Multi_step"
  */
 
-unset($_SESSION['estimation']['errors']);
+unset($_SESSION['multi_step']['errors']);
 
 // Étape 1 - Mon profil
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['step'] == '1') {
     if (empty($_POST['profil'])) {
         // Enregistrer le message d'erreur dans la session
-        $_SESSION['estimation']['errors']['profil'] = 'Veuillez sélectionner une option pour votre profil.';
+        $_SESSION['multi_step']['errors']['profil'] = 'Veuillez sélectionner une option pour votre profil.';
     } else {
         // Nettoyer et stocker la sélection dans la session
-        $_SESSION['estimation']['profil'] = htmlspecialchars($_POST['profil']);
+        $_SESSION['multi_step']['profil'] = htmlspecialchars($_POST['profil']);
     }
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
-    if (empty($_SESSION['estimation']['errors']['profil'])) {
-        wp_safe_redirect(home_url('/estimation/mon-projet/'));
+    if (empty($_SESSION['multi_step']['errors']['profil'])) {
+        wp_safe_redirect(home_url('/multi_step/mon-projet/'));
         exit;
     }
 }
@@ -30,15 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['step'] == '2') {
     if (empty($_POST['projet'])) {
         // Enregistrer le message d'erreur dans la session
-        $_SESSION['estimation']['errors']['projet'] = 'Veuillez sélectionner une option pour votre projet.';
+        $_SESSION['multi_step']['errors']['projet'] = 'Veuillez sélectionner une option pour votre projet.';
     } else {
         // Nettoyer et stocker la sélection dans la session
-        $_SESSION['estimation']['projet'] = htmlspecialchars($_POST['projet']);
+        $_SESSION['multi_step']['projet'] = htmlspecialchars($_POST['projet']);
     }
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
-    if (empty($_SESSION['estimation']['errors']['projet'])) {
-        wp_safe_redirect(home_url('/estimation/mon-accompagnement/'));
+    if (empty($_SESSION['multi_step']['errors']['projet'])) {
+        wp_safe_redirect(home_url('/multi_step/mon-accompagnement/'));
         exit;
     }
 }
@@ -47,23 +47,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['step'] == '3') {
     if (empty($_POST['accompagnement'])) {
         // Enregistrer le message d'erreur dans la session
-        $_SESSION['estimation']['errors']['accompagnement'] = 'Veuillez sélectionner une option pour l\'accompagnement.';
+        $_SESSION['multi_step']['errors']['accompagnement'] = 'Veuillez sélectionner une option pour l\'accompagnement.';
     } else {
         $nouvelAccompagnement = htmlspecialchars($_POST['accompagnement']);
 
         // Vérifier si l'accompagnement a changé
-        if (isset($_SESSION['estimation']['accompagnement']) && $_SESSION['estimation']['accompagnement'] != $nouvelAccompagnement) {
+        if (isset($_SESSION['multi_step']['accompagnement']) && $_SESSION['multi_step']['accompagnement'] != $nouvelAccompagnement) {
             // Réinitialiser les choix de besoins si l'accompagnement a changé
-            unset($_SESSION['estimation']['besoins']);
+            unset($_SESSION['multi_step']['besoins']);
         }
 
         // Mettre à jour l'accompagnement dans la session
-        $_SESSION['estimation']['accompagnement'] = $nouvelAccompagnement;
+        $_SESSION['multi_step']['accompagnement'] = $nouvelAccompagnement;
     }
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
-    if (empty($_SESSION['estimation']['errors']['accompagnement'])) {
-        wp_safe_redirect(home_url('/estimation/mes-besoins/'));
+    if (empty($_SESSION['multi_step']['errors']['accompagnement'])) {
+        wp_safe_redirect(home_url('/multi_step/mes-besoins/'));
         exit;
     }
 }
@@ -71,15 +71,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 // Étape 4 - Mes besoins
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['step'] == '4') {
     if (empty($_POST['besoins']) || !is_array($_POST['besoins'])) {
-        $_SESSION['estimation']['errors']['besoins'] = 'Veuillez sélectionner au moins une option pour vos besoins.';
+        $_SESSION['multi_step']['errors']['besoins'] = 'Veuillez sélectionner au moins une option pour vos besoins.';
     } else {
         // Sécuriser et assigner les besoins
-        $_SESSION['estimation']['besoins'] = array_map('htmlspecialchars', $_POST['besoins']);
+        $_SESSION['multi_step']['besoins'] = array_map('htmlspecialchars', $_POST['besoins']);
     }
 
     // Redirection conditionnelle
-    if (empty($_SESSION['estimation']['errors']['besoins'])) {
-        wp_safe_redirect(home_url('/estimation/informations-complementaires/'));
+    if (empty($_SESSION['multi_step']['errors']['besoins'])) {
+        wp_safe_redirect(home_url('/multi_step/informations-complementaires/'));
         exit;
     }
 }
@@ -88,10 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 // Étape 5 - Informations complémentaires
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['step'] == '5') {
     // Nettoyer la valeur du champ facultatif 'infos-complementaires'
-    $_SESSION['estimation']['infos-complementaires'] = isset($_POST['infos-complementaires']) ? htmlspecialchars($_POST['infos-complementaires']) : '';
+    $_SESSION['multi_step']['infos-complementaires'] = isset($_POST['infos-complementaires']) ? htmlspecialchars($_POST['infos-complementaires']) : '';
 
     // Redirection vers la prochaine étape
-    wp_safe_redirect(home_url('/estimation/superficie/'));
+    wp_safe_redirect(home_url('/multi_step/superficie/'));
     exit;
 }
 
@@ -100,15 +100,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['step'] == '6') {
     if (empty($_POST['superficie'])) {
         // Enregistrer le message d'erreur dans la session
-        $_SESSION['estimation']['errors']['superficie'] = 'Veuillez sélectionner une option pour la superficie.';
+        $_SESSION['multi_step']['errors']['superficie'] = 'Veuillez sélectionner une option pour la superficie.';
     } else {
         // Nettoyer et stocker la sélection dans la session
-        $_SESSION['estimation']['superficie'] = htmlspecialchars($_POST['superficie']);
+        $_SESSION['multi_step']['superficie'] = htmlspecialchars($_POST['superficie']);
     }
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
-    if (empty($_SESSION['estimation']['errors']['superficie'])) {
-        wp_safe_redirect(home_url('/estimation/demarrage/'));
+    if (empty($_SESSION['multi_step']['errors']['superficie'])) {
+        wp_safe_redirect(home_url('/multi_step/demarrage/'));
         exit;
     }
 }
@@ -118,10 +118,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
     $dateDemarrage = null; // Initialisation de $dateDemarrage
 
     if (empty($_POST['delai'])) {
-        $_SESSION['estimation']['errors']['demarrage'] = 'Veuillez sélectionner un délai pour le démarrage du projet.';
+        $_SESSION['multi_step']['errors']['demarrage'] = 'Veuillez sélectionner un délai pour le démarrage du projet.';
     } elseif ($_POST['delai'] === 'date-precise') {
         if (empty($_POST['date-demarrage'])) {
-            $_SESSION['estimation']['errors']['date-demarrage'] = 'Veuillez indiquer la date de démarrage envisagée.';
+            $_SESSION['multi_step']['errors']['date-demarrage'] = 'Veuillez indiquer la date de démarrage envisagée.';
         } else {
             $dateDemarrageTemp = htmlspecialchars($_POST['date-demarrage']);
             $dateDemarrage = DateTime::createFromFormat('Y-m-d', $dateDemarrageTemp); // Création de l'objet DateTime
@@ -129,23 +129,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
             $dateMinimum->modify('+7 days');
 
             if ($dateDemarrage < $dateMinimum) {
-                $_SESSION['estimation']['errors']['date-demarrage'] = 'La date de démarrage doit être au moins 7 jours après la date actuelle.';
+                $_SESSION['multi_step']['errors']['date-demarrage'] = 'La date de démarrage doit être au moins 7 jours après la date actuelle.';
                 $dateDemarrage = null; // Réinitialisation si la date n'est pas valide
             }
         }
     }
 
     // Continuer le traitement si pas d'erreur pour 'date-demarrage'
-    if (!isset($_SESSION['estimation']['errors']['date-demarrage'])) {
-        $_SESSION['estimation']['demarrage'] = [
+    if (!isset($_SESSION['multi_step']['errors']['date-demarrage'])) {
+        $_SESSION['multi_step']['demarrage'] = [
             'delai' => htmlspecialchars($_POST['delai']),
             'date-demarrage' => $dateDemarrage ? $dateDemarrage->format('Y-m-d') : null
         ];
     }
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
-    if (empty($_SESSION['estimation']['errors']['demarrage']) && empty($_SESSION['estimation']['errors']['date-demarrage'])) {
-        wp_safe_redirect(home_url('/estimation/mon-budget/'));
+    if (empty($_SESSION['multi_step']['errors']['demarrage']) && empty($_SESSION['multi_step']['errors']['date-demarrage'])) {
+        wp_safe_redirect(home_url('/multi_step/mon-budget/'));
         exit;
     }
 }
@@ -154,14 +154,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 // Étape 8 - Mon budget
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['step'] == '8') {
     if (empty($_POST['budget'])) {
-        $_SESSION['estimation']['errors']['budget'] = 'Veuillez sélectionner une option pour votre budget.';
+        $_SESSION['multi_step']['errors']['budget'] = 'Veuillez sélectionner une option pour votre budget.';
     } else {
-        $_SESSION['estimation']['budget'] = htmlspecialchars($_POST['budget']);
+        $_SESSION['multi_step']['budget'] = htmlspecialchars($_POST['budget']);
     }
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
-    if (empty($_SESSION['estimation']['errors']['budget'])) {
-        wp_safe_redirect(home_url('/estimation/mes-coordonnees/'));
+    if (empty($_SESSION['multi_step']['errors']['budget'])) {
+        wp_safe_redirect(home_url('/multi_step/mes-coordonnees/'));
         exit;
     }
 }
@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
     $adresse = trim($_POST['adresse']);
 
     // Sauvegarde des valeurs saisies dans la session
-    $_SESSION['estimation']['coordonnees'] = [
+    $_SESSION['multi_step']['coordonnees'] = [
         'prenom' => htmlspecialchars($prenom),
         'nom' => htmlspecialchars($nom),
         'email' => htmlspecialchars($email),
@@ -193,10 +193,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
     if (empty($adresse)) $erreurs['adresse'] = 'L\'adresse est requise.';
 
     if (count($erreurs) === 0) {
-        wp_safe_redirect(home_url('/estimation/envoyer-ma-demande/'));
+        wp_safe_redirect(home_url('/multi_step/envoyer-ma-demande/'));
         exit;
     } else {
-        $_SESSION['estimation']['errors']['coordonnees'] = $erreurs;
+        $_SESSION['multi_step']['errors']['coordonnees'] = $erreurs;
     }
 }
 
@@ -204,9 +204,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 // Étape 10 - Envoyer ma demande
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['step'] == '10') {
     if (empty($_POST['delai'])) {
-        $_SESSION['estimation']['errors']['delai'] = 'Veuillez sélectionner un délai pour recevoir votre estimation.';
+        $_SESSION['multi_step']['errors']['delai'] = 'Veuillez sélectionner un délai pour recevoir votre multi_step.';
     } else {
-        $_SESSION['estimation']['delai'] = htmlspecialchars($_POST['delai']);
+        $_SESSION['multi_step']['delai'] = htmlspecialchars($_POST['delai']);
 
         // Validation de reCAPTCHA v3
         $recaptchaResponse = $_POST['recaptcha_response'];
@@ -215,19 +215,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
         $responseData = json_decode($verifyResponse);
         if (!$responseData->success) {
             // En cas d'échec de la validation reCAPTCHA, définir un message d'erreur
-            $_SESSION['estimation']['errors']['recaptcha'] = 'La vérification reCAPTCHA a échoué. Veuillez réessayer.';
+            $_SESSION['multi_step']['errors']['recaptcha'] = 'La vérification reCAPTCHA a échoué. Veuillez réessayer.';
         }
     }
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
-    if (empty($_SESSION['estimation']['errors'])) {
-        // Ici, vous pouvez implémenter une logique pour traiter les données de l'estimation
+    if (empty($_SESSION['multi_step']['errors'])) {
+        // Ici, vous pouvez implémenter une logique pour traiter les données de l'multi_step
         // Par exemple, envoyer les informations par email ou les enregistrer dans une base de données
 
         // Redirection conditionnelle en fonction du délai
-        if ($_SESSION['estimation']['delai'] === 'standard') {
-            wp_safe_redirect(home_url('/estimation/bravo/'));
-        } elseif ($_SESSION['estimation']['delai'] === 'express') {
+        if ($_SESSION['multi_step']['delai'] === 'standard') {
+            wp_safe_redirect(home_url('/multi_step/bravo/'));
+        } elseif ($_SESSION['multi_step']['delai'] === 'express') {
             wp_safe_redirect($GLOBALS['stripeOptions']['payment-link']);
         }
         exit;
@@ -242,7 +242,7 @@ function bimbeau_ms_elementor_missing_notice() {
         '</p></div>';
 }
 
-function estimation_etape_shortcode($atts) {
+function multi_step_etape_shortcode($atts) {
 
     // Récupération des attributs du shortcode
     $atts = shortcode_atts(array(
@@ -266,7 +266,7 @@ function estimation_etape_shortcode($atts) {
     if (!$elementor_active) {
         if (!bimbeau_ms_isPreviousStepCompleted($etape)) {
             // Script pour vérifier si on est dans l'éditeur Elementor
-            echo '<script>window.location.href = "/estimation/mon-profil/";</script>';
+            echo '<script>window.location.href = "/multi_step/mon-profil/";</script>';
             exit;
         }
     }
@@ -279,11 +279,11 @@ function estimation_etape_shortcode($atts) {
         case '1':
 
             // Récupération du modèle d'affichage des champs du formulaire
-            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4240'); // Estimation Field - Radio Column
+            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4240'); // Multi_step Field - Radio Column
 
-            $profilChoisi = isset($_SESSION['estimation']['profil']) ? $_SESSION['estimation']['profil'] : '';
+            $profilChoisi = isset($_SESSION['multi_step']['profil']) ? $_SESSION['multi_step']['profil'] : '';
 
-            echo '<form id="mon-profil-form" action="" method="POST" class="estimation_form_step efs_columns efs_gap_M">
+            echo '<form id="mon-profil-form" action="" method="POST" class="multi_step_form_step efs_columns efs_gap_M">
                     <input type="hidden" name="step" value="1">';
 
             $animation_delay = 0;
@@ -304,11 +304,11 @@ function estimation_etape_shortcode($atts) {
         case '2':
 
             // Récupération du modèle d'affichage des champs du formulaire
-            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4240'); // Estimation Field - Radio Column
+            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4240'); // Multi_step Field - Radio Column
 
-            $projetChoisi = isset($_SESSION['estimation']['projet']) ? $_SESSION['estimation']['projet'] : '';
+            $projetChoisi = isset($_SESSION['multi_step']['projet']) ? $_SESSION['multi_step']['projet'] : '';
 
-            echo '<form id="mon-projet-form" action="" method="POST" class="estimation_form_step efs_columns efs_gap_M">
+            echo '<form id="mon-projet-form" action="" method="POST" class="multi_step_form_step efs_columns efs_gap_M">
                         <input type="hidden" name="step" value="2">';
 
 
@@ -331,12 +331,12 @@ function estimation_etape_shortcode($atts) {
         case '3':
 
             // Récupération du modèle d'affichage des champs du formulaire
-            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4336'); // Estimation Field – Radio Row
+            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4336'); // Multi_step Field – Radio Row
 
-            $accompagnementChoisi = isset($_SESSION['estimation']['accompagnement']) ? $_SESSION['estimation']['accompagnement'] : '';
+            $accompagnementChoisi = isset($_SESSION['multi_step']['accompagnement']) ? $_SESSION['multi_step']['accompagnement'] : '';
 
 
-            echo '<form id="mon-accompagnement-form" action="" method="POST" class="estimation_form_step efs_rows efs_gap_S">
+            echo '<form id="mon-accompagnement-form" action="" method="POST" class="multi_step_form_step efs_rows efs_gap_S">
                         <input type="hidden" name="step" value="3">';
 
             $animation_delay = 0;
@@ -360,12 +360,12 @@ function estimation_etape_shortcode($atts) {
         case '4':
 
             // Récupération du modèle d'affichage des champs du formulaire
-            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4240'); // Estimation Field - Radio Column
+            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4240'); // Multi_step Field - Radio Column
 
-            $besoinsChoisis = isset($_SESSION['estimation']['besoins']) ? $_SESSION['estimation']['besoins'] : [];
-            $accompagnementChoisi = isset($_SESSION['estimation']['accompagnement']) ? $_SESSION['estimation']['accompagnement'] : '';
+            $besoinsChoisis = isset($_SESSION['multi_step']['besoins']) ? $_SESSION['multi_step']['besoins'] : [];
+            $accompagnementChoisi = isset($_SESSION['multi_step']['accompagnement']) ? $_SESSION['multi_step']['accompagnement'] : '';
 
-            echo '<form id="besoins-form" action="" method="POST" class="estimation_form_step efs_columns efs_gap_S no-icon efs_minheight_S">
+            echo '<form id="besoins-form" action="" method="POST" class="multi_step_form_step efs_columns efs_gap_S no-icon efs_minheight_S">
                         <input type="hidden" name="step" value="4">';
 
             if (array_key_exists($accompagnementChoisi, $GLOBALS['besoinsOptions'])) {
@@ -387,10 +387,10 @@ function estimation_etape_shortcode($atts) {
             break;
 
         case '5':
-            $infosComplementaires = isset($_SESSION['estimation']['infos-complementaires']) ? $_SESSION['estimation']['infos-complementaires'] : '';
+            $infosComplementaires = isset($_SESSION['multi_step']['infos-complementaires']) ? $_SESSION['multi_step']['infos-complementaires'] : '';
 ?>
             <!-- Formulaire pour "Informations complémentaires" (post_id = 3370) -->
-            <form id="informations-complementaires-form" action="" method="POST" class="estimation_form_step efs_flex_column">
+            <form id="informations-complementaires-form" action="" method="POST" class="multi_step_form_step efs_flex_column">
                 <input type="hidden" name="step" value="5">
 
                 <!-- Champ de texte pour les informations complémentaires -->
@@ -405,11 +405,11 @@ function estimation_etape_shortcode($atts) {
         case '6':
 
             // Récupération du modèle d'affichage des champs du formulaire
-            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4336'); // Estimation Field – Radio Row
+            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4336'); // Multi_step Field – Radio Row
 
-            $superficieChoisie = isset($_SESSION['estimation']['superficie']) ? $_SESSION['estimation']['superficie'] : '';
+            $superficieChoisie = isset($_SESSION['multi_step']['superficie']) ? $_SESSION['multi_step']['superficie'] : '';
 
-            echo '<form id="superficie-form" action="" method="POST" class="estimation_form_step efs_columns efs_gap_S no-icon">
+            echo '<form id="superficie-form" action="" method="POST" class="multi_step_form_step efs_columns efs_gap_S no-icon">
                             <input type="hidden" name="step" value="6">';
 
             $animation_delay = 0;
@@ -432,15 +432,15 @@ function estimation_etape_shortcode($atts) {
         case '7':
 
             // Récupération du modèle d'affichage des champs du formulaire
-            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4240'); // Estimation Field - Radio Column
+            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4240'); // Multi_step Field - Radio Column
 
-            $demarrageChoisi = isset($_SESSION['estimation']['demarrage']['delai']) ? $_SESSION['estimation']['demarrage']['delai'] : '';
-            $dateEnvisagee = isset($_SESSION['estimation']['demarrage']['date-demarrage']) ? $_SESSION['estimation']['demarrage']['date-demarrage'] : '';
+            $demarrageChoisi = isset($_SESSION['multi_step']['demarrage']['delai']) ? $_SESSION['multi_step']['demarrage']['delai'] : '';
+            $dateEnvisagee = isset($_SESSION['multi_step']['demarrage']['date-demarrage']) ? $_SESSION['multi_step']['demarrage']['date-demarrage'] : '';
 
             // Calculer la date minimale (aujourd'hui + 7 jours)
             $dateMin = date('Y-m-d', strtotime('+7 days'));
 
-            echo '<form id="demarrage-projet-form" action="" method="POST" class="estimation_form_step efs_columns efs_gap_M">
+            echo '<form id="demarrage-projet-form" action="" method="POST" class="multi_step_form_step efs_columns efs_gap_M">
                           <input type="hidden" name="step" value="7">';
 
 
@@ -471,7 +471,7 @@ function estimation_etape_shortcode($atts) {
                     $(window).on('elementor/frontend/init', function() {
 
                         // Sélectionner l'élément parent et gérer le clic
-                        $(document).on('click', '.estimation_form_step div[data-elementor-type="section"]', function() {
+                        $(document).on('click', '.multi_step_form_step div[data-elementor-type="section"]', function() {
                             var $this = $(this);
 
                             // Trouver le champ enfant
@@ -495,11 +495,11 @@ function estimation_etape_shortcode($atts) {
 
         case '8':
             // Récupération du modèle d'affichage des champs du formulaire
-            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4336'); // Estimation Field – Radio Row
+            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4336'); // Multi_step Field – Radio Row
 
-            $budgetChoisi = isset($_SESSION['estimation']['budget']) ? $_SESSION['estimation']['budget'] : '';
+            $budgetChoisi = isset($_SESSION['multi_step']['budget']) ? $_SESSION['multi_step']['budget'] : '';
 
-            echo '<form id="budget-projet-form" action="" method="POST" class="estimation_form_step efs_rows efs_gap_S no-icon">
+            echo '<form id="budget-projet-form" action="" method="POST" class="multi_step_form_step efs_rows efs_gap_S no-icon">
                         <input type="hidden" name="step" value="8">';
 
             $animation_delay = 0;
@@ -519,7 +519,7 @@ function estimation_etape_shortcode($atts) {
 
 
         case '9':
-            $coordonnees = isset($_SESSION['estimation']['coordonnees']) ? $_SESSION['estimation']['coordonnees'] : [];
+            $coordonnees = isset($_SESSION['multi_step']['coordonnees']) ? $_SESSION['multi_step']['coordonnees'] : [];
             $prenom = isset($coordonnees['prenom']) ? $coordonnees['prenom'] : '';
             $nom = isset($coordonnees['nom']) ? $coordonnees['nom'] : '';
             $email = isset($coordonnees['email']) ? $coordonnees['email'] : '';
@@ -527,7 +527,7 @@ function estimation_etape_shortcode($atts) {
             $adresse = isset($coordonnees['adresse']) ? $coordonnees['adresse'] : '';
         ?>
             <!-- Formulaire pour "Mes coordonnées" (post_id = 3367) -->
-            <form id="mes-coordonnees-form" action="" method="POST" class="estimation_form_step efs_gap_M">
+            <form id="mes-coordonnees-form" action="" method="POST" class="multi_step_form_step efs_gap_M">
                 <input type="hidden" name="step" value="9">
                 <div class="efs_col_50">
                     <label for="prenom">Prénom</label>
@@ -569,14 +569,14 @@ function estimation_etape_shortcode($atts) {
 
         case '10':
             // Récupération du modèle d'affichage des champs du formulaire
-            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4826'); // Estimation Field - Radio Column
+            $radio_column_template = \Elementor\Plugin::$instance->frontend->get_builder_content('4826'); // Multi_step Field - Radio Column
 
-            $delaiChoisi = isset($_SESSION['estimation']['delai']) ? $_SESSION['estimation']['delai'] : '';
+            $delaiChoisi = isset($_SESSION['multi_step']['delai']) ? $_SESSION['multi_step']['delai'] : '';
 
             // Ajout du script reCAPTCHA
             echo '<script src="https://www.google.com/recaptcha/api.js?render=6LdmaecoAAAAADI-XWX738fvkmXIN3Oq0lXqZutN"></script>';
 
-            echo '<form id="envoyer-ma-demande-form" action="" method="POST" class="estimation_form_step efs_columns efs_gap_M">
+            echo '<form id="envoyer-ma-demande-form" action="" method="POST" class="multi_step_form_step efs_columns efs_gap_M">
                           <input type="hidden" name="step" value="10">';
 
             $animation_delay = 0;
@@ -599,7 +599,7 @@ function estimation_etape_shortcode($atts) {
             ?>
                 <style>
                     .stripe-badge,
-                    #estimation-express-submit {
+                    #multi_step-express-submit {
                         display: none;
                     }
                 </style>
@@ -608,7 +608,7 @@ function estimation_etape_shortcode($atts) {
             } else {
             ?>
                 <style>
-                    #estimation-standard-submit {
+                    #multi_step-standard-submit {
                         display: none;
                     }
                 </style>
@@ -632,7 +632,7 @@ function estimation_etape_shortcode($atts) {
                     $(window).on('elementor/frontend/init', function() {
 
                         // Sélectionner l'élément parent et gérer le clic
-                        $(document).on('click', '.estimation_form_step div[data-elementor-type="section"]', function() {
+                        $(document).on('click', '.multi_step_form_step div[data-elementor-type="section"]', function() {
                             var $this = $(this);
 
                             // Trouver le champ enfant
@@ -641,12 +641,12 @@ function estimation_etape_shortcode($atts) {
                             // Mise à jour du texte du bouton en fonction du délai sélectionné
                             if ($field.attr('id') === 'express') {
                                 $('.stripe-badge').show();
-                                $('#estimation-express-submit').show();
-                                $('#estimation-standard-submit').hide();
+                                $('#multi_step-express-submit').show();
+                                $('#multi_step-standard-submit').hide();
                             } else {
                                 $('.stripe-badge').hide();
-                                $('#estimation-express-submit').hide();
-                                $('#estimation-standard-submit').show();
+                                $('#multi_step-express-submit').hide();
+                                $('#multi_step-standard-submit').show();
                             }
                         });
                     });
@@ -694,13 +694,13 @@ function estimation_etape_shortcode($atts) {
             $heureActuelle = (int)$dateDeReponse->format('H');
 
             if (!$elementor_active) {
-                $delai = isset($_SESSION['estimation']['delai']) ? $_SESSION['estimation']['delai'] : '';
+                $delai = isset($_SESSION['multi_step']['delai']) ? $_SESSION['multi_step']['delai'] : '';
                 // Vérification supplémentaire pour le délai express
                 if ($delai === 'express') {
                     // Vérifier la présence du session_id et son validité
                     if (!isset($_GET['session_id']) || !bimbeau_ms_isSessionIdValid($_GET['session_id'])) {
                         // Redirection vers l'étape de paiement avec un message d'erreur
-                        echo '<script>window.location.href = "/estimation/envoyer-ma-demande/?payment-error";</script>';
+                        echo '<script>window.location.href = "/multi_step/envoyer-ma-demande/?payment-error";</script>';
                         exit;
                     }
 
@@ -719,7 +719,7 @@ function estimation_etape_shortcode($atts) {
                     addBusinessDays($dateDeReponse, 7);
                 } else {
                     // Redirection vers l'étape de paiement
-                    wp_safe_redirect(home_url('/estimation/envoyer-ma-demande/'));
+                    wp_safe_redirect(home_url('/multi_step/envoyer-ma-demande/'));
                     exit;
                 }
             } else {
@@ -733,13 +733,13 @@ function estimation_etape_shortcode($atts) {
             }
 
             // Formatage de la date pour l'affichage
-            $dateEstimation = $dateDeReponse->format('d/m/Y');
+            $dateMulti_step = $dateDeReponse->format('d/m/Y');
 
             // Affichage de la date d'envoi
             echo '<div class="efs-info">';
             echo '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>';
             echo '<div>';
-            echo '<p>Vous recevrez votre estimation personnalisée le ' . $dateEstimation . '</p>';
+            echo '<p>Vous recevrez votre multi_step personnalisée le ' . $dateMulti_step . '</p>';
             echo '</div>';
             echo '</div>';
 
@@ -747,53 +747,53 @@ function estimation_etape_shortcode($atts) {
              * Emails transactionnels
              */
 
-            // Détails de la demande d'estimation
-            $estimation = $_SESSION['estimation'];
-            $detailsEstimation = '<h2>Détails de la demande d\'estimation</h2><ul style="padding: 0">';
-            $detailsEstimation .= '<ul style="padding: 0">';
-            $detailsEstimation .= '<li><b>Profil : </b>' . $GLOBALS['profilOptions'][$estimation['profil']] . '</li>';
-            $detailsEstimation .= '<li><b>Projet : </b>' . $GLOBALS['projetOptions'][$estimation['projet']] . '</li>';
-            $detailsEstimation .= '<li><b>Accompagnement : </b>' . $GLOBALS['accompagnementOptions'][$estimation['accompagnement']]['label'] . '</li>';
-            $detailsEstimation .= '<li><b>Superficie de l\'espace concerné : </b>' . $GLOBALS['superficieOptions'][$estimation['superficie']] . '</li>';
-            $detailsEstimation .= '<li><b>Besoins : </b><ul style="padding: 0">';
-            foreach ($estimation['besoins'] as $besoin) {
-                $detailsEstimation .= '<li>' . $GLOBALS['besoinsOptions'][$estimation['accompagnement']][$besoin] . '</li>';
+            // Détails de la demande d'multi_step
+            $multi_step = $_SESSION['multi_step'];
+            $detailsMulti_step = '<h2>Détails de la demande d\'multi_step</h2><ul style="padding: 0">';
+            $detailsMulti_step .= '<ul style="padding: 0">';
+            $detailsMulti_step .= '<li><b>Profil : </b>' . $GLOBALS['profilOptions'][$multi_step['profil']] . '</li>';
+            $detailsMulti_step .= '<li><b>Projet : </b>' . $GLOBALS['projetOptions'][$multi_step['projet']] . '</li>';
+            $detailsMulti_step .= '<li><b>Accompagnement : </b>' . $GLOBALS['accompagnementOptions'][$multi_step['accompagnement']]['label'] . '</li>';
+            $detailsMulti_step .= '<li><b>Superficie de l\'espace concerné : </b>' . $GLOBALS['superficieOptions'][$multi_step['superficie']] . '</li>';
+            $detailsMulti_step .= '<li><b>Besoins : </b><ul style="padding: 0">';
+            foreach ($multi_step['besoins'] as $besoin) {
+                $detailsMulti_step .= '<li>' . $GLOBALS['besoinsOptions'][$multi_step['accompagnement']][$besoin] . '</li>';
             }
-            $detailsEstimation .= '</ul></li>';
-            $detailsEstimation .= '<li><b>Informations complémentaires : </b>' . $estimation['infos-complementaires'] . '</li>';
-            if ($estimation['demarrage']['delai'] === 'date-precise') {
-                $detailsEstimation .= '<li><b>Démarrage : </b>À une date précise, le ' . date('d/m/Y', strtotime($estimation['demarrage']['date-demarrage'])) . '</li>';
+            $detailsMulti_step .= '</ul></li>';
+            $detailsMulti_step .= '<li><b>Informations complémentaires : </b>' . $multi_step['infos-complementaires'] . '</li>';
+            if ($multi_step['demarrage']['delai'] === 'date-precise') {
+                $detailsMulti_step .= '<li><b>Démarrage : </b>À une date précise, le ' . date('d/m/Y', strtotime($multi_step['demarrage']['date-demarrage'])) . '</li>';
             } else {
-                $detailsEstimation .= '<li><b>Démarrage : </b>' . $GLOBALS['demarrageOptions'][$estimation['demarrage']['delai']] . '</li>';
+                $detailsMulti_step .= '<li><b>Démarrage : </b>' . $GLOBALS['demarrageOptions'][$multi_step['demarrage']['delai']] . '</li>';
             }
-            $detailsEstimation .= '<li><b>Budget : </b>' . $GLOBALS['budgetOptions'][$estimation['budget']] . '</li>';
-            $detailsEstimation .= '<li><b>Coordonnées : </b><ul style="padding: 0">';
-            $detailsEstimation .= '<li><b>Prénom : </b>' . $estimation['coordonnees']['prenom'] . '</li>';
-            $detailsEstimation .= '<li><b>Nom : </b>' . $estimation['coordonnees']['nom'] . '</li>';
-            $detailsEstimation .= '<li><b>Email : </b>' . $estimation['coordonnees']['email'] . '</li>';
-            $detailsEstimation .= '<li><b>Téléphone : </b>' . $estimation['coordonnees']['telephone'] . '</li>';
-            $detailsEstimation .= '<li><b>Adresse : </b>' . $estimation['coordonnees']['adresse'] . '</li>';
-            $detailsEstimation .= '</ul></li>';
-            $detailsEstimation .= '<li><b>Délai de réception de l\'estimation : </b>' . $GLOBALS['delaiOptions'][$estimation['delai']] . '</li>';
-            $detailsEstimation .= '</ul>';
+            $detailsMulti_step .= '<li><b>Budget : </b>' . $GLOBALS['budgetOptions'][$multi_step['budget']] . '</li>';
+            $detailsMulti_step .= '<li><b>Coordonnées : </b><ul style="padding: 0">';
+            $detailsMulti_step .= '<li><b>Prénom : </b>' . $multi_step['coordonnees']['prenom'] . '</li>';
+            $detailsMulti_step .= '<li><b>Nom : </b>' . $multi_step['coordonnees']['nom'] . '</li>';
+            $detailsMulti_step .= '<li><b>Email : </b>' . $multi_step['coordonnees']['email'] . '</li>';
+            $detailsMulti_step .= '<li><b>Téléphone : </b>' . $multi_step['coordonnees']['telephone'] . '</li>';
+            $detailsMulti_step .= '<li><b>Adresse : </b>' . $multi_step['coordonnees']['adresse'] . '</li>';
+            $detailsMulti_step .= '</ul></li>';
+            $detailsMulti_step .= '<li><b>Délai de réception de l\'multi_step : </b>' . $GLOBALS['delaiOptions'][$multi_step['delai']] . '</li>';
+            $detailsMulti_step .= '</ul>';
 
-            // Nouvelle demande d'estimation pour l'Administrateur
-            $subjectAdmin = "[Secret Déco] Nouvelle demande d'estimation de travaux attendue le " . $dateEstimation;
-            $headerAdmin = "Nouvelle demande d'estimation";
-            $startAdmin = "<h2>Bonjour !</h2><p>Voici les détails de la demande d'estimation :</p>";
-            $endAdmin = "<p>Cette personne attend une estimation pour le " . $dateEstimation . ". Vous recevrez un rappel 24h avant cette date</p>";
-            $contentAdmin = $startAdmin . $detailsEstimation . $endAdmin;
+            // Nouvelle demande d'multi_step pour l'Administrateur
+            $subjectAdmin = "[Secret Déco] Nouvelle demande d'multi_step de travaux attendue le " . $dateMulti_step;
+            $headerAdmin = "Nouvelle demande d'multi_step";
+            $startAdmin = "<h2>Bonjour !</h2><p>Voici les détails de la demande d'multi_step :</p>";
+            $endAdmin = "<p>Cette personne attend une multi_step pour le " . $dateMulti_step . ". Vous recevrez un rappel 24h avant cette date</p>";
+            $contentAdmin = $startAdmin . $detailsMulti_step . $endAdmin;
             $emailAdmin = $GLOBALS['generalOptions']['admin-email'];
             $emailSentAdmin = bimbeau_ms_sendCustomEmail($emailAdmin, $subjectAdmin, $contentAdmin, $headerAdmin, false);
 
 
-            // Confirmation de votre demande d'estimation pour le Client
-            $subjectClient = "[Secret Déco] Confirmation de votre demande d'estimation de travaux";
+            // Confirmation de votre demande d'multi_step pour le Client
+            $subjectClient = "[Secret Déco] Confirmation de votre demande d'multi_step de travaux";
             $headerClient = "Merci pour votre demande !";
-            $startClient = "<h2>Bonjour " . htmlspecialchars($_SESSION['estimation']['coordonnees']['prenom']) . ",</h2><p>Nous avons bien reçu votre demande d'estimation pour votre projet. Voici un résumé de votre demande :</p>";
-            $endClient = "<p>Nous reviendrons vers vous avec une estimation détaillée le " . $dateEstimation . ".</p><p>Merci pour votre confiance,</p><p>L'équipe Secret Déco</p>";
-            $contentClient = $startClient . $detailsEstimation . $endClient;
-            $emailClient = $_SESSION['estimation']['coordonnees']['email'];
+            $startClient = "<h2>Bonjour " . htmlspecialchars($_SESSION['multi_step']['coordonnees']['prenom']) . ",</h2><p>Nous avons bien reçu votre demande d'multi_step pour votre projet. Voici un résumé de votre demande :</p>";
+            $endClient = "<p>Nous reviendrons vers vous avec une multi_step détaillée le " . $dateMulti_step . ".</p><p>Merci pour votre confiance,</p><p>L'équipe Secret Déco</p>";
+            $contentClient = $startClient . $detailsMulti_step . $endClient;
+            $emailClient = $_SESSION['multi_step']['coordonnees']['email'];
             $emailSentClient = bimbeau_ms_sendCustomEmail($emailClient, $subjectClient, $contentClient, $headerClient, false);
 
 
@@ -801,8 +801,8 @@ function estimation_etape_shortcode($atts) {
             if (!$emailSentAdmin || !$emailSentClient) {
                 // Création d'un message détaillé pour le log
                 $logData = "Une erreur est survenue lors de l'envoi des emails.\n";
-                $logData .= "Données de la demande :\n" . print_r($estimation, true) . "\n";
-                $logData .= "Date d'estimation : " . $dateEstimation . "\n";
+                $logData .= "Données de la demande :\n" . print_r($multi_step, true) . "\n";
+                $logData .= "Date d'multi_step : " . $dateMulti_step . "\n";
                 $logData .= "Email Admin : " . $emailAdmin . "\n";
                 $logData .= "Email Client : " . $emailClient . "\n";
 
@@ -810,7 +810,7 @@ function estimation_etape_shortcode($atts) {
                 bimbeau_ms_custom_log($logData);
 
                 // Redirection vers l'étape de paiement avec un message d'erreur
-                echo '<script>window.location.href = "/estimation/envoyer-ma-demande/?email-error";</script>';
+                echo '<script>window.location.href = "/multi_step/envoyer-ma-demande/?email-error";</script>';
                 exit;
             }
 
@@ -820,30 +820,30 @@ function estimation_etape_shortcode($atts) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             
-            gtag('event', 'demande_estimation', {
-                'event_category': 'Estimation',
-                'event_label': 'Demande d\'estimation envoyée',
+            gtag('event', 'demande_multi_step', {
+                'event_category': 'Multi_step',
+                'event_label': 'Demande d\'multi_step envoyée',
                 'value': 1
             });
             </script>";
 
             // Email de rappel
             $uniqueId = time();
-            $estimationDetails = [
-                'prenom' => $_SESSION['estimation']['coordonnees']['prenom'],
-                'nom' => $_SESSION['estimation']['coordonnees']['nom'],
-                'dateEstimation' => $dateEstimation,
+            $multi_stepDetails = [
+                'prenom' => $_SESSION['multi_step']['coordonnees']['prenom'],
+                'nom' => $_SESSION['multi_step']['coordonnees']['nom'],
+                'dateMulti_step' => $dateMulti_step,
                 'emailAdmin' => $GLOBALS['generalOptions']['admin-email'],
-                'detailsEstimation' => $detailsEstimation
+                'detailsMulti_step' => $detailsMulti_step
             ];
-            update_option('estimation_reminder_' . $uniqueId, $estimationDetails);
+            update_option('multi_step_reminder_' . $uniqueId, $multi_stepDetails);
             $dateRappel = clone $dateDeReponse;
             $dateRappel->modify('-1 day')->setTime(10, 0);
             $reminderTimestamp = $dateRappel->getTimestamp();
-            wp_schedule_single_event($reminderTimestamp, 'send_estimation_reminder', [$uniqueId]);
+            wp_schedule_single_event($reminderTimestamp, 'send_multi_step_reminder', [$uniqueId]);
 
-            // Réinitialise les données de l'estimation
-            unset($_SESSION['estimation']);
+            // Réinitialise les données de l'multi_step
+            unset($_SESSION['multi_step']);
 
             break;
 
@@ -870,11 +870,11 @@ function estimation_etape_shortcode($atts) {
     }
 
     // Afficher les erreurs, le cas échéant
-    if (!empty($_SESSION['estimation']['errors'])) {
+    if (!empty($_SESSION['multi_step']['errors'])) {
         echo '<div class="efs-error">';
         echo '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" style="vertical-align: middle; margin-right: 8px;"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg>';
         echo '<div>';
-        foreach ($_SESSION['estimation']['errors'] as $error) {
+        foreach ($_SESSION['multi_step']['errors'] as $error) {
             if (is_array($error)) {
                 foreach ($error as $errorMessage) {
                     echo '<p>' . $errorMessage . '</p>';
@@ -889,6 +889,6 @@ function estimation_etape_shortcode($atts) {
 
     return ob_get_clean(); // Renvoyer et nettoyer la mémoire tampon
 }
-add_shortcode('estimation_etape', 'estimation_etape_shortcode');
+add_shortcode('multi_step_etape', 'multi_step_etape_shortcode');
 
 

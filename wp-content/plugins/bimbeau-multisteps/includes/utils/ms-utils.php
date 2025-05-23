@@ -177,7 +177,7 @@ function bimbeau_ms_isPreviousStepCompleted($current_step) {
     $previous_step_index = array_search($current_step, array_keys($step_keys)) - 1;
     $previous_step_key   = $step_keys[array_keys($step_keys)[$previous_step_index]];
 
-    return isset($_SESSION['estimation'][$previous_step_key]);
+    return isset($_SESSION['multi_step'][$previous_step_key]);
 }
 
 /**
@@ -185,7 +185,7 @@ function bimbeau_ms_isPreviousStepCompleted($current_step) {
  */
 function bimbeau_ms_custom_log($message) {
     date_default_timezone_set('Europe/Paris');
-    $log_file       = dirname(__FILE__) . '/estimation-log.txt';
+    $log_file       = dirname(__FILE__) . '/multi_step-log.txt';
     $log_size_limit = 5 * 1024 * 1024; // 5 Mo
     if (file_exists($log_file) && filesize($log_file) > $log_size_limit) {
         file_put_contents($log_file, '');
@@ -261,25 +261,25 @@ function bimbeau_ms_sendCustomEmail($to, $subject, $content, $customHeader = '',
 }
 
 /**
- * Envoie un email de rappel pour une demande d'estimation.
+ * Envoie un email de rappel pour une demande d'multi_step.
  */
-function bimbeau_ms_send_estimation_reminder($uniqueId) {
-    $estimationDetails = get_option('estimation_reminder_' . $uniqueId);
-    if (!$estimationDetails) {
-        error_log("Les détails de l'estimation pour l'ID $uniqueId n'ont pas été récupérés");
+function bimbeau_ms_send_multi_step_reminder($uniqueId) {
+    $multi_stepDetails = get_option('multi_step_reminder_' . $uniqueId);
+    if (!$multi_stepDetails) {
+        error_log("Les détails de l'multi_step pour l'ID $uniqueId n'ont pas été récupérés");
         return;
     }
-    $prenom            = htmlspecialchars($estimationDetails['prenom']);
-    $nom               = htmlspecialchars($estimationDetails['nom']);
-    $dateEstimation    = $estimationDetails['dateEstimation'];
-    $emailAdmin        = $estimationDetails['emailAdmin'];
-    $detailsEstimation = $estimationDetails['detailsEstimation'];
-    $subjectAdmin = "[Secret Déco] L'estimation travaux de " . $prenom . ' ' . $nom . " est attendue pour le " . $dateEstimation;
-    $headerAdmin  = 'Rappel demande d\'estimation';
-    $startAdmin   = '<h2>Bonjour !</h2><p>Voici les détails de la demande d\'estimation :</p>';
-    $endAdmin     = '<p>Cette personne attend une estimation pour le ' . $dateEstimation . '.</p>';
-    $contentAdmin = $startAdmin . $detailsEstimation . $endAdmin;
+    $prenom            = htmlspecialchars($multi_stepDetails['prenom']);
+    $nom               = htmlspecialchars($multi_stepDetails['nom']);
+    $dateMulti_step    = $multi_stepDetails['dateMulti_step'];
+    $emailAdmin        = $multi_stepDetails['emailAdmin'];
+    $detailsMulti_step = $multi_stepDetails['detailsMulti_step'];
+    $subjectAdmin = "[Secret Déco] L'multi_step travaux de " . $prenom . ' ' . $nom . " est attendue pour le " . $dateMulti_step;
+    $headerAdmin  = 'Rappel demande d\'multi_step';
+    $startAdmin   = '<h2>Bonjour !</h2><p>Voici les détails de la demande d\'multi_step :</p>';
+    $endAdmin     = '<p>Cette personne attend une multi_step pour le ' . $dateMulti_step . '.</p>';
+    $contentAdmin = $startAdmin . $detailsMulti_step . $endAdmin;
     bimbeau_ms_sendCustomEmail($emailAdmin, $subjectAdmin, $contentAdmin, $headerAdmin, false);
-    delete_option('estimation_reminder_' . $uniqueId);
+    delete_option('multi_step_reminder_' . $uniqueId);
 }
-add_action('send_estimation_reminder', 'bimbeau_ms_send_estimation_reminder', 10, 1);
+add_action('send_multi_step_reminder', 'bimbeau_ms_send_multi_step_reminder', 10, 1);

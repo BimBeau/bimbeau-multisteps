@@ -1,12 +1,12 @@
 .grecaptcha-badge,
-body[data-elementor-device-mode="mobile"] #estimation-standard-submit a .elementor-button-icon,
-body[data-elementor-device-mode="mobile"] #estimation-express-submit a .elementor-button-icon,
-body[data-elementor-device-mode="mobile"] .badge-estimation .elementor-icon-box-content,
-body[data-elementor-device-mode="mobile"] #estimation-prev .elementor-button-text {
+body[data-elementor-device-mode="mobile"] #multi_step-standard-submit a .elementor-button-icon,
+body[data-elementor-device-mode="mobile"] #multi_step-express-submit a .elementor-button-icon,
+body[data-elementor-device-mode="mobile"] .badge-multi_step .elementor-icon-box-content,
+body[data-elementor-device-mode="mobile"] #multi_step-prev .elementor-button-text {
     display: none;
 }
 
-body[data-elementor-device-mode="mobile"] #estimation-prev .elementor-button-link {
+body[data-elementor-device-mode="mobile"] #multi_step-prev .elementor-button-link {
     background-color: var(--e-global-color-cf746cf);
 }
 
@@ -20,22 +20,22 @@ body[data-elementor-device-mode="mobile"] #estimation-prev .elementor-button-lin
     word-spacing: var(--e-global-typography-e459aae-word-spacing);
 }
 
-.estimation_form_step {
+.multi_step_form_step {
     display: flex;
     flex-wrap: wrap;
     margin: 0;
 }
 
-.estimation_form_step .elementor-icon-box-wrapper .elementor-icon-box-icon {
+.multi_step_form_step .elementor-icon-box-wrapper .elementor-icon-box-icon {
     display: block !important;
 }
 
-.estimation_form_step.no-icon .elementor-icon-box-icon,
-.estimation_form_step .elementor-icon-box-wrapper .elementor-icon-box-icon:not(:first-child) {
+.multi_step_form_step.no-icon .elementor-icon-box-icon,
+.multi_step_form_step .elementor-icon-box-wrapper .elementor-icon-box-icon:not(:first-child) {
     display: none !important;
 }
 
-.estimation_form_step.no-icon div[data-elementor-type="section"]>div.elementor-element {
+.multi_step_form_step.no-icon div[data-elementor-type="section"]>div.elementor-element {
     align-items: start;
 }
 
@@ -45,28 +45,28 @@ body[data-elementor-device-mode="mobile"] #estimation-prev .elementor-button-lin
     --minheight_S: 100px;
 }
 
-.estimation_form_step div[data-elementor-type="section"] {
+.multi_step_form_step div[data-elementor-type="section"] {
     display: flex;
 }
 
-#mes-coordonnees-form.estimation_form_step {
+#mes-coordonnees-form.multi_step_form_step {
     margin-bottom: var(--gap_M);
 }
 
-.estimation_form_step.efs_columns div[data-elementor-type="section"] {
+.multi_step_form_step.efs_columns div[data-elementor-type="section"] {
     flex-basis: calc((100% - (var(--gap_M)*2)) / 3);
 }
 
-#mes-coordonnees-form.estimation_form_step>div.efs_col_50,
-body[data-elementor-device-mode="laptop"] #besoins-form.estimation_form_step div[data-elementor-type="section"],
-body[data-elementor-device-mode="tablet"] #besoins-form.estimation_form_step div[data-elementor-type="section"],
-body[data-elementor-device-mode="mobile"] .estimation_form_step.efs_columns div[data-elementor-type="section"] {
+#mes-coordonnees-form.multi_step_form_step>div.efs_col_50,
+body[data-elementor-device-mode="laptop"] #besoins-form.multi_step_form_step div[data-elementor-type="section"],
+body[data-elementor-device-mode="tablet"] #besoins-form.multi_step_form_step div[data-elementor-type="section"],
+body[data-elementor-device-mode="mobile"] .multi_step_form_step.efs_columns div[data-elementor-type="section"] {
     flex-basis: calc((100% - (var(--gap_M)*2)) / 2);
 }
 
-body[data-elementor-device-mode="mobile"] #mes-coordonnees-form.estimation_form_step>div.efs_col_50,
-#mes-coordonnees-form.estimation_form_step>div.efs_col_100,
-body[data-elementor-device-mode="mobile"] #besoins-form.estimation_form_step div[data-elementor-type="section"] {
+body[data-elementor-device-mode="mobile"] #mes-coordonnees-form.multi_step_form_step>div.efs_col_50,
+#mes-coordonnees-form.multi_step_form_step>div.efs_col_100,
+body[data-elementor-device-mode="mobile"] #besoins-form.multi_step_form_step div[data-elementor-type="section"] {
     flex-basis: 100%;
 }
 
@@ -87,7 +87,7 @@ body[data-elementor-device-mode="mobile"] .efs_gap_S {
     flex-direction: column;
 }
 
-.estimation_form_step .efs_field_description {
+.multi_step_form_step .efs_field_description {
     color: var(--e-global-color-84d7aad);
     font-family: var(--e-global-typography-42551c2-font-family), Sans-serif;
     font-size: var(--e-global-typography-42551c2-font-size);
@@ -101,27 +101,27 @@ body[data-elementor-device-mode="mobile"] .efs_gap_S {
 }
 
 /* Masquer les inputs spécifiques */
-.estimation_form_step input[type="radio"],
-.estimation_form_step input[type="checkbox"] {
+.multi_step_form_step input[type="radio"],
+.multi_step_form_step input[type="checkbox"] {
     display: none;
 }
 
 /* Style pour l'élément parent lorsque le champ enfant est actif */
-.estimation_form_step div[data-elementor-type="section"].active>div[data-element_type="container"] {
+.multi_step_form_step div[data-elementor-type="section"].active>div[data-element_type="container"] {
     border-color: var(--e-global-color-text);
     background: var(--e-global-color-cf746cf);
 }
 
-.estimation_form_step.efs_minheight_S div[data-elementor-type="section"]>div[data-element_type="container"] {
+.multi_step_form_step.efs_minheight_S div[data-elementor-type="section"]>div[data-element_type="container"] {
     min-height: var(--minheight_S);
 }
 
-#estimation-next,
-.estimation_form_step div[data-elementor-type="section"] {
+#multi_step-next,
+.multi_step_form_step div[data-elementor-type="section"] {
     cursor: pointer;
 }
 
-.estimation_form_step .custom-input {
+.multi_step_form_step .custom-input {
     display: flex;
     gap: 15px;
     align-items: center;
@@ -129,12 +129,12 @@ body[data-elementor-device-mode="mobile"] .efs_gap_S {
     text-align: left;
 }
 
-.estimation_form_step .custom-input input {
+.multi_step_form_step .custom-input input {
     display: none;
 }
 
-.estimation_form_step .custom-input.custom-input-checkbox::before,
-.estimation_form_step .custom-input.custom-input-radio::before {
+.multi_step_form_step .custom-input.custom-input-checkbox::before,
+.multi_step_form_step .custom-input.custom-input-radio::before {
     content: '';
     display: block;
     width: 22px;
@@ -146,29 +146,29 @@ body[data-elementor-device-mode="mobile"] .efs_gap_S {
     box-shadow: 0 0 0 1px var(--e-global-color-ca7eba9);
 }
 
-.estimation_form_step .custom-input.custom-input-radio::before {
+.multi_step_form_step .custom-input.custom-input-radio::before {
     border-radius: 50%;
 }
 
-.estimation_form_step .custom-input.custom-input-checkbox::before {
+.multi_step_form_step .custom-input.custom-input-checkbox::before {
     border-radius: 5px;
 }
 
-.estimation_form_step div[data-elementor-type="section"].active .custom-input::before {
+.multi_step_form_step div[data-elementor-type="section"].active .custom-input::before {
     background-image: url('../img/check_form.svg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 60%;
 }
 
-.estimation_form_step div[data-elementor-type="section"].active .custom-input::before,
-.estimation_form_step div[data-elementor-type="section"].active .custom-input::before {
+.multi_step_form_step div[data-elementor-type="section"].active .custom-input::before,
+.multi_step_form_step div[data-elementor-type="section"].active .custom-input::before {
     background-color: var(--e-global-color-text);
     border: 3px solid var(--e-global-color-a621b80);
     box-shadow: 0 0 0 1px var(--e-global-color-text);
 }
 
-.estimation_form_step .efs_field_description {
+.multi_step_form_step .efs_field_description {
     color: var(--e-global-color-84d7aad);
     font-family: var(--e-global-typography-42551c2-font-family), Sans-serif;
     font-size: var(--e-global-typography-42551c2-font-size);
@@ -180,7 +180,7 @@ body[data-elementor-device-mode="mobile"] .efs_gap_S {
     word-spacing: var(--e-global-typography-42551c2-word-spacing);
 }
 
-.estimation_form_step label {
+.multi_step_form_step label {
     font-family: var(--e-global-typography-d35e44d-font-family), Sans-serif;
     font-size: var(--e-global-typography-d35e44d-font-size);
     font-weight: var(--e-global-typography-d35e44d-font-weight);
@@ -192,31 +192,31 @@ body[data-elementor-device-mode="mobile"] .efs_gap_S {
     margin: 10px 0;
 }
 
-.estimation_form_step.efs_flex_column {
+.multi_step_form_step.efs_flex_column {
     flex-direction: column;
 }
 
-.estimation_form_step textarea,
-.estimation_form_step input {
+.multi_step_form_step textarea,
+.multi_step_form_step input {
     border-radius: 15px;
     border-color: var(--e-global-color-ca7eba9);
     border-width: 1.5px;
     outline: none;
 }
 
-.estimation_form_step textarea {
+.multi_step_form_step textarea {
     padding: min(calc(2vw + 10px), 70px);
 }
 
-.estimation_form_step textarea:focus,
-.estimation_form_step input:focus {
+.multi_step_form_step textarea:focus,
+.multi_step_form_step input:focus {
     border-color: var(--e-global-color-text);
 }
 
-.estimation_form_step textarea,
-.estimation_form_step textarea::placeholder,
-.estimation_form_step input,
-.estimation_form_step input::placeholder {
+.multi_step_form_step textarea,
+.multi_step_form_step textarea::placeholder,
+.multi_step_form_step input,
+.multi_step_form_step input::placeholder {
     color: var(--e-global-color-text);
     font-family: var(--e-global-typography-text-font-family), Sans-serif;
     font-size: var(--e-global-typography-text-font-size);
@@ -225,8 +225,8 @@ body[data-elementor-device-mode="mobile"] .efs_gap_S {
     line-height: var(--e-global-typography-text-line-height);
 }
 
-.estimation_form_step input::placeholder,
-.estimation_form_step textarea::placeholder {
+.multi_step_form_step input::placeholder,
+.multi_step_form_step textarea::placeholder {
     color: var(--e-global-color-84d7aad);
 }
 
@@ -258,7 +258,7 @@ body[data-elementor-device-mode="mobile"] .efs_gap_S {
     margin: 0;
 }
 
-@keyframes animOutEstimation {
+@keyframes animOutMulti_step {
     from {
         opacity: 1;
     }
@@ -268,6 +268,6 @@ body[data-elementor-device-mode="mobile"] .efs_gap_S {
 }
 
 .efs-animate-out {
-    animation: animOutEstimation 0.6s forwards;
+    animation: animOutMulti_step 0.6s forwards;
 }
 
