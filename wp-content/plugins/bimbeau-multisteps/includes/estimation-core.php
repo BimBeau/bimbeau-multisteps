@@ -384,11 +384,13 @@ function estimation_etape_shortcode($atts) {
     ), $atts);
     $etape = $atts['etape'];
 
-    // Vérifier si nous sommes dans l'éditeur Elementor
+    // Vérifier si nous sommes dans l'éditeur ou en prévisualisation Elementor
     $elementor_preview_active = \Elementor\Plugin::$instance->preview->is_preview_mode();
+    $elementor_edit_mode = \Elementor\Plugin::$instance->editor->is_edit_mode();
+    $elementor_active = $elementor_preview_active || $elementor_edit_mode;
 
     // Vérifier si l'étape précédente a été complétée
-    if (!$elementor_preview_active) {
+    if (!$elementor_active) {
         if (!isPreviousStepCompleted($etape)) {
             // Script pour vérifier si on est dans l'éditeur Elementor
             echo '<script>window.location.href = "/estimation/mon-profil/";</script>';
@@ -818,7 +820,7 @@ function estimation_etape_shortcode($atts) {
             $dateDeReponse = new DateTime(); // Date actuelle
             $heureActuelle = (int)$dateDeReponse->format('H');
 
-            if (!$elementor_preview_active) {
+            if (!$elementor_active) {
                 $delai = isset($_SESSION['estimation']['delai']) ? $_SESSION['estimation']['delai'] : '';
                 // Vérification supplémentaire pour le délai express
                 if ($delai === 'express') {
