@@ -1,0 +1,6 @@
+/* TinyMCE */
+
+#tinymce blockquote {
+    margin: 0;
+    font-weight: bold;
+}

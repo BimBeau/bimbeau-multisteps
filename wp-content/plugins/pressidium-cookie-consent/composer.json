@@ -1,0 +1,84 @@
+{
+    "name": "pressidium/pressidium-cookie-consent",
+    "description": "Lightweight, user-friendly and customizable cookie consent banner to help you comply with the EU GDPR cookie law and CCPA regulations",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "classmap": [
+            "includes/classes"
+        ],
+        "psr-4": {
+            "Pressidium\\WP\\CookieConsent\\": "includes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Konstantinos Pappas",
+            "email": "konpap@pressidium.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/pressidium/pressidium-cookie-consent/issues",
+        "source": "https://github.com/pressidium/pressidium-cookie-consent"
+    },
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.7",
+        "wp-coding-standards/wpcs": "^3.1",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "phpstan/phpstan": "^2.1",
+        "vimeo/psalm": "^5.8",
+        "phpmd/phpmd": "^2.15",
+        "szepeviktor/phpstan-wordpress": "^2.0",
+        "php-stubs/wordpress-stubs": "^6.1",
+        "phpstan/extension-installer": "^1.4",
+        "coenjacobs/mozart": "^0.7.1",
+        "league/container": "^3.4",
+        "ext-json": "*",
+        "psr/log": "^1.1",
+        "phpcsstandards/phpcsutils": "^1.0",
+        "symfony/http-client": "^6.4",
+        "nyholm/psr7": "^1.8",
+        "orhanerday/open-ai": "^5.3",
+        "guzzlehttp/guzzle": "^7.9",
+        "gemini-api-php/client": "^1.7"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "php-http/discovery": true
+        }
+    },
+    "extra": {
+        "mozart": {
+            "dep_namespace": "Pressidium\\WP\\CookieConsent\\Dependencies\\",
+            "dep_directory": "/includes/Dependencies/",
+            "classmap_directory": "/includes/classes/dependencies/",
+            "classmap_prefix": "Pressidium_Cookie_Consent_",
+            "packages": [
+                "league/container",
+                "psr/log",
+                "nyholm/psr7",
+                "guzzlehttp/guzzle",
+                "orhanerday/open-ai",
+                "gemini-api-php/client"
+            ],
+            "delete_vendor_directories": false
+        }
+    },
+    "scripts": {
+        "lint": "./vendor/squizlabs/php_codesniffer/bin/phpcs",
+        "phpstan": "./vendor/bin/phpstan -c phpstan.neon",
+        "post-install-cmd": [
+            "\"vendor/bin/mozart\" compose",
+            "composer dump-autoload"
+        ],
+        "post-update-cmd": [
+            "\"vendor/bin/mozart\" compose",
+            "composer dump-autoload"
+        ]
+    }
+}

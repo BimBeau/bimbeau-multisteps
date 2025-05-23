@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="uuid-e928e6bf-2329-4725-b0be-d050bbd93777" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.41 18.41">
+  <defs>
+    <style>
+      .uuid-c2b0b208-1bec-41c4-af03-6a8ccec34b35 {
+        fill: #50575e;
+      }
+
+      .uuid-c2b0b208-1bec-41c4-af03-6a8ccec34b35, .uuid-0c0347e9-ebf8-4cc9-aff2-1f129a00f2e7 {
+        stroke-width: 0px;
+      }
+
+      .uuid-0c0347e9-ebf8-4cc9-aff2-1f129a00f2e7 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <path class="uuid-c2b0b208-1bec-41c4-af03-6a8ccec34b35" d="m2.28,18.41c-.63,0-1.17-.22-1.61-.67-.44-.44-.67-.98-.67-1.61V2.28c0-.63.22-1.17.67-1.61C1.11.22,1.65,0,2.28,0h13.86c.63,0,1.17.22,1.61.67.44.44.67.98.67,1.61v13.86c0,.63-.22,1.17-.67,1.61-.44.44-.98.67-1.61.67,0,0-13.86,0-13.86,0Z"/>
+  <polygon class="uuid-0c0347e9-ebf8-4cc9-aff2-1f129a00f2e7" points="12.43 11.08 10.01 14.3 6.79 10.01 2.65 15.58 15.76 15.58 12.43 11.08"/>
+  <path class="uuid-0c0347e9-ebf8-4cc9-aff2-1f129a00f2e7" d="m16.17,8.78h-.76v1.22h-1.77v-1.22h-3.48v-1.62l2.44-4.81h1.88l-2.44,4.81h1.6v-1.64h1.77v1.64h.76v1.62Z"/>
+</svg>

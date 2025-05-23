@@ -1,0 +1,134 @@
+.acf-svg-icon-picker__popup * {
+	box-sizing: border-box;
+}
+
+.acf-svg-icon-picker__svg,
+.acf-svg-icon-picker__popup-svg {
+	position: relative;
+	width: 50px;
+	height: 50px;
+}
+
+.acf-svg-icon-picker__popup-svg {
+	margin: 0 auto;
+}
+
+.acf-svg-icon-picker__popup-svg img,
+.acf-svg-icon-picker__svg img {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	display: block;
+	max-width: 50px;
+	max-height: 50px;
+	transform: translate(-50%, -50%);
+}
+
+.acf-svg-icon-picker__img {
+	width: 60px;
+	cursor: pointer;
+}
+
+.acf-svg-icon-picker__popup {
+	overflow: auto;
+	width: 500px;
+	height: 400px;
+	padding: 20px;
+	background-color: #fff;
+	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.acf-svg-icon-picker__popup__title {
+	margin: 0 0 10px;
+	float: left;
+}
+
+.acf-svg-icon-picker__popup__close {
+	display: inline-block;
+	margin: 0 0 10px;
+	float: right;
+}
+
+.acf-svg-icon-picker__popup ul {
+	position: relative;
+	margin: 0;
+}
+
+.acf-svg-icon-picker__popup ul::before,
+.acf-svg-icon-picker__popup ul::after {
+	display: table;
+	width: 100%;
+	content: "";
+}
+
+.acf-svg-icon-picker__popup ul li {
+	position: absolute;
+	width: 25%;
+	padding: 10px;
+	cursor: pointer;
+	float: left;
+}
+
+.acf-svg-icon-picker__popup ul li:nth-child(4n+1) {
+	clear: left;
+}
+
+.acf-svg-icon-picker__popup ul li:hover {
+	background-color: #eee;
+}
+
+.acf-svg-icon-picker__popup ul li span {
+	display: block;
+	margin: 10px auto 0;
+	color: #222;
+	font-size: 12px;
+	text-align: center;
+	text-transform: capitalize;
+}
+
+.acf-svg-icon-picker__popup-holder {
+	position: fixed;
+	z-index: 99999;
+	inset: 0;
+  display: grid;
+	background-color: rgba(0, 0, 0, 0.8);
+  place-items: center;
+}
+
+.acf-svg-icon-picker__svg--span {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	border-radius: 50px;
+	background-color: #eee;
+	color: #aaa;
+	font-size: 20px;
+	font-weight: 300;
+	line-height: 50px;
+	text-align: center;
+}
+
+.acf-svg-icon-picker__svg--span:hover {
+	background-color: #ddd;
+}
+
+.acf-svg-icon-picker__remove {
+	display: none;
+	padding: 2px;
+	border: 1px solid #e1e1e1;
+	margin-top: 5px;
+	background-color: #f4f4f4;
+	cursor: pointer;
+	font-size: 11px;
+	line-height: 1;
+}
+
+.acf-svg-icon-picker__remove--active {
+	display: inline-block;
+}
+
+.acf-svg-icon-picker__filter {
+	width: 100%;
+	padding: 12px;
+	border-radius: 4px;
+}
