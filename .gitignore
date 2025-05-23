@@ -47,3 +47,10 @@ wp-config.php
 # Note: If you wish to whitelist themes,
 # uncomment the next line
 #/wp-content/themes
+
+# Local environment and verification files
+/.private/
+/.well-known/
+/.htaccess.bk
+/google212637494f39f4b4.html
+/pinterest-4945a.html
