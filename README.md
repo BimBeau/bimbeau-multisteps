@@ -1,6 +1,6 @@
 # BimBeau MultiSteps
 
-This plugin powers the multi-step estimation form for Secret Déco.
+This plugin powers the multi-step multi step form for Secret Déco.
 
 ## Stripe configuration
 

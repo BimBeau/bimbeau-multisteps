@@ -3,7 +3,7 @@
 
     $(window).on('elementor/frontend/init', function() {
         function verifierEtActiverClasse() {
-            $('.estimation_form_step div[data-elementor-type="section"]').each(function() {
+            $('.multi_step_form_step div[data-elementor-type="section"]').each(function() {
                 var $this = $(this);
                 var $field = $this.find('input[type="radio"]:checked, input[type="checkbox"]:checked');
                 if ($field.length) {
@@ -13,7 +13,7 @@
         }
         verifierEtActiverClasse();
 
-        $(document).on('click', '.estimation_form_step div[data-elementor-type="section"]', function() {
+        $(document).on('click', '.multi_step_form_step div[data-elementor-type="section"]', function() {
             var $this = $(this);
             var $field = $this.find('input[type="text"], input[type="radio"], input[type="checkbox"], input[type="email"], input[type="date"], input[type="tel"], textarea');
 
@@ -56,12 +56,12 @@
             }
         });
 
-        $('#estimation-next a').on('click', function(e) {
+        $('#multi_step-next a').on('click', function(e) {
             e.preventDefault();
             animateAndRedirect(null, 600, true, false);
         });
 
-        $('#estimation-standard-submit a, #estimation-express-submit a').on('click', function(e) {
+        $('#multi_step-standard-submit a, #multi_step-express-submit a').on('click', function(e) {
             e.preventDefault();
             animateAndRedirect(null, 600, true, true);
         });

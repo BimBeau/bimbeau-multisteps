@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: BimBeau MultiSteps
-Description: Convertit le formulaire d'estimation multi-étapes en plugin administrable.
+Description: Convertit le formulaire multi step multi-étapes en plugin administrable.
 Version: 1.0.0
 Author: BimBeau
 */
@@ -26,7 +26,7 @@ if (is_admin()) require_once BIMBEAU_MS_DIR . 'includes/admin/admin-settings.php
 function bimbeau_ms_enqueue_assets() {
     wp_enqueue_style(
         'bimbeau-ms-style',
-        BIMBEAU_MS_URL . 'assets/css/estimation-form.css',
+        BIMBEAU_MS_URL . 'assets/css/multi_step-form.css',
         [],
         '1.0.0'
     );
@@ -43,7 +43,7 @@ add_action('wp_enqueue_scripts', 'bimbeau_ms_enqueue_assets');
 
 // Chargement du coeur du formulaire après l'initialisation de WordPress
 function bimbeau_ms_load_core() {
-    require_once BIMBEAU_MS_DIR . 'includes/forms/estimation-form.php';
+    require_once BIMBEAU_MS_DIR . 'includes/forms/multi_step-form.php';
 }
 add_action('init', 'bimbeau_ms_load_core');
 
