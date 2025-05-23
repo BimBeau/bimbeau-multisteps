@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
     if (empty($_SESSION['estimation']['errors']['profil'])) {
-        header('Location: /estimation/mon-projet/');
+        wp_safe_redirect(home_url('/estimation/mon-projet/'));
         exit;
     }
 }
@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
     if (empty($_SESSION['estimation']['errors']['projet'])) {
-        header('Location: /estimation/mon-accompagnement/');
+        wp_safe_redirect(home_url('/estimation/mon-accompagnement/'));
         exit;
     }
 }
@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
     if (empty($_SESSION['estimation']['errors']['accompagnement'])) {
-        header('Location: /estimation/mes-besoins/');
+        wp_safe_redirect(home_url('/estimation/mes-besoins/'));
         exit;
     }
 }
@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 
     // Redirection conditionnelle
     if (empty($_SESSION['estimation']['errors']['besoins'])) {
-        header('Location: /estimation/informations-complementaires/');
+        wp_safe_redirect(home_url('/estimation/informations-complementaires/'));
         exit;
     }
 }
@@ -232,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
     $_SESSION['estimation']['infos-complementaires'] = isset($_POST['infos-complementaires']) ? htmlspecialchars($_POST['infos-complementaires']) : '';
 
     // Redirection vers la prochaine étape
-    header('Location: /estimation/superficie/');
+    wp_safe_redirect(home_url('/estimation/superficie/'));
     exit;
 }
 
@@ -249,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
     if (empty($_SESSION['estimation']['errors']['superficie'])) {
-        header('Location: /estimation/demarrage/');
+        wp_safe_redirect(home_url('/estimation/demarrage/'));
         exit;
     }
 }
@@ -286,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
     if (empty($_SESSION['estimation']['errors']['demarrage']) && empty($_SESSION['estimation']['errors']['date-demarrage'])) {
-        header('Location: /estimation/mon-budget/');
+        wp_safe_redirect(home_url('/estimation/mon-budget/'));
         exit;
     }
 }
@@ -302,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 
     // Rediriger uniquement si aucune erreur n'a été trouvée
     if (empty($_SESSION['estimation']['errors']['budget'])) {
-        header('Location: /estimation/mes-coordonnees/');
+        wp_safe_redirect(home_url('/estimation/mes-coordonnees/'));
         exit;
     }
 }
@@ -334,7 +334,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
     if (empty($adresse)) $erreurs['adresse'] = 'L\'adresse est requise.';
 
     if (count($erreurs) === 0) {
-        header('Location: /estimation/envoyer-ma-demande/');
+        wp_safe_redirect(home_url('/estimation/envoyer-ma-demande/'));
         exit;
     } else {
         $_SESSION['estimation']['errors']['coordonnees'] = $erreurs;
@@ -367,9 +367,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 
         // Redirection conditionnelle en fonction du délai
         if ($_SESSION['estimation']['delai'] === 'standard') {
-            header('Location: /estimation/bravo/');
+            wp_safe_redirect(home_url('/estimation/bravo/'));
         } elseif ($_SESSION['estimation']['delai'] === 'express') {
-            header('Location: ' . $GLOBALS['stripeOptions']['payment-link']);
+            wp_safe_redirect($GLOBALS['stripeOptions']['payment-link']);
         }
         exit;
     }
@@ -846,7 +846,7 @@ function estimation_etape_shortcode($atts) {
                     addBusinessDays($dateDeReponse, 7);
                 } else {
                     // Redirection vers l'étape de paiement
-                    header('Location: /estimation/envoyer-ma-demande/');
+                    wp_safe_redirect(home_url('/estimation/envoyer-ma-demande/'));
                     exit;
                 }
             } else {
