@@ -778,23 +778,31 @@ function multi_step_form_shortcode($atts) {
             $detailsMulti_step .= '</ul>';
 
             // Nouvelle demande d'multi_step pour l'Administrateur
-            $subjectAdmin = "[Secret Déco] Nouvelle demande d'multi_step de travaux attendue le " . $dateMulti_step;
+            $subjectAdmin = get_option('bimbeau_ms_confirm_admin_subject');
+            $subjectAdmin = str_replace(['{prenom}','{nom}','{date}'], [$_SESSION['multi_step']['coordonnees']['prenom'], $_SESSION['multi_step']['coordonnees']['nom'], $dateMulti_step], $subjectAdmin);
             $headerAdmin = "Nouvelle demande d'multi_step";
-            $startAdmin = "<h2>Bonjour !</h2><p>Voici les détails de la demande d'multi_step :</p>";
-            $endAdmin = "<p>Cette personne attend une multi_step pour le " . $dateMulti_step . ". Vous recevrez un rappel 24h avant cette date</p>";
-            $contentAdmin = $startAdmin . $detailsMulti_step . $endAdmin;
+            $bodyAdmin = get_option('bimbeau_ms_confirm_admin_body');
+            $bodyAdmin = str_replace(
+                ['{prenom}','{nom}','{date}','{details}'],
+                [$_SESSION['multi_step']['coordonnees']['prenom'], $_SESSION['multi_step']['coordonnees']['nom'], $dateMulti_step, $detailsMulti_step],
+                $bodyAdmin
+            );
             $emailAdmin = $GLOBALS['generalOptions']['admin-email'];
-            $emailSentAdmin = bimbeau_ms_sendCustomEmail($emailAdmin, $subjectAdmin, $contentAdmin, $headerAdmin, false);
+            $emailSentAdmin = bimbeau_ms_sendCustomEmail($emailAdmin, $subjectAdmin, $bodyAdmin, $headerAdmin, false);
 
 
             // Confirmation de votre demande d'multi_step pour le Client
-            $subjectClient = "[Secret Déco] Confirmation de votre demande d'multi_step de travaux";
+            $subjectClient = get_option('bimbeau_ms_confirm_client_subject');
+            $subjectClient = str_replace(['{prenom}','{nom}','{date}'], [$_SESSION['multi_step']['coordonnees']['prenom'], $_SESSION['multi_step']['coordonnees']['nom'], $dateMulti_step], $subjectClient);
             $headerClient = "Merci pour votre demande !";
-            $startClient = "<h2>Bonjour " . htmlspecialchars($_SESSION['multi_step']['coordonnees']['prenom']) . ",</h2><p>Nous avons bien reçu votre demande d'multi_step pour votre projet. Voici un résumé de votre demande :</p>";
-            $endClient = "<p>Nous reviendrons vers vous avec une multi_step détaillée le " . $dateMulti_step . ".</p><p>Merci pour votre confiance,</p><p>L'équipe Secret Déco</p>";
-            $contentClient = $startClient . $detailsMulti_step . $endClient;
+            $bodyClient = get_option('bimbeau_ms_confirm_client_body');
+            $bodyClient = str_replace(
+                ['{prenom}','{nom}','{date}','{details}'],
+                [$_SESSION['multi_step']['coordonnees']['prenom'], $_SESSION['multi_step']['coordonnees']['nom'], $dateMulti_step, $detailsMulti_step],
+                $bodyClient
+            );
             $emailClient = $_SESSION['multi_step']['coordonnees']['email'];
-            $emailSentClient = bimbeau_ms_sendCustomEmail($emailClient, $subjectClient, $contentClient, $headerClient, false);
+            $emailSentClient = bimbeau_ms_sendCustomEmail($emailClient, $subjectClient, $bodyClient, $headerClient, false);
 
 
             // Vérifier si les mails ont bien été envoyés
@@ -834,6 +842,7 @@ function multi_step_form_shortcode($atts) {
                 'nom' => $_SESSION['multi_step']['coordonnees']['nom'],
                 'dateMulti_step' => $dateMulti_step,
                 'emailAdmin' => $GLOBALS['generalOptions']['admin-email'],
+                'emailClient' => $emailClient,
                 'detailsMulti_step' => $detailsMulti_step
             ];
             update_option('multi_step_reminder_' . $uniqueId, $multi_stepDetails);

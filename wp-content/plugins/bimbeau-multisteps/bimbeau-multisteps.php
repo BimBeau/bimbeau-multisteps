@@ -68,6 +68,26 @@ register_activation_hook(__FILE__, function() {
     add_option('bimbeau_ms_admin_email', 'hello@secretdeco.fr');
     add_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
     add_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
+
+    // Default email templates
+    add_option('bimbeau_ms_confirm_client_subject', '[Secret Déco] Confirmation de votre demande');
+    add_option('bimbeau_ms_confirm_client_body', "<h2>Bonjour {prenom},</h2><p>Nous avons bien reçu votre demande. Voici un récapitulatif :</p>{details}<p>Nous reviendrons vers vous avant le {date}.</p>");
+    add_option('bimbeau_ms_confirm_admin_subject', '[Secret Déco] Nouvelle demande de travaux à traiter pour le {date}');
+    add_option('bimbeau_ms_confirm_admin_body', "<h2>Bonjour !</h2><p>Voici les détails de la demande :</p>{details}<p>Cette personne attend un retour pour le {date}. Vous recevrez un rappel 24h avant cette date.</p>");
+    add_option('bimbeau_ms_reminder_client_subject', '[Secret Déco] Rappel de votre demande');
+    add_option('bimbeau_ms_reminder_client_body', "<h2>Bonjour {prenom},</h2><p>Nous vous rappelons que votre demande est en cours. Vous recevrez votre réponse le {date}.</p>");
+    add_option('bimbeau_ms_reminder_admin_subject', '[Secret Déco] Rappel : demande de {prenom} {nom} pour le {date}');
+    add_option('bimbeau_ms_reminder_admin_body', "<h2>Bonjour !</h2><p>Voici un rappel de la demande :</p>{details}<p>Cette personne attend un retour le {date}.</p>");
+
+    // Capability for email management
+    $role = get_role('editor');
+    if ($role && !$role->has_cap('bimbeau_ms_manage_emails')) {
+        $role->add_cap('bimbeau_ms_manage_emails');
+    }
+    $role = get_role('shop_manager');
+    if ($role && !$role->has_cap('bimbeau_ms_manage_emails')) {
+        $role->add_cap('bimbeau_ms_manage_emails');
+    }
 });
 
 function bimbeau_ms_elementor_missing_notice_main() {
