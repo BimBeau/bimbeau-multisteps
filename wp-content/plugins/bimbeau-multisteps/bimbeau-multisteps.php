@@ -21,6 +21,17 @@ add_action('init', function() {
 define('BIMBEAU_MS_DIR', plugin_dir_path(__FILE__));
 define('BIMBEAU_MS_URL', plugin_dir_url(__FILE__));
 
+// Enqueue front-end assets
+function bimbeau_ms_enqueue_assets() {
+    wp_enqueue_style(
+        'bimbeau-ms-style',
+        BIMBEAU_MS_URL . 'assets/css/estimation-form.css',
+        [],
+        '1.0.0'
+    );
+}
+add_action('wp_enqueue_scripts', 'bimbeau_ms_enqueue_assets');
+
 // Chargement du coeur du formulaire
 require_once BIMBEAU_MS_DIR . 'includes/estimation-core.php';
 
