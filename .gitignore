@@ -21,8 +21,7 @@
 wp-config.php
 
 # Example themes
-/wp-content/themes/twenty*/
-/wp-content/themes/hello-bimbeau/
+/wp-content/themes/
 
 # Example plugin
 /wp-content/plugins/hello.php
@@ -35,6 +34,9 @@ wp-config.php
 
 # htaccess
 /.htaccess
+
+# Mu-Plugin
+/wp-content/mu-plugins/
 
 # All plugins
 #
