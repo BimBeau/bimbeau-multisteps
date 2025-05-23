@@ -29,13 +29,15 @@ add_action('admin_menu', function() {
     $label = get_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
     $icon  = get_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
     add_menu_page(
-        'Tableau de bord',
+        'Réglages',
         $label,
         'manage_options',
         'bimbeau-multisteps',
-        'bimbeau_ms_dashboard_page',
+        'bimbeau_ms_options_page',
         $icon
     );
+});
+
 
     add_submenu_page(
         'bimbeau-multisteps',
