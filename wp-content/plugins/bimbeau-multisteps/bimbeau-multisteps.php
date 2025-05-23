@@ -40,8 +40,11 @@ function bimbeau_ms_enqueue_assets() {
 }
 add_action('wp_enqueue_scripts', 'bimbeau_ms_enqueue_assets');
 
-// Chargement du coeur du formulaire
-require_once BIMBEAU_MS_DIR . 'includes/estimation-core.php';
+// Chargement du coeur du formulaire après l'initialisation de WordPress
+function bimbeau_ms_load_core() {
+    require_once BIMBEAU_MS_DIR . 'includes/estimation-core.php';
+}
+add_action('init', 'bimbeau_ms_load_core');
 
 // Création de la page d'options
 add_action('admin_menu', function() {
