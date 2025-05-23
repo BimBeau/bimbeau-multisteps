@@ -273,13 +273,35 @@ function bimbeau_ms_send_multi_step_reminder($uniqueId) {
     $nom               = htmlspecialchars($multi_stepDetails['nom']);
     $dateMulti_step    = $multi_stepDetails['dateMulti_step'];
     $emailAdmin        = $multi_stepDetails['emailAdmin'];
+    $emailClient       = isset($multi_stepDetails['emailClient']) ? $multi_stepDetails['emailClient'] : '';
     $detailsMulti_step = $multi_stepDetails['detailsMulti_step'];
-    $subjectAdmin = "[Secret Déco] L'multi_step travaux de " . $prenom . ' ' . $nom . " est attendue pour le " . $dateMulti_step;
+    $subjectAdmin = str_replace(
+        ['{prenom}','{nom}','{date}'],
+        [$prenom, $nom, $dateMulti_step],
+        get_option('bimbeau_ms_reminder_admin_subject')
+    );
     $headerAdmin  = 'Rappel demande d\'multi_step';
-    $startAdmin   = '<h2>Bonjour !</h2><p>Voici les détails de la demande d\'multi_step :</p>';
-    $endAdmin     = '<p>Cette personne attend une multi_step pour le ' . $dateMulti_step . '.</p>';
-    $contentAdmin = $startAdmin . $detailsMulti_step . $endAdmin;
-    bimbeau_ms_sendCustomEmail($emailAdmin, $subjectAdmin, $contentAdmin, $headerAdmin, false);
+    $bodyAdmin    = str_replace(
+        ['{prenom}','{nom}','{date}','{details}'],
+        [$prenom, $nom, $dateMulti_step, $detailsMulti_step],
+        get_option('bimbeau_ms_reminder_admin_body')
+    );
+    bimbeau_ms_sendCustomEmail($emailAdmin, $subjectAdmin, $bodyAdmin, $headerAdmin, false);
+
+    if ($emailClient) {
+        $subjectClient = str_replace(
+            ['{prenom}','{nom}','{date}'],
+            [$prenom, $nom, $dateMulti_step],
+            get_option('bimbeau_ms_reminder_client_subject')
+        );
+        $headerClient = 'Rappel de votre demande';
+        $bodyClient   = str_replace(
+            ['{prenom}','{nom}','{date}','{details}'],
+            [$prenom, $nom, $dateMulti_step, $detailsMulti_step],
+            get_option('bimbeau_ms_reminder_client_body')
+        );
+        bimbeau_ms_sendCustomEmail($emailClient, $subjectClient, $bodyClient, $headerClient, false);
+    }
     delete_option('multi_step_reminder_' . $uniqueId);
 }
 add_action('send_multi_step_reminder', 'bimbeau_ms_send_multi_step_reminder', 10, 1);
