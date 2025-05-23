@@ -54,6 +54,7 @@ function bimbeau_ms_options_page() {
         update_option('bimbeau_ms_payment_link', sanitize_text_field($_POST['payment_link_prod']));
         update_option('bimbeau_ms_payment_link_test', sanitize_text_field($_POST['payment_link_test']));
         update_option('bimbeau_ms_secret_key', sanitize_text_field($_POST['secret_key']));
+        update_option('bimbeau_ms_secret_key_test', sanitize_text_field($_POST['secret_key_test']));
         update_option('bimbeau_ms_admin_email', sanitize_email($_POST['admin_email']));
         update_option('bimbeau_ms_menu_label', sanitize_text_field($_POST['menu_label']));
         update_option('bimbeau_ms_menu_icon', sanitize_text_field($_POST['menu_icon']));
@@ -62,7 +63,8 @@ function bimbeau_ms_options_page() {
     $mode = get_option('bimbeau_ms_mode', 'PROD');
     $payment_prod = get_option('bimbeau_ms_payment_link', '');
     $payment_test = get_option('bimbeau_ms_payment_link_test', '');
-    $secret = get_option('bimbeau_ms_secret_key', '');
+    $secret       = get_option('bimbeau_ms_secret_key', '');
+    $secret_test  = get_option('bimbeau_ms_secret_key_test', '');
     $admin = get_option('bimbeau_ms_admin_email', '');
     $menu_label = get_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
     $menu_icon  = get_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
@@ -89,8 +91,12 @@ function bimbeau_ms_options_page() {
                     <td><input type="text" id="payment_link_test" name="payment_link_test" value="<?php echo esc_attr($payment_test); ?>" class="regular-text" /></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="secret_key">Secret Key</label></th>
+                    <th scope="row"><label for="secret_key">Secret Key PROD</label></th>
                     <td><input type="text" id="secret_key" name="secret_key" value="<?php echo esc_attr($secret); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="secret_key_test">Secret Key TEST</label></th>
+                    <td><input type="text" id="secret_key_test" name="secret_key_test" value="<?php echo esc_attr($secret_test); ?>" class="regular-text" /></td>
                 </tr>
                 <tr>
                     <th scope="row"><label for="admin_email">Email admin</label></th>

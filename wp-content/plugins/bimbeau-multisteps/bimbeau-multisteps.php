@@ -54,6 +54,7 @@ register_activation_hook(__FILE__, function() {
     add_option('bimbeau_ms_payment_link', 'https://buy.stripe.com/14k5mzfDf86f7U4cO6');
     add_option('bimbeau_ms_payment_link_test', 'https://buy.stripe.com/test_bIY2bbckteyjgbm4gg');
     add_option('bimbeau_ms_secret_key', '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');
+    add_option('bimbeau_ms_secret_key_test', 'sk_test_51JUCdyHKX5FyumXs1WF9dsIgDPgJu2a05VtBgspxxA86CDwrkGy3cPadlSXx9LyZhP5iDitOcQ8m62dvEgsWESoT007cVCjJiA');
     add_option('bimbeau_ms_admin_email', 'hello@secretdeco.fr');
     add_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
     add_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
