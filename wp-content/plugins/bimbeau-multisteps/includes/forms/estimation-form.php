@@ -1,6 +1,6 @@
 <?php
 // unset($_SESSION['estimation']);
-require_once dirname(__DIR__) . '/estimation-utils.php';
+require_once dirname(__DIR__) . '/utils/ms-utils.php';
 
 /**
  * Traitement des données des formulaires des pages "Estimation"
@@ -250,7 +250,7 @@ function estimation_etape_shortcode($atts) {
 
     // Vérifier si l'étape précédente a été complétée
     if (!$elementor_active) {
-        if (!isPreviousStepCompleted($etape)) {
+        if (!bimbeau_ms_isPreviousStepCompleted($etape)) {
             // Script pour vérifier si on est dans l'éditeur Elementor
             echo '<script>window.location.href = "/estimation/mon-profil/";</script>';
             exit;
@@ -684,7 +684,7 @@ function estimation_etape_shortcode($atts) {
                 // Vérification supplémentaire pour le délai express
                 if ($delai === 'express') {
                     // Vérifier la présence du session_id et son validité
-                    if (!isset($_GET['session_id']) || !isSessionIdValid($_GET['session_id'])) {
+                    if (!isset($_GET['session_id']) || !bimbeau_ms_isSessionIdValid($_GET['session_id'])) {
                         // Redirection vers l'étape de paiement avec un message d'erreur
                         echo '<script>window.location.href = "/estimation/envoyer-ma-demande/?payment-error";</script>';
                         exit;
@@ -770,7 +770,7 @@ function estimation_etape_shortcode($atts) {
             $endAdmin = "<p>Cette personne attend une estimation pour le " . $dateEstimation . ". Vous recevrez un rappel 24h avant cette date</p>";
             $contentAdmin = $startAdmin . $detailsEstimation . $endAdmin;
             $emailAdmin = $GLOBALS['generalOptions']['admin-email'];
-            $emailSentAdmin = sendCustomEmail($emailAdmin, $subjectAdmin, $contentAdmin, $headerAdmin, false);
+            $emailSentAdmin = bimbeau_ms_sendCustomEmail($emailAdmin, $subjectAdmin, $contentAdmin, $headerAdmin, false);
 
 
             // Confirmation de votre demande d'estimation pour le Client
@@ -780,7 +780,7 @@ function estimation_etape_shortcode($atts) {
             $endClient = "<p>Nous reviendrons vers vous avec une estimation détaillée le " . $dateEstimation . ".</p><p>Merci pour votre confiance,</p><p>L'équipe Secret Déco</p>";
             $contentClient = $startClient . $detailsEstimation . $endClient;
             $emailClient = $_SESSION['estimation']['coordonnees']['email'];
-            $emailSentClient = sendCustomEmail($emailClient, $subjectClient, $contentClient, $headerClient, false);
+            $emailSentClient = bimbeau_ms_sendCustomEmail($emailClient, $subjectClient, $contentClient, $headerClient, false);
 
 
             // Vérifier si les mails ont bien été envoyés
@@ -793,7 +793,7 @@ function estimation_etape_shortcode($atts) {
                 $logData .= "Email Client : " . $emailClient . "\n";
 
                 // Utilisation de la fonction de log personnalisée
-                custom_log($logData);
+                bimbeau_ms_custom_log($logData);
 
                 // Redirection vers l'étape de paiement avec un message d'erreur
                 echo '<script>window.location.href = "/estimation/envoyer-ma-demande/?email-error";</script>';
