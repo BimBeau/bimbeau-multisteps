@@ -31,6 +31,14 @@ function bimbeau_ms_enqueue_assets() {
         '1.0.0'
     );
 
+    // Force an absolute path for the checkbox tick image
+    wp_add_inline_style(
+        'bimbeau-ms-style',
+        '.multi_step_form_step div[data-elementor-type="section"].active .custom-input::before{' .
+        'background-image:url("' . BIMBEAU_MS_URL . 'assets/img/check_form.svg");'
+        .'}'
+    );
+
     wp_enqueue_script(
         'bimbeau-ms-form-interactions',
         BIMBEAU_MS_URL . 'assets/js/form-interactions.js',
