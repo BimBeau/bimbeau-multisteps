@@ -135,7 +135,7 @@ $GLOBALS['delaiOptions'] = [
 /**
  * Vérifie si un identifiant de session Stripe est valide.
  */
-function isSessionIdValid($session_id) {
+function bimbeau_ms_isSessionIdValid($session_id) {
     $ch = curl_init('https://api.stripe.com/v1/checkout/sessions/' . $session_id);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_USERPWD, $GLOBALS['stripeOptions']['secret-key'] . ':');
@@ -153,7 +153,7 @@ function isSessionIdValid($session_id) {
 /**
  * Vérifie si l\'étape précédente a été complétée.
  */
-function isPreviousStepCompleted($current_step) {
+function bimbeau_ms_isPreviousStepCompleted($current_step) {
     $step_keys = [
         '1'  => 'profil',
         '2'  => 'projet',
@@ -181,7 +181,7 @@ function isPreviousStepCompleted($current_step) {
 /**
  * Journalise les messages dans un fichier de log.
  */
-function custom_log($message) {
+function bimbeau_ms_custom_log($message) {
     date_default_timezone_set('Europe/Paris');
     $log_file       = dirname(__FILE__) . '/estimation-log.txt';
     $log_size_limit = 5 * 1024 * 1024; // 5 Mo
@@ -196,7 +196,7 @@ function custom_log($message) {
 /**
  * Envoie un email HTML personnalisé et log l\'activité.
  */
-function sendCustomEmail($to, $subject, $content, $customHeader = '', $returnHtml = false) {
+function bimbeau_ms_sendCustomEmail($to, $subject, $content, $customHeader = '', $returnHtml = false) {
     global $phpmailer;
     if (isset($phpmailer)) {
         $phpmailer->SMTPDebug = 2;
@@ -261,7 +261,7 @@ function sendCustomEmail($to, $subject, $content, $customHeader = '', $returnHtm
 /**
  * Envoie un email de rappel pour une demande d'estimation.
  */
-function send_estimation_reminder($uniqueId) {
+function bimbeau_ms_send_estimation_reminder($uniqueId) {
     $estimationDetails = get_option('estimation_reminder_' . $uniqueId);
     if (!$estimationDetails) {
         error_log("Les détails de l'estimation pour l'ID $uniqueId n'ont pas été récupérés");
@@ -277,7 +277,7 @@ function send_estimation_reminder($uniqueId) {
     $startAdmin   = '<h2>Bonjour !</h2><p>Voici les détails de la demande d\'estimation :</p>';
     $endAdmin     = '<p>Cette personne attend une estimation pour le ' . $dateEstimation . '.</p>';
     $contentAdmin = $startAdmin . $detailsEstimation . $endAdmin;
-    sendCustomEmail($emailAdmin, $subjectAdmin, $contentAdmin, $headerAdmin, false);
+    bimbeau_ms_sendCustomEmail($emailAdmin, $subjectAdmin, $contentAdmin, $headerAdmin, false);
     delete_option('estimation_reminder_' . $uniqueId);
 }
-add_action('send_estimation_reminder', 'send_estimation_reminder', 10, 1);
+add_action('send_estimation_reminder', 'bimbeau_ms_send_estimation_reminder', 10, 1);
