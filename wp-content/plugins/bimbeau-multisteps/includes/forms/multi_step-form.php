@@ -242,7 +242,7 @@ function bimbeau_ms_elementor_missing_notice() {
         '</p></div>';
 }
 
-function multi_step_etape_shortcode($atts) {
+function multi_step_form_shortcode($atts) {
 
     // Récupération des attributs du shortcode
     $atts = shortcode_atts(array(
@@ -889,6 +889,6 @@ function multi_step_etape_shortcode($atts) {
 
     return ob_get_clean(); // Renvoyer et nettoyer la mémoire tampon
 }
-add_shortcode('multi_step_etape', 'multi_step_etape_shortcode');
+add_shortcode('multi_step_form', 'multi_step_form_shortcode');
 
 
