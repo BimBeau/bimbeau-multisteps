@@ -1,0 +1,14 @@
+[2025-05-23 21:08:53] Une erreur est survenue lors de l'envoi des emails.
+Données de la demande :
+
+Date d'multi_step : 02/06/2025
+Email Admin : dev@bimbeau.fr
+Email Client : 
+
+[2025-05-23 21:17:24] Une erreur est survenue lors de l'envoi des emails.
+Données de la demande :
+
+Date d'multi_step : 02/06/2025
+Email Admin : dev@bimbeau.fr
+Email Client : 
+
