@@ -1,6 +1,6 @@
 <?php
 // unset($_SESSION['estimation']);
-require_once __DIR__ . '/estimation-utils.php';
+require_once dirname(__DIR__) . '/estimation-utils.php';
 
 /**
  * Traitement des données des formulaires des pages "Estimation"
