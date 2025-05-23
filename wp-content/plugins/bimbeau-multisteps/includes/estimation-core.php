@@ -1190,6 +1190,117 @@ function custom_log($message) {
 }
 
 /**
+ * Envoie un email transactionnel personnalisé avec logs détaillés en cas d'échec.
+ *
+ * @param string  $to         Adresse email du destinataire.
+ * @param string  $subject    Sujet de l'email.
+ * @param string  $content    Contenu de l'email.
+ * @param string  $customHeader Texte personnalisé affiché dans l'en-tête de l'email.
+ * @param bool    $returnHtml Si true, retourne le HTML de l'email au lieu de l'envoyer.
+ *
+ * @return string|void Retourne le HTML de l'email si $returnHtml est true, sinon envoie l'email.
+ */
+function sendCustomEmail($to, $subject, $content, $customHeader = '', $returnHtml = false) {
+    global $phpmailer;
+
+    // Activer les logs détaillés de PHPMailer
+    if (isset($phpmailer)) {
+        $phpmailer->SMTPDebug = 2; // 2 pour afficher les logs détaillés
+    }
+
+    // ID du logo et paramètres de style par défaut
+    $logoId                 = 7301;
+    $pageBackgroundColor    = '#f7f3f2';
+    $containerBackgroundColor = '#ffffff';
+    $fontFamily             = '"Helvetica Neue",Helvetica,Roboto,Arial,sans-serif';
+    $headerSettings         = [
+        'backgroundColor' => '#000000',
+        'textColor'       => '#ffffff',
+        'fontSize'        => '30px',
+    ];
+    $contentSettings        = [
+        'backgroundColor' => '#ffffff',
+        'textColor'       => '#000000',
+        'fontSize'        => '14px',
+    ];
+    $footerSettings         = [
+        'textColor' => '#a19f9c',
+        'fontSize'  => '12px',
+    ];
+
+    // Récupération de l'URL du logo
+    $logoUrl = wp_get_attachment_url($logoId);
+    if (!$logoUrl) {
+        error_log("❌ ERREUR : L'URL du logo n'a pas pu être récupérée pour l'ID $logoId.");
+    } else {
+        error_log("✅ Succès : URL du logo récupérée - $logoUrl");
+    }
+
+    // Construction de l'email HTML
+    $emailHtml = "
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta content='width=device-width, initial-scale=1.0' name='viewport'>
+    <title>Secret Déco</title>
+    <style>@media screen and (max-width: 600px){#header_wrapper{padding: 27px 36px !important; font-size: 24px;}#body_content_inner{font-size: 10px !important;}}</style>
+  </head>
+  <body style='background-color: {$pageBackgroundColor}; font-family: {$fontFamily};'>
+  <center>
+      <a href='" . get_site_url() . "'><img src='{$logoUrl}' alt='Logo' style='width: 400px; display: block; margin: 20px auto; max-width: 100%;'/></a>
+      <div style='border: 1px solid #dedbda; box-shadow: 0 1px 4px rgba(0,0,0,.1); width: 600px; max-width: 100%; background-color: {$containerBackgroundColor}; margin: 0 auto; box-sizing: border-box;'>
+          <div id='header_wrapper' style='background-color: {$headerSettings['backgroundColor']}; color: {$headerSettings['textColor']}; font-size: {$headerSettings['fontSize']}; font-weight: 300; padding: 40px; text-align: center;'>{$customHeader}</div>
+          <div style='line-height: 150%; text-align: left; background-color: {$contentSettings['backgroundColor']}; color: {$contentSettings['textColor']}; font-size: {$contentSettings['fontSize']}; padding: 40px;'>{$content}</div>
+      </div>
+      <div style='color: {$footerSettings['textColor']}; font-size: {$footerSettings['fontSize']}; padding: 25px; text-align: center;'>Secret Déco – Révélons le potentiel déco de votre intérieur</div>
+  </center>
+  </body>
+  </html>";
+
+    if ($returnHtml) {
+        return $emailHtml;
+    }
+
+    // Prépare les headers de l'email
+    $headers = [
+        'Content-Type: text/html; charset=UTF-8',
+        'From: Secret Déco <hello@secretdeco.fr>',
+    ];
+
+    // Log avant l'envoi
+    error_log("📤 Tentative d'envoi de l'email à $to avec le sujet : $subject");
+
+    // Envoie l'email au destinataire principal
+    $emailSentToRecipient = wp_mail($to, $subject, $emailHtml, $headers);
+
+    if ($emailSentToRecipient) {
+        error_log("✅ Succès : L'email a été envoyé à $to.");
+    } else {
+        error_log("❌ ERREUR : L'email n'a pas pu être envoyé à $to.");
+        if (isset($phpmailer) && $phpmailer->ErrorInfo) {
+            error_log("📌 Détail de l'erreur PHPMailer : " . $phpmailer->ErrorInfo);
+        }
+    }
+
+    // Envoi de la copie au développeur
+    $devEmail = 'dev@bimbeau.fr';
+    error_log("📤 Tentative d'envoi d'une copie de l'email à $devEmail");
+    $emailSentToDev = wp_mail($devEmail, $subject, $emailHtml, $headers);
+
+    if ($emailSentToDev) {
+        error_log("✅ Succès : La copie de l'email a été envoyée à $devEmail.");
+    } else {
+        error_log("❌ ERREUR : La copie de l'email n'a pas pu être envoyée à $devEmail.");
+        if (isset($phpmailer) && $phpmailer->ErrorInfo) {
+            error_log("📌 Détail de l'erreur PHPMailer : " . $phpmailer->ErrorInfo);
+        }
+    }
+
+    return $emailSentToRecipient;
+}
+
+/**
  * Envoie un email de rappel pour une demande d'estimation.
  *
  * @param int|string $uniqueId Identifiant unique lié à la demande d'estimation.
