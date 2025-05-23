@@ -33,6 +33,15 @@ add_action('admin_menu', function() {
         'bimbeau-multisteps',
         'bimbeau_ms_options_page'
     );
+
+    add_submenu_page(
+        'bimbeau-multisteps',
+        'Gérer les étapes',
+        'Gérer les étapes',
+        'manage_options',
+        'bimbeau-ms-steps',
+        'bimbeau_ms_steps_page'
+    );
 });
 
 function bimbeau_ms_options_page() {
@@ -87,6 +96,56 @@ function bimbeau_ms_options_page() {
         </form>
     </div>
     <?php
+}
+
+function bimbeau_ms_steps_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+
+    $custom_steps = get_option('bimbeau_ms_custom_steps', []);
+
+    if (isset($_POST['bimbeau_ms_add_step']) && !empty($_POST['step_name'])) {
+        $step_name = sanitize_text_field($_POST['step_name']);
+        $custom_steps[] = $step_name;
+        update_option('bimbeau_ms_custom_steps', $custom_steps);
+        echo '<div class="updated"><p>Étape ajoutée.</p></div>';
+    }
+
+    $default_steps = [
+        'Mon profil',
+        'Mon projet',
+        'Mon accompagnement',
+        'Mes besoins',
+        'Informations complémentaires',
+        'Superficie',
+        'Démarrage du projet',
+        'Mon budget',
+        'Mes coordonnées',
+        'Envoyer ma demande',
+        'Remerciement'
+    ];
+
+    $all_steps = array_merge($default_steps, $custom_steps);
+
+    echo '<div class="wrap">';
+    echo '<h1>Gestion des étapes</h1>';
+    echo '<table class="widefat">';
+    echo '<thead><tr><th>#</th><th>Nom de l\'étape</th></tr></thead>';
+    echo '<tbody>';
+    $index = 1;
+    foreach ($all_steps as $step) {
+        echo '<tr><td>' . $index . '</td><td>' . esc_html($step) . '</td></tr>';
+        $index++;
+    }
+    echo '</tbody></table>';
+
+    echo '<h2>Ajouter une étape</h2>';
+    echo '<form method="post">';
+    echo '<input type="text" name="step_name" class="regular-text" required />';
+    echo '<p class="submit"><input type="submit" name="bimbeau_ms_add_step" class="button button-primary" value="Ajouter" /></p>';
+    echo '</form>';
+    echo '</div>';
 }
 
 // Définition des options par défaut à l'activation
