@@ -12,7 +12,8 @@ if (!function_exists('register_googlereview_post_type')) {
         $labels = array(
             'name'                  => _x('Avis clients', 'Post type general name', 'google-reviews-importer'),
             'singular_name'         => _x('Avis client', 'Post type singular name', 'google-reviews-importer'),
-            'menu_name'             => _x('Avis clients', 'Admin Menu text', 'google-reviews-importer'),
+            // Nom personnalisé pour l'élément de menu dans l'administration
+            'menu_name'             => _x('Avis Google', 'Admin Menu text', 'google-reviews-importer'),
             'name_admin_bar'        => _x('Avis client', 'Add New on Toolbar', 'google-reviews-importer'),
             'add_new'               => __('Ajouter un avis', 'google-reviews-importer'),
             'add_new_item'          => __('Ajouter un nouvel avis', 'google-reviews-importer'),
@@ -49,7 +50,8 @@ if (!function_exists('register_googlereview_post_type')) {
             'hierarchical'       => false,
             'menu_position'      => null,
             'supports'           => array('title', 'editor', 'custom-fields', 'thumbnail'),
-            'menu_icon'          => 'dashicons-star-filled',
+            // Icône personnalisée pour le menu du type de contenu
+            'menu_icon'          => 'dashicons-star-half',
         );
 
         register_post_type('googlereview', $args);
