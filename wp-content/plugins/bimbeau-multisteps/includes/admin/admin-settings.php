@@ -185,12 +185,6 @@ function bimbeau_ms_email_page() {
     }
 
     if (isset($_POST['bimbeau_ms_save_emails'])) {
-        update_option('bimbeau_ms_confirm_client_subject', wp_kses_post($_POST['confirm_client_subject']));
-        update_option('bimbeau_ms_confirm_client_body', wp_kses_post($_POST['confirm_client_body']));
-        update_option('bimbeau_ms_confirm_admin_subject', wp_kses_post($_POST['confirm_admin_subject']));
-        update_option('bimbeau_ms_confirm_admin_body', wp_kses_post($_POST['confirm_admin_body']));
-        update_option('bimbeau_ms_reminder_client_subject', wp_kses_post($_POST['reminder_client_subject']));
-        update_option('bimbeau_ms_reminder_client_body', wp_kses_post($_POST['reminder_client_body']));
         if (isset($_POST['confirm_client_subject'])) {
             update_option('bimbeau_ms_confirm_client_subject', wp_kses_post($_POST['confirm_client_subject']));
         }
