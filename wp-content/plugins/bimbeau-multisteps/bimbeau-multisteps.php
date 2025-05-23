@@ -29,6 +29,14 @@ function bimbeau_ms_enqueue_assets() {
         [],
         '1.0.0'
     );
+
+    wp_enqueue_script(
+        'bimbeau-ms-form-interactions',
+        BIMBEAU_MS_URL . 'assets/js/form-interactions.js',
+        ['jquery'],
+        '1.0.0',
+        true
+    );
 }
 add_action('wp_enqueue_scripts', 'bimbeau_ms_enqueue_assets');
 
