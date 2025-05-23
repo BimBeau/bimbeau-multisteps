@@ -846,8 +846,12 @@ function multi_step_form_shortcode($atts) {
                 'detailsMulti_step' => $detailsMulti_step
             ];
             update_option('multi_step_reminder_' . $uniqueId, $multi_stepDetails);
+            $daysBefore = intval(get_option('bimbeau_ms_reminder_days_before', 1));
+            $timeOption = get_option('bimbeau_ms_reminder_time', '10:00');
             $dateRappel = clone $dateDeReponse;
-            $dateRappel->modify('-1 day')->setTime(10, 0);
+            $dateRappel->modify('-' . $daysBefore . ' day');
+            list($hour, $minute) = array_pad(explode(':', $timeOption), 2, 0);
+            $dateRappel->setTime((int)$hour, (int)$minute);
             $reminderTimestamp = $dateRappel->getTimestamp();
             wp_schedule_single_event($reminderTimestamp, 'send_multi_step_reminder', [$uniqueId]);
 

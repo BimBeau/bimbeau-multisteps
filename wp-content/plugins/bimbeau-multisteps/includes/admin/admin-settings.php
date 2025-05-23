@@ -191,8 +191,36 @@ function bimbeau_ms_email_page() {
         update_option('bimbeau_ms_confirm_admin_body', wp_kses_post($_POST['confirm_admin_body']));
         update_option('bimbeau_ms_reminder_client_subject', wp_kses_post($_POST['reminder_client_subject']));
         update_option('bimbeau_ms_reminder_client_body', wp_kses_post($_POST['reminder_client_body']));
-        update_option('bimbeau_ms_reminder_admin_subject', wp_kses_post($_POST['reminder_admin_subject']));
-        update_option('bimbeau_ms_reminder_admin_body', wp_kses_post($_POST['reminder_admin_body']));
+        if (isset($_POST['confirm_client_subject'])) {
+            update_option('bimbeau_ms_confirm_client_subject', wp_kses_post($_POST['confirm_client_subject']));
+        }
+        if (isset($_POST['confirm_client_body'])) {
+            update_option('bimbeau_ms_confirm_client_body', wp_kses_post($_POST['confirm_client_body']));
+        }
+        if (isset($_POST['confirm_admin_subject'])) {
+            update_option('bimbeau_ms_confirm_admin_subject', wp_kses_post($_POST['confirm_admin_subject']));
+        }
+        if (isset($_POST['confirm_admin_body'])) {
+            update_option('bimbeau_ms_confirm_admin_body', wp_kses_post($_POST['confirm_admin_body']));
+        }
+        if (isset($_POST['reminder_client_subject'])) {
+            update_option('bimbeau_ms_reminder_client_subject', wp_kses_post($_POST['reminder_client_subject']));
+        }
+        if (isset($_POST['reminder_client_body'])) {
+            update_option('bimbeau_ms_reminder_client_body', wp_kses_post($_POST['reminder_client_body']));
+        }
+        if (isset($_POST['reminder_admin_subject'])) {
+            update_option('bimbeau_ms_reminder_admin_subject', wp_kses_post($_POST['reminder_admin_subject']));
+        }
+        if (isset($_POST['reminder_admin_body'])) {
+            update_option('bimbeau_ms_reminder_admin_body', wp_kses_post($_POST['reminder_admin_body']));
+        }
+        if (isset($_POST['reminder_days_before'])) {
+            update_option('bimbeau_ms_reminder_days_before', intval($_POST['reminder_days_before']));
+        }
+        if (isset($_POST['reminder_time'])) {
+            update_option('bimbeau_ms_reminder_time', sanitize_text_field($_POST['reminder_time']));
+        }
         echo '<div class="updated"><p>Options enregistrées.</p></div>';
     }
 
@@ -204,59 +232,81 @@ function bimbeau_ms_email_page() {
     $reminderClientBody    = get_option('bimbeau_ms_reminder_client_body');
     $reminderAdminSubject  = get_option('bimbeau_ms_reminder_admin_subject');
     $reminderAdminBody     = get_option('bimbeau_ms_reminder_admin_body');
+    $reminderDays          = get_option('bimbeau_ms_reminder_days_before', 1);
+    $reminderTime          = get_option('bimbeau_ms_reminder_time', '10:00');
+
+    $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'confirmation';
 
     ?>
     <div class="wrap">
         <h1>Emails</h1>
         <p>Utilisez les raccourcis {prenom}, {nom}, {date} et {details} pour insérer les valeurs correspondantes.</p>
+        <h2 class="nav-tab-wrapper">
+            <a href="?page=bimbeau-ms-emails&tab=confirmation" class="nav-tab <?php echo $active_tab == 'confirmation' ? 'nav-tab-active' : ''; ?>">Confirmation</a>
+            <a href="?page=bimbeau-ms-emails&tab=rappel" class="nav-tab <?php echo $active_tab == 'rappel' ? 'nav-tab-active' : ''; ?>">Rappel</a>
+        </h2>
         <form method="post">
-            <h2>Confirmation Client</h2>
-            <table class="form-table" role="presentation">
-                <tr>
-                    <th scope="row"><label for="confirm_client_subject">Sujet</label></th>
-                    <td><input type="text" id="confirm_client_subject" name="confirm_client_subject" value="<?php echo esc_attr($confirmClientSubject); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="confirm_client_body">Corps</label></th>
-                    <td><textarea id="confirm_client_body" name="confirm_client_body" class="large-text" rows="5"><?php echo esc_textarea($confirmClientBody); ?></textarea></td>
-                </tr>
-            </table>
+            <?php if ($active_tab === 'confirmation') : ?>
+                <h2>Confirmation Client</h2>
+                <table class="form-table" role="presentation">
+                    <tr>
+                        <th scope="row"><label for="confirm_client_subject">Sujet</label></th>
+                        <td><input type="text" id="confirm_client_subject" name="confirm_client_subject" value="<?php echo esc_attr($confirmClientSubject); ?>" class="regular-text" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="confirm_client_body">Corps</label></th>
+                        <td><?php wp_editor($confirmClientBody, 'confirm_client_body_editor', ['textarea_name' => 'confirm_client_body']); ?></td>
+                    </tr>
+                </table>
 
-            <h2>Confirmation Admin</h2>
-            <table class="form-table" role="presentation">
-                <tr>
-                    <th scope="row"><label for="confirm_admin_subject">Sujet</label></th>
-                    <td><input type="text" id="confirm_admin_subject" name="confirm_admin_subject" value="<?php echo esc_attr($confirmAdminSubject); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="confirm_admin_body">Corps</label></th>
-                    <td><textarea id="confirm_admin_body" name="confirm_admin_body" class="large-text" rows="5"><?php echo esc_textarea($confirmAdminBody); ?></textarea></td>
-                </tr>
-            </table>
+                <h2>Confirmation Admin</h2>
+                <table class="form-table" role="presentation">
+                    <tr>
+                        <th scope="row"><label for="confirm_admin_subject">Sujet</label></th>
+                        <td><input type="text" id="confirm_admin_subject" name="confirm_admin_subject" value="<?php echo esc_attr($confirmAdminSubject); ?>" class="regular-text" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="confirm_admin_body">Corps</label></th>
+                        <td><?php wp_editor($confirmAdminBody, 'confirm_admin_body_editor', ['textarea_name' => 'confirm_admin_body']); ?></td>
+                    </tr>
+                </table>
+            <?php else : ?>
+                <h2>Rappel Client</h2>
+                <table class="form-table" role="presentation">
+                    <tr>
+                        <th scope="row"><label for="reminder_client_subject">Sujet</label></th>
+                        <td><input type="text" id="reminder_client_subject" name="reminder_client_subject" value="<?php echo esc_attr($reminderClientSubject); ?>" class="regular-text" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="reminder_client_body">Corps</label></th>
+                        <td><?php wp_editor($reminderClientBody, 'reminder_client_body_editor', ['textarea_name' => 'reminder_client_body']); ?></td>
+                    </tr>
+                </table>
 
-            <h2>Rappel Client</h2>
-            <table class="form-table" role="presentation">
-                <tr>
-                    <th scope="row"><label for="reminder_client_subject">Sujet</label></th>
-                    <td><input type="text" id="reminder_client_subject" name="reminder_client_subject" value="<?php echo esc_attr($reminderClientSubject); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="reminder_client_body">Corps</label></th>
-                    <td><textarea id="reminder_client_body" name="reminder_client_body" class="large-text" rows="5"><?php echo esc_textarea($reminderClientBody); ?></textarea></td>
-                </tr>
-            </table>
+                <h2>Rappel Admin</h2>
+                <table class="form-table" role="presentation">
+                    <tr>
+                        <th scope="row"><label for="reminder_admin_subject">Sujet</label></th>
+                        <td><input type="text" id="reminder_admin_subject" name="reminder_admin_subject" value="<?php echo esc_attr($reminderAdminSubject); ?>" class="regular-text" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="reminder_admin_body">Corps</label></th>
+                        <td><?php wp_editor($reminderAdminBody, 'reminder_admin_body_editor', ['textarea_name' => 'reminder_admin_body']); ?></td>
+                    </tr>
+                </table>
 
-            <h2>Rappel Admin</h2>
-            <table class="form-table" role="presentation">
-                <tr>
-                    <th scope="row"><label for="reminder_admin_subject">Sujet</label></th>
-                    <td><input type="text" id="reminder_admin_subject" name="reminder_admin_subject" value="<?php echo esc_attr($reminderAdminSubject); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="reminder_admin_body">Corps</label></th>
-                    <td><textarea id="reminder_admin_body" name="reminder_admin_body" class="large-text" rows="5"><?php echo esc_textarea($reminderAdminBody); ?></textarea></td>
-                </tr>
-            </table>
+                <h2>Programmation du rappel</h2>
+                <table class="form-table" role="presentation">
+                    <tr>
+                        <th scope="row"><label for="reminder_days_before">Jours avant la date de réponse</label></th>
+                        <td><input type="number" id="reminder_days_before" name="reminder_days_before" min="0" value="<?php echo esc_attr($reminderDays); ?>" class="small-text" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="reminder_time">Heure d'envoi</label></th>
+                        <td><input type="time" id="reminder_time" name="reminder_time" value="<?php echo esc_attr($reminderTime); ?>" /></td>
+                    </tr>
+                </table>
+            <?php endif; ?>
 
             <p class="submit"><input type="submit" name="bimbeau_ms_save_emails" class="button button-primary" value="Enregistrer" /></p>
         </form>
