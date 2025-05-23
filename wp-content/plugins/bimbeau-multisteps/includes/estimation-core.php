@@ -420,7 +420,7 @@ function estimation_etape_shortcode($atts) {
                 // Remplacez les balises de remplacement par les données réelles
                 $radio_column_html = str_replace('animation_delay&quot;:200', 'animation_delay&quot;:' . $animation_delay, $radio_column_template);
                 $radio_column_html = str_replace('{LABEL}', $label . '<input type="radio" id="' . $value . '" name="profil" value="' . $value . '" ' . $checked . ' required>', $radio_column_html);
-                $radio_column_html = str_replace('<div class="elementor-icon-box-wrapper">', '<div class="elementor-icon-box-wrapper"><div class="elementor-icon-box-icon"><span class="elementor-icon elementor-animation-">' . file_get_contents(BIMBEAU_MS_DIR . 'assets/img/estimation/' . $value . '.svg') . '</span></div>', $radio_column_html);
+                $radio_column_html = str_replace('<div class="elementor-icon-box-wrapper">', '<div class="elementor-icon-box-wrapper"><div class="elementor-icon-box-icon"><span class="elementor-icon elementor-animation-">' . file_get_contents(BIMBEAU_MS_DIR . 'assets/img/' . $value . '.svg') . '</span></div>', $radio_column_html);
                 echo $radio_column_html;
                 $animation_delay += 100;
             }
@@ -446,7 +446,7 @@ function estimation_etape_shortcode($atts) {
                 // Remplacez les balises de remplacement par les données réelles
                 $radio_column_html = str_replace('animation_delay&quot;:200', 'animation_delay&quot;:' . $animation_delay, $radio_column_template);
                 $radio_column_html = str_replace('{LABEL}', $label . '<input type="radio" id="' . $value . '" name="projet" value="' . $value . '" ' . $checked . ' required>', $radio_column_html);
-                $radio_column_html = str_replace('<div class="elementor-icon-box-wrapper">', '<div class="elementor-icon-box-wrapper"><div class="elementor-icon-box-icon"><span class="elementor-icon elementor-animation-">' . file_get_contents(BIMBEAU_MS_DIR . 'assets/img/estimation/' . $value . '.svg') . '</span></div>', $radio_column_html);
+                $radio_column_html = str_replace('<div class="elementor-icon-box-wrapper">', '<div class="elementor-icon-box-wrapper"><div class="elementor-icon-box-icon"><span class="elementor-icon elementor-animation-">' . file_get_contents(BIMBEAU_MS_DIR . 'assets/img/' . $value . '.svg') . '</span></div>', $radio_column_html);
                 echo $radio_column_html;
                 $animation_delay += 100;
             }
@@ -473,7 +473,7 @@ function estimation_etape_shortcode($atts) {
                 // Remplacez les balises de remplacement par les données réelles
                 $radio_column_html = str_replace('&quot;animation&quot;:&quot;fadeInUp&quot;,', '&quot;animation&quot;:&quot;none&quot;,', $radio_column_template);
                 $radio_column_html = str_replace('{LABEL}', $option['label'] . '<input type="radio" id="' . $value . '" name="accompagnement" value="' . $value . '" ' . $checked . ' required><div class="efs_field_description">' . $option['description'] . '</div>', $radio_column_html);
-                $radio_column_html = str_replace('<div class="elementor-icon-box-wrapper">', '<div class="elementor-icon-box-wrapper"><div class="elementor-icon-box-icon"><span class="elementor-icon elementor-animation-">' . file_get_contents(BIMBEAU_MS_DIR . 'assets/img/estimation/' . $value . '.svg') . '</span></div>', $radio_column_html);
+                $radio_column_html = str_replace('<div class="elementor-icon-box-wrapper">', '<div class="elementor-icon-box-wrapper"><div class="elementor-icon-box-icon"><span class="elementor-icon elementor-animation-">' . file_get_contents(BIMBEAU_MS_DIR . 'assets/img/' . $value . '.svg') . '</span></div>', $radio_column_html);
 
                 echo $radio_column_html;
                 $animation_delay += 100;
@@ -578,7 +578,7 @@ function estimation_etape_shortcode($atts) {
                 // Remplacez les balises de remplacement par les données réelles
                 $radio_column_html = str_replace('animation_delay&quot;:200', 'animation_delay&quot;:' . $animation_delay, $radio_column_template);
                 $radio_column_html = str_replace('{LABEL}', $label . '<input type="radio" id="' . $value . '" name="delai" value="' . $value . '" ' . $checked . ' required>', $radio_column_html);
-                $radio_column_html = str_replace('<div class="elementor-icon-box-wrapper">', '<div class="elementor-icon-box-wrapper"><div class="elementor-icon-box-icon"><span class="elementor-icon elementor-animation-">' . file_get_contents(BIMBEAU_MS_DIR . 'assets/img/estimation/' . $value . '.svg') . '</span></div>', $radio_column_html);
+                $radio_column_html = str_replace('<div class="elementor-icon-box-wrapper">', '<div class="elementor-icon-box-wrapper"><div class="elementor-icon-box-icon"><span class="elementor-icon elementor-animation-">' . file_get_contents(BIMBEAU_MS_DIR . 'assets/img/' . $value . '.svg') . '</span></div>', $radio_column_html);
                 echo $radio_column_html;
                 $animation_delay += 100;
             }
@@ -716,7 +716,7 @@ function estimation_etape_shortcode($atts) {
                 $radio_column_html = str_replace('animation_delay&quot;:200', 'animation_delay&quot;:' . $animation_delay, $radio_column_template);
                 $radio_column_html = str_replace('{LABEL}', $label . '<input type="radio" id="' . $value . '" name="delai" value="' . $value . '" ' . $checked . ' required>', $radio_column_html);
                 $radio_column_html = str_replace('{PRICE}', $price, $radio_column_html);
-                $radio_column_html = str_replace('<div class="elementor-icon-box-wrapper">', '<div class="elementor-icon-box-wrapper"><div class="elementor-icon-box-icon"><span class="elementor-icon elementor-animation-">' . file_get_contents(BIMBEAU_MS_DIR . 'assets/img/estimation/' . $value . '.svg') . '</span></div>', $radio_column_html);
+                $radio_column_html = str_replace('<div class="elementor-icon-box-wrapper">', '<div class="elementor-icon-box-wrapper"><div class="elementor-icon-box-icon"><span class="elementor-icon elementor-animation-">' . file_get_contents(BIMBEAU_MS_DIR . 'assets/img/' . $value . '.svg') . '</span></div>', $radio_column_html);
                 echo $radio_column_html;
                 $animation_delay += 100;
             }
