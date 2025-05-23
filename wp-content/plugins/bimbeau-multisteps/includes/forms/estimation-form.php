@@ -235,6 +235,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['step']) && $_POST['ste
 }
 
 
+
+function bimbeau_ms_elementor_missing_notice() {
+    echo '<div class="notice notice-error"><p>' .
+        'BimBeau MultiSteps requiert le plugin Elementor pour fonctionner.' .
+        '</p></div>';
+}
+
 function estimation_etape_shortcode($atts) {
 
     // Récupération des attributs du shortcode
@@ -242,6 +249,13 @@ function estimation_etape_shortcode($atts) {
         'etape' => '1', // Valeur par défaut
     ), $atts);
     $etape = $atts['etape'];
+
+    if (!class_exists('\\Elementor\\Plugin')) {
+        if (is_admin()) {
+            add_action('admin_notices', 'bimbeau_ms_elementor_missing_notice');
+        }
+        return '';
+    }
 
     // Vérifier si nous sommes dans l'éditeur ou en prévisualisation Elementor
     $elementor_preview_active = \Elementor\Plugin::$instance->preview->is_preview_mode();
