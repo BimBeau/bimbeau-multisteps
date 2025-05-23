@@ -26,12 +26,15 @@ require_once BIMBEAU_MS_DIR . 'includes/estimation-core.php';
 
 // Création de la page d'options
 add_action('admin_menu', function() {
+    $label = get_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
+    $icon  = get_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
     add_menu_page(
-        'BimBeau MultiSteps',
-        'BimBeau MultiSteps',
+        'Réglages',
+        $label,
         'manage_options',
         'bimbeau-multisteps',
-        'bimbeau_ms_options_page'
+        'bimbeau_ms_options_page',
+        $icon
     );
 
     add_submenu_page(
@@ -54,6 +57,8 @@ function bimbeau_ms_options_page() {
         update_option('bimbeau_ms_payment_link_test', sanitize_text_field($_POST['payment_link_test']));
         update_option('bimbeau_ms_secret_key', sanitize_text_field($_POST['secret_key']));
         update_option('bimbeau_ms_admin_email', sanitize_email($_POST['admin_email']));
+        update_option('bimbeau_ms_menu_label', sanitize_text_field($_POST['menu_label']));
+        update_option('bimbeau_ms_menu_icon', sanitize_text_field($_POST['menu_icon']));
         echo '<div class="updated"><p>Options enregistrées.</p></div>';
     }
     $mode = get_option('bimbeau_ms_mode', 'PROD');
@@ -61,9 +66,11 @@ function bimbeau_ms_options_page() {
     $payment_test = get_option('bimbeau_ms_payment_link_test', '');
     $secret = get_option('bimbeau_ms_secret_key', '');
     $admin = get_option('bimbeau_ms_admin_email', '');
+    $menu_label = get_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
+    $menu_icon  = get_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
     ?>
     <div class="wrap">
-        <h1>BimBeau MultiSteps</h1>
+        <h1>Réglages</h1>
         <form method="post">
             <table class="form-table" role="presentation">
                 <tr>
@@ -90,6 +97,17 @@ function bimbeau_ms_options_page() {
                 <tr>
                     <th scope="row"><label for="admin_email">Email admin</label></th>
                     <td><input type="email" id="admin_email" name="admin_email" value="<?php echo esc_attr($admin); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="menu_label">Nom du menu</label></th>
+                    <td><input type="text" id="menu_label" name="menu_label" value="<?php echo esc_attr($menu_label); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="menu_icon">Icône du menu</label></th>
+                    <td>
+                        <input type="text" id="menu_icon" name="menu_icon" value="<?php echo esc_attr($menu_icon); ?>" class="regular-text" />
+                        <p class="description">URL ou Dashicon (ex. dashicons-admin-generic)</p>
+                    </td>
                 </tr>
             </table>
             <p class="submit"><input type="submit" name="bimbeau_ms_save" id="submit" class="button button-primary" value="Enregistrer" /></p>
@@ -155,5 +173,7 @@ register_activation_hook(__FILE__, function() {
     add_option('bimbeau_ms_payment_link_test', 'https://buy.stripe.com/test_bIY2bbckteyjgbm4gg');
     add_option('bimbeau_ms_secret_key', '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');
     add_option('bimbeau_ms_admin_email', 'hello@secretdeco.fr');
+    add_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
+    add_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
 });
 
