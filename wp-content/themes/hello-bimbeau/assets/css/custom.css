@@ -1,0 +1,64 @@
+/* Cookie banner
+ */
+
+:root {
+    --cc-overlay-opacity: .5;
+}
+
+#cc--main .cc_div .cc-link {
+    color: var(--cc-btn-primary-bg);
+    background: inherit;
+    border: inherit;
+    padding: inherit;
+    text-transform: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    border-bottom: 1px solid var(--cc-btn-primary-bg);
+    border-radius: 0;
+}
+
+#cc--main .cc_div .cc-link:hover,
+.cc_div .cc-link:active {
+    border-color: transparent;
+}
+
+#cc--main .cc_div .c-bn {
+    font-family: inherit;
+    border-color: inherit;
+    border-style: inherit;
+    border-width: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    border-radius: var(--cc-btn-border-radius);
+}
+
+#cc--main .cc_div .b-tl {
+    border: inherit;
+    text-transform: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    border-radius: var(--cc-border-radius);
+}
+
+#cc--main .cc_div .b-tg {
+    border: inherit;
+    background: inherit;
+    color: inherit;
+    line-height: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+
+}
+
+#cc--main .cc_div .c-tgl {
+    border: inherit;
+    background: inherit;
+    color: inherit;
+    line-height: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    border-radius: 4em;
+}
