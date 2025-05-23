@@ -41,13 +41,15 @@ function bimbeau_ms_options_page() {
     }
     if (isset($_POST['bimbeau_ms_save'])) {
         update_option('bimbeau_ms_mode', sanitize_text_field($_POST['mode']));
-        update_option('bimbeau_ms_payment_link', sanitize_text_field($_POST['payment_link']));
+        update_option('bimbeau_ms_payment_link', sanitize_text_field($_POST['payment_link_prod']));
+        update_option('bimbeau_ms_payment_link_test', sanitize_text_field($_POST['payment_link_test']));
         update_option('bimbeau_ms_secret_key', sanitize_text_field($_POST['secret_key']));
         update_option('bimbeau_ms_admin_email', sanitize_email($_POST['admin_email']));
         echo '<div class="updated"><p>Options enregistrées.</p></div>';
     }
     $mode = get_option('bimbeau_ms_mode', 'PROD');
-    $payment = get_option('bimbeau_ms_payment_link', '');
+    $payment_prod = get_option('bimbeau_ms_payment_link', '');
+    $payment_test = get_option('bimbeau_ms_payment_link_test', '');
     $secret = get_option('bimbeau_ms_secret_key', '');
     $admin = get_option('bimbeau_ms_admin_email', '');
     ?>
@@ -65,8 +67,12 @@ function bimbeau_ms_options_page() {
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="payment_link">Payment Link</label></th>
-                    <td><input type="text" id="payment_link" name="payment_link" value="<?php echo esc_attr($payment); ?>" class="regular-text" /></td>
+                    <th scope="row"><label for="payment_link_prod">Payment Link PROD</label></th>
+                    <td><input type="text" id="payment_link_prod" name="payment_link_prod" value="<?php echo esc_attr($payment_prod); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="payment_link_test">Payment Link TEST</label></th>
+                    <td><input type="text" id="payment_link_test" name="payment_link_test" value="<?php echo esc_attr($payment_test); ?>" class="regular-text" /></td>
                 </tr>
                 <tr>
                     <th scope="row"><label for="secret_key">Secret Key</label></th>
@@ -87,6 +93,7 @@ function bimbeau_ms_options_page() {
 register_activation_hook(__FILE__, function() {
     add_option('bimbeau_ms_mode', 'PROD');
     add_option('bimbeau_ms_payment_link', 'https://buy.stripe.com/14k5mzfDf86f7U4cO6');
+    add_option('bimbeau_ms_payment_link_test', 'https://buy.stripe.com/test_bIY2bbckteyjgbm4gg');
     add_option('bimbeau_ms_secret_key', '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');
     add_option('bimbeau_ms_admin_email', 'hello@secretdeco.fr');
 });
