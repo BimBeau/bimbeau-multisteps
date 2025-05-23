@@ -79,7 +79,7 @@ register_activation_hook(__FILE__, function() {
     add_option('bimbeau_ms_reminder_admin_subject', '[Secret Déco] Rappel : demande de {prenom} {nom} pour le {date}');
     add_option('bimbeau_ms_reminder_admin_body', "<h2>Bonjour !</h2><p>Voici un rappel de la demande :</p>{details}<p>Cette personne attend un retour le {date}.</p>");
 
-    // Capability for email management
+    // Capability for email management (editor and above)
     $role = get_role('editor');
     if ($role && !$role->has_cap('bimbeau_ms_manage_emails')) {
         $role->add_cap('bimbeau_ms_manage_emails');
@@ -87,6 +87,15 @@ register_activation_hook(__FILE__, function() {
     $role = get_role('shop_manager');
     if ($role && !$role->has_cap('bimbeau_ms_manage_emails')) {
         $role->add_cap('bimbeau_ms_manage_emails');
+    }
+    $role = get_role('administrator');
+    if ($role && !$role->has_cap('bimbeau_ms_manage_emails')) {
+        $role->add_cap('bimbeau_ms_manage_emails');
+    }
+
+    // Capability for advanced settings (administrator only)
+    if ($role && !$role->has_cap('bimbeau_ms_manage_advanced')) {
+        $role->add_cap('bimbeau_ms_manage_advanced');
     }
 });
 

@@ -26,9 +26,9 @@ function bimbeau_ms_register_admin_menu() {
 
     add_submenu_page(
         'bimbeau-ms-emails',
-        'Réglages',
-        'Réglages',
-        'manage_options',
+        'Réglages avancés',
+        'Réglages avancés',
+        'bimbeau_ms_manage_advanced',
         'bimbeau-ms-settings',
         'bimbeau_ms_options_page'
     );
@@ -55,7 +55,7 @@ function bimbeau_ms_dashboard_page() {
 }
 
 function bimbeau_ms_options_page() {
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can('bimbeau_ms_manage_advanced')) {
         return;
     }
     if (isset($_POST['bimbeau_ms_save'])) {
@@ -79,7 +79,7 @@ function bimbeau_ms_options_page() {
     $menu_icon  = get_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
     ?>
     <div class="wrap">
-        <h1>Réglages</h1>
+        <h1>Réglages avancés</h1>
         <form method="post">
             <table class="form-table" role="presentation">
                 <tr>
