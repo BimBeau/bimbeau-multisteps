@@ -36,8 +36,19 @@ add_action('admin_menu', function() {
         'bimbeau_ms_options_page',
         $icon
     );
+});
+
 
     add_submenu_page(
+        'bimbeau-multisteps',
+        'Réglages',
+        'Réglages',
+        'manage_options',
+        'bimbeau-ms-settings',
+        'bimbeau_ms_options_page'
+    );
+
+add_submenu_page(
         'bimbeau-multisteps',
         'Gérer les étapes',
         'Gérer les étapes',
@@ -46,6 +57,16 @@ add_action('admin_menu', function() {
         'bimbeau_ms_steps_page'
     );
 });
+
+function bimbeau_ms_dashboard_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    echo '<div class="wrap">';
+    echo '<h1>Tableau de bord</h1>';
+    echo '<p>Bienvenue dans le tableau de bord du plugin.</p>';
+    echo '</div>';
+}
 
 function bimbeau_ms_options_page() {
     if (!current_user_can('manage_options')) {
