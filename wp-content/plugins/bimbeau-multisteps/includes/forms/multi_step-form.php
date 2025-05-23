@@ -842,7 +842,6 @@ function multi_step_form_shortcode($atts) {
                 'nom' => $_SESSION['multi_step']['coordonnees']['nom'],
                 'dateMulti_step' => $dateMulti_step,
                 'emailAdmin' => $GLOBALS['generalOptions']['admin-email'],
-                'emailClient' => $emailClient,
                 'detailsMulti_step' => $detailsMulti_step
             ];
             update_option('multi_step_reminder_' . $uniqueId, $multi_stepDetails);
