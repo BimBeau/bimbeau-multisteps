@@ -14,6 +14,12 @@ function bimbeau_ms_handle_generic_post($step) {
     if (intval($_POST['step']) !== (int)$step->id) {
         return;
     }
+    if (
+        !isset($_POST['bimbeau_ms_nonce']) ||
+        !wp_verify_nonce(wp_unslash($_POST['bimbeau_ms_nonce']), 'bimbeau_ms_form')
+    ) {
+        return;
+    }
     $key     = $step->step_key;
     $type    = $step->question_type;
     $choices = json_decode($step->choices, true) ?: [];
@@ -75,6 +81,7 @@ function bimbeau_ms_render_step($step) {
     ob_start();
     ?>
     <form method="POST" class="multi_step_form_step">
+        <?php wp_nonce_field('bimbeau_ms_form', 'bimbeau_ms_nonce'); ?>
         <input type="hidden" name="step" value="<?php echo esc_attr($step->id); ?>">
         <h3><?php echo esc_html($step->label); ?></h3>
         <?php if ($type === 'radio'): ?>
