@@ -112,6 +112,20 @@ function bimbeau_ms_enqueue_steps_app() {
     );
     wp_enqueue_style( 'wp-components' );
 }
+
+/**
+ * Enqueue the React labels application on the labels page.
+ */
+function bimbeau_ms_enqueue_labels_app() {
+    wp_enqueue_script(
+        'bimbeau-ms-labels-app',
+        BIMBEAU_MS_URL . 'assets/js/labels-app.js',
+        [ 'wp-element', 'wp-components', 'wp-api-fetch' ],
+        '1.0.0',
+        true
+    );
+    wp_enqueue_style( 'wp-components' );
+}
 add_action( 'admin_enqueue_scripts', function( $hook ) {
     // Apply the wp-components style to every admin page of the plugin
     if ( strpos( $hook, 'bimbeau-ms-' ) !== false ) {
@@ -126,6 +140,10 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
     // Load the React steps application only on the steps page
     if ( strpos( $hook, 'bimbeau-ms-steps' ) !== false ) {
         bimbeau_ms_enqueue_steps_app();
+    }
+    // Load the React labels application only on the labels page
+    if ( strpos( $hook, 'bimbeau-ms-labels' ) !== false ) {
+        bimbeau_ms_enqueue_labels_app();
     }
 } );
 
@@ -221,6 +239,61 @@ function bimbeau_ms_register_rest_routes() {
         },
         'permission_callback' => function() {
             return current_user_can( 'manage_options' );
+        },
+    ] );
+
+    // Routes for the React labels page
+    register_rest_route( 'bimbeau-ms/v1', '/labels', [
+        'methods'  => 'GET',
+        'callback' => function() {
+            return [
+                'label_required'        => get_option( 'bimbeau_ms_label_required', 'Ce champ est requis.' ),
+                'label_select_option'   => get_option( 'bimbeau_ms_label_select_option', 'Veuillez sélectionner au moins une option.' ),
+                'label_continue'        => get_option( 'bimbeau_ms_label_continue', 'Continuer' ),
+                'label_unknown_step'    => get_option( 'bimbeau_ms_label_unknown_step', 'Étape inconnue.' ),
+                'msg_saved'             => get_option( 'bimbeau_ms_msg_saved', 'Options enregistrées.' ),
+                'msg_elementor_missing' => get_option( 'bimbeau_ms_msg_elementor_missing', 'BimBeau MultiSteps requiert le plugin Elementor pour fonctionner.' ),
+                'msg_reminder_disabled' => get_option( 'bimbeau_ms_msg_reminder_disabled', 'La fonctionnalité de rappel est désactivée.' ),
+                'msg_dashboard_welcome' => get_option( 'bimbeau_ms_msg_dashboard_welcome', 'Bienvenue dans le tableau de bord du plugin.' ),
+            ];
+        },
+        'permission_callback' => function() {
+            return current_user_can( 'bimbeau_ms_manage_emails' );
+        },
+    ] );
+
+    register_rest_route( 'bimbeau-ms/v1', '/labels', [
+        'methods'  => 'POST',
+        'callback' => function( WP_REST_Request $request ) {
+            $data = $request->get_json_params();
+            if ( isset( $data['label_required'] ) ) {
+                update_option( 'bimbeau_ms_label_required', sanitize_text_field( $data['label_required'] ) );
+            }
+            if ( isset( $data['label_select_option'] ) ) {
+                update_option( 'bimbeau_ms_label_select_option', sanitize_text_field( $data['label_select_option'] ) );
+            }
+            if ( isset( $data['label_continue'] ) ) {
+                update_option( 'bimbeau_ms_label_continue', sanitize_text_field( $data['label_continue'] ) );
+            }
+            if ( isset( $data['label_unknown_step'] ) ) {
+                update_option( 'bimbeau_ms_label_unknown_step', sanitize_text_field( $data['label_unknown_step'] ) );
+            }
+            if ( isset( $data['msg_saved'] ) ) {
+                update_option( 'bimbeau_ms_msg_saved', sanitize_text_field( $data['msg_saved'] ) );
+            }
+            if ( isset( $data['msg_elementor_missing'] ) ) {
+                update_option( 'bimbeau_ms_msg_elementor_missing', sanitize_text_field( $data['msg_elementor_missing'] ) );
+            }
+            if ( isset( $data['msg_reminder_disabled'] ) ) {
+                update_option( 'bimbeau_ms_msg_reminder_disabled', sanitize_text_field( $data['msg_reminder_disabled'] ) );
+            }
+            if ( isset( $data['msg_dashboard_welcome'] ) ) {
+                update_option( 'bimbeau_ms_msg_dashboard_welcome', sanitize_text_field( $data['msg_dashboard_welcome'] ) );
+            }
+            return [ 'success' => true ];
+        },
+        'permission_callback' => function() {
+            return current_user_can( 'bimbeau_ms_manage_emails' );
         },
     ] );
 }
