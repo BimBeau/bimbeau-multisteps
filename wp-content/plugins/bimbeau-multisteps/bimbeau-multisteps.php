@@ -88,10 +88,46 @@ register_activation_hook(__FILE__, function() {
     // Insert default steps if table empty
     if (!$wpdb->get_var("SELECT COUNT(*) FROM {$table_name}")) {
         $defaults = [
-            ['profil', 'Mon profil', 'radio', json_encode(['proprietaire' => 'Propriétaire', 'compromis' => 'En train de signer mon compromis', 'renseignements' => 'Juste à la recherche de renseignements'])],
+            [
+                'profil',
+                'Mon profil',
+                'radio',
+                json_encode([
+                    'proprietaire'  => 'Propriétaire',
+                    'compromis'     => 'En train de signer mon compromis',
+                    'renseignements' => [
+                        'label'  => 'Juste à la recherche de renseignements',
+                        'extras' => [
+                            [
+                                'name'     => 'precisions',
+                                'label'    => 'Précisez vos besoins',
+                                'type'     => 'text',
+                                'required' => false
+                            ]
+                        ]
+                    ]
+                ])
+            ],
             ['projet', 'Mon projet', 'radio', json_encode(['maison' => 'Maison', 'appartement' => 'Appartement'])],
             ['accompagnement', 'Mon accompagnement', 'radio', json_encode(['renovation' => 'Rénovation', 'construction' => 'Construction'])],
-            ['besoins', 'Mes besoins', 'checkbox', json_encode(['restructurer' => 'Restructurer', 'decorer' => 'Décorer'])],
+            [
+                'besoins',
+                'Mes besoins',
+                'checkbox',
+                json_encode([
+                    'restructurer' => 'Restructurer',
+                    'decorer'      => [
+                        'label'  => 'Décorer',
+                        'extras' => [
+                            [
+                                'name'  => 'zones',
+                                'label' => 'Zones à décorer',
+                                'type'  => 'text'
+                            ]
+                        ]
+                    ]
+                ])
+            ],
             ['coordonnees', 'Mes coordonnées', 'text', '']
         ];
         $order = 1;
