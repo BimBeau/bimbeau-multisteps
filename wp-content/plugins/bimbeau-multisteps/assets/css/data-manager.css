@@ -6,3 +6,19 @@
 #ms-data-view-filter {
     margin-bottom: 10px;
 }
+
+/* Style inputs to better match WordPress admin appearance */
+.bimbeau-data-form input[type="text"],
+.bimbeau-data-form textarea,
+.bimbeau-data-form select {
+    width: 100%;
+    max-width: 400px;
+    padding: 6px 8px;
+    border: 1px solid #ccd0d4;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+.bimbeau-data-form button {
+    margin-top: 10px;
+}
