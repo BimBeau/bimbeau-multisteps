@@ -14,6 +14,7 @@ jobs:
           token: "${{ secrets.GITHUB_TOKEN }}"
           pull-request-number: ${{ github.event.pull_request.number }}
           merge-method: "squash"
-      - uses: "peter-evans/auto-merge@v3"
-        with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Merge pull request
+        run: gh pr merge ${{ github.event.pull_request.number }} --squash --admin --delete-branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
