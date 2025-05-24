@@ -67,6 +67,7 @@ function bimbeau_ms_options_page() {
         update_option('bimbeau_ms_admin_email', sanitize_email(wp_unslash($_POST['admin_email'])));
         update_option('bimbeau_ms_menu_label', sanitize_text_field(wp_unslash($_POST['menu_label'])));
         update_option('bimbeau_ms_menu_icon', sanitize_text_field(wp_unslash($_POST['menu_icon'])));
+        update_option('bimbeau_ms_enable_delay_step', isset($_POST['enable_delay_step']) ? 1 : 0);
         echo '<div class="updated"><p>Options enregistrées.</p></div>';
     }
     $mode = get_option('bimbeau_ms_mode', 'PROD');
@@ -77,6 +78,7 @@ function bimbeau_ms_options_page() {
     $admin = get_option('bimbeau_ms_admin_email', '');
     $menu_label = get_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
     $menu_icon  = get_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
+    $enable_delay = get_option('bimbeau_ms_enable_delay_step', 1);
     ?>
     <div class="wrap">
         <h1>Réglages avancés</h1>
@@ -121,6 +123,10 @@ function bimbeau_ms_options_page() {
                         <input type="text" id="menu_icon" name="menu_icon" value="<?php echo esc_attr($menu_icon); ?>" class="regular-text" />
                         <p class="description">URL ou Dashicon (ex. dashicons-admin-generic)</p>
                     </td>
+                </tr>
+                <tr>
+                    <th scope="row">Activer le choix du délai de réponse</th>
+                    <td><input type="checkbox" id="enable_delay_step" name="enable_delay_step" value="1" <?php checked($enable_delay, 1); ?> /></td>
                 </tr>
             </table>
             <p class="submit"><input type="submit" name="bimbeau_ms_save" id="submit" class="button button-primary" value="Enregistrer" /></p>
@@ -252,8 +258,12 @@ function bimbeau_ms_email_page() {
     $reminderAdminBody     = get_option('bimbeau_ms_reminder_admin_body');
     $reminderDays          = get_option('bimbeau_ms_reminder_days_before', 1);
     $reminderTime          = get_option('bimbeau_ms_reminder_time', '10:00');
+    $enable_delay          = get_option('bimbeau_ms_enable_delay_step', 1);
 
     $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'confirmation';
+    if (!$enable_delay) {
+        $active_tab = 'confirmation';
+    }
 
     ?>
     <div class="wrap">
@@ -261,7 +271,9 @@ function bimbeau_ms_email_page() {
         <p>Utilisez les raccourcis {prenom}, {nom}, {date} et {details} pour insérer les valeurs correspondantes.</p>
         <h2 class="nav-tab-wrapper">
             <a href="?page=bimbeau-ms-emails&tab=confirmation" class="nav-tab <?php echo $active_tab == 'confirmation' ? 'nav-tab-active' : ''; ?>">Confirmation</a>
-            <a href="?page=bimbeau-ms-emails&tab=rappel" class="nav-tab <?php echo $active_tab == 'rappel' ? 'nav-tab-active' : ''; ?>">Rappel</a>
+            <?php if ($enable_delay) : ?>
+                <a href="?page=bimbeau-ms-emails&tab=rappel" class="nav-tab <?php echo $active_tab == 'rappel' ? 'nav-tab-active' : ''; ?>">Rappel</a>
+            <?php endif; ?>
         </h2>
         <form method="post">
             <?php if ($active_tab === 'confirmation') : ?>
@@ -289,29 +301,33 @@ function bimbeau_ms_email_page() {
                     </tr>
                 </table>
             <?php else : ?>
-                <h2>Rappel Admin</h2>
-                <table class="form-table" role="presentation">
-                    <tr>
-                        <th scope="row"><label for="reminder_admin_subject">Sujet</label></th>
-                        <td><input type="text" id="reminder_admin_subject" name="reminder_admin_subject" value="<?php echo esc_attr($reminderAdminSubject); ?>" class="regular-text" style="width:40em;" /></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="reminder_admin_body">Corps</label></th>
-                        <td><?php wp_editor($reminderAdminBody, 'reminder_admin_body_editor', ['textarea_name' => 'reminder_admin_body']); ?></td>
-                    </tr>
-                </table>
+                <?php if ($enable_delay) : ?>
+                    <h2>Rappel Admin</h2>
+                    <table class="form-table" role="presentation">
+                        <tr>
+                            <th scope="row"><label for="reminder_admin_subject">Sujet</label></th>
+                            <td><input type="text" id="reminder_admin_subject" name="reminder_admin_subject" value="<?php echo esc_attr($reminderAdminSubject); ?>" class="regular-text" style="width:40em;" /></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="reminder_admin_body">Corps</label></th>
+                            <td><?php wp_editor($reminderAdminBody, 'reminder_admin_body_editor', ['textarea_name' => 'reminder_admin_body']); ?></td>
+                        </tr>
+                    </table>
 
-                <h2>Programmation du rappel</h2>
-                <table class="form-table" role="presentation">
-                    <tr>
-                        <th scope="row"><label for="reminder_days_before">Jours avant la date de réponse</label></th>
-                        <td><input type="number" id="reminder_days_before" name="reminder_days_before" min="0" value="<?php echo esc_attr($reminderDays); ?>" class="small-text" /></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="reminder_time">Heure d'envoi</label></th>
-                        <td><input type="time" id="reminder_time" name="reminder_time" value="<?php echo esc_attr($reminderTime); ?>" /></td>
-                    </tr>
-                </table>
+                    <h2>Programmation du rappel</h2>
+                    <table class="form-table" role="presentation">
+                        <tr>
+                            <th scope="row"><label for="reminder_days_before">Jours avant la date de réponse</label></th>
+                            <td><input type="number" id="reminder_days_before" name="reminder_days_before" min="0" value="<?php echo esc_attr($reminderDays); ?>" class="small-text" /></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="reminder_time">Heure d'envoi</label></th>
+                            <td><input type="time" id="reminder_time" name="reminder_time" value="<?php echo esc_attr($reminderTime); ?>" /></td>
+                        </tr>
+                    </table>
+                <?php else : ?>
+                    <p>La fonctionnalité de rappel est désactivée.</p>
+                <?php endif; ?>
             <?php endif; ?>
 
             <p class="submit"><input type="submit" name="bimbeau_ms_save_emails" class="button button-primary" value="Enregistrer" /></p>

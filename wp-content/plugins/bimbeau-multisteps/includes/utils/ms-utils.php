@@ -166,9 +166,13 @@ function bimbeau_ms_isPreviousStepCompleted($current_step) {
         '7'  => 'demarrage',
         '8'  => 'budget',
         '9'  => 'coordonnees',
-        '10' => 'delai',
-        '11' => 'remerciement'
     ];
+    if (get_option('bimbeau_ms_enable_delay_step', 1)) {
+        $step_keys['10'] = 'delai';
+        $step_keys['11'] = 'remerciement';
+    } else {
+        $step_keys['10'] = 'remerciement';
+    }
 
     if ($current_step === '1') {
         return true;
@@ -299,5 +303,10 @@ add_action('send_multi_step_reminder', 'bimbeau_ms_send_multi_step_reminder', 10
 function bimbeau_ms_get_step_definitions() {
     global $wpdb;
     $table = $wpdb->prefix . 'bimbeau_ms_steps';
-    return $wpdb->get_results("SELECT * FROM {$table} ORDER BY step_order ASC");
+    $steps = $wpdb->get_results("SELECT * FROM {$table} ORDER BY step_order ASC");
+    if (!get_option('bimbeau_ms_enable_delay_step', 1)) {
+        $steps = array_filter($steps, function($s) { return $s->step_key !== 'delai'; });
+        $steps = array_values($steps);
+    }
+    return $steps;
 }
