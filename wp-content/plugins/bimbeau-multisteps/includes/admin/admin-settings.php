@@ -53,6 +53,73 @@ function bimbeau_ms_register_admin_menu() {
 }
 add_action('admin_menu', 'bimbeau_ms_register_admin_menu');
 
+/**
+ * Enqueue the React settings application on the options page.
+ */
+function bimbeau_ms_enqueue_settings_app() {
+    wp_enqueue_script(
+        'bimbeau-ms-settings-app',
+        BIMBEAU_MS_URL . 'assets/js/settings-app.js',
+        [ 'wp-element', 'wp-components', 'wp-api-fetch' ],
+        '1.0.0',
+        true
+    );
+    wp_enqueue_style( 'wp-components' );
+}
+add_action( 'admin_enqueue_scripts', function( $hook ) {
+    if ( strpos( $hook, 'bimbeau-ms-settings' ) !== false ) {
+        bimbeau_ms_enqueue_settings_app();
+    }
+} );
+
+/**
+ * Register REST routes used by the React settings page.
+ */
+function bimbeau_ms_register_rest_routes() {
+    register_rest_route( 'bimbeau-ms/v1', '/options', [
+        'methods'  => 'GET',
+        'callback' => function() {
+            return [
+                'mode'              => get_option( 'bimbeau_ms_mode', 'PROD' ),
+                'payment_link_prod' => get_option( 'bimbeau_ms_payment_link', '' ),
+                'payment_link_test' => get_option( 'bimbeau_ms_payment_link_test', '' ),
+                'admin_email'       => get_option( 'bimbeau_ms_admin_email', '' ),
+                'enable_delay_step' => (bool) get_option( 'bimbeau_ms_enable_delay_step', 1 ),
+            ];
+        },
+        'permission_callback' => function() {
+            return current_user_can( 'bimbeau_ms_manage_advanced' );
+        },
+    ] );
+
+    register_rest_route( 'bimbeau-ms/v1', '/options', [
+        'methods'  => 'POST',
+        'callback' => function( WP_REST_Request $request ) {
+            $data = $request->get_json_params();
+            if ( isset( $data['mode'] ) ) {
+                update_option( 'bimbeau_ms_mode', sanitize_text_field( $data['mode'] ) );
+            }
+            if ( isset( $data['payment_link_prod'] ) ) {
+                update_option( 'bimbeau_ms_payment_link', sanitize_text_field( $data['payment_link_prod'] ) );
+            }
+            if ( isset( $data['payment_link_test'] ) ) {
+                update_option( 'bimbeau_ms_payment_link_test', sanitize_text_field( $data['payment_link_test'] ) );
+            }
+            if ( isset( $data['admin_email'] ) ) {
+                update_option( 'bimbeau_ms_admin_email', sanitize_email( $data['admin_email'] ) );
+            }
+            if ( isset( $data['enable_delay_step'] ) ) {
+                update_option( 'bimbeau_ms_enable_delay_step', $data['enable_delay_step'] ? 1 : 0 );
+            }
+            return [ 'success' => true ];
+        },
+        'permission_callback' => function() {
+            return current_user_can( 'bimbeau_ms_manage_advanced' );
+        },
+    ] );
+}
+add_action( 'rest_api_init', 'bimbeau_ms_register_rest_routes' );
+
 function bimbeau_ms_dashboard_page() {
     if (!current_user_can('manage_options')) {
         return;
@@ -70,92 +137,13 @@ function bimbeau_ms_options_page() {
     if (!current_user_can('bimbeau_ms_manage_advanced')) {
         return;
     }
-    if (isset($_POST['bimbeau_ms_save'])) {
-        update_option('bimbeau_ms_mode', sanitize_text_field(wp_unslash($_POST['mode'])));
-        update_option('bimbeau_ms_payment_link', sanitize_text_field(wp_unslash($_POST['payment_link_prod'])));
-        update_option('bimbeau_ms_payment_link_test', sanitize_text_field(wp_unslash($_POST['payment_link_test'])));
-        update_option('bimbeau_ms_secret_key', sanitize_text_field(wp_unslash($_POST['secret_key'])));
-        update_option('bimbeau_ms_secret_key_test', sanitize_text_field(wp_unslash($_POST['secret_key_test'])));
-        update_option('bimbeau_ms_admin_email', sanitize_email(wp_unslash($_POST['admin_email'])));
-        update_option('bimbeau_ms_menu_label', sanitize_text_field(wp_unslash($_POST['menu_label'])));
-        update_option('bimbeau_ms_menu_icon', sanitize_text_field(wp_unslash($_POST['menu_icon'])));
-        if (isset($_POST['recaptcha_key'])) {
-            update_option('bimbeau_ms_recaptcha_key', sanitize_text_field(wp_unslash($_POST['recaptcha_key'])));
-        }
-        update_option('bimbeau_ms_enable_delay_step', isset($_POST['enable_delay_step']) ? 1 : 0);
-        echo '<div class="updated"><p>' . esc_html(get_option(
-            'bimbeau_ms_msg_saved',
-            'Options enregistrées.'
-        )) . '</p></div>';
-    }
-    $mode = get_option('bimbeau_ms_mode', 'PROD');
-    $payment_prod = get_option('bimbeau_ms_payment_link', '');
-    $payment_test = get_option('bimbeau_ms_payment_link_test', '');
-    $secret       = get_option('bimbeau_ms_secret_key', '');
-    $secret_test  = get_option('bimbeau_ms_secret_key_test', '');
-    $admin = get_option('bimbeau_ms_admin_email', '');
-    $menu_label = get_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
-    $menu_icon  = get_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
-    $recaptcha   = get_option('bimbeau_ms_recaptcha_key', '');
-    $enable_delay = get_option('bimbeau_ms_enable_delay_step', 1);
-    ?>
-    <div class="wrap">
-        <h1>Réglages avancés</h1>
-        <form method="post">
-            <table class="form-table" role="presentation">
-                <tr>
-                    <th scope="row"><label for="mode">Mode Stripe</label></th>
-                    <td>
-                        <select name="mode" id="mode">
-                            <option value="PROD" <?php selected($mode, 'PROD'); ?>>PROD</option>
-                            <option value="TEST" <?php selected($mode, 'TEST'); ?>>TEST</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="payment_link_prod">Payment Link PROD</label></th>
-                    <td><input type="text" id="payment_link_prod" name="payment_link_prod" value="<?php echo esc_attr($payment_prod); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="payment_link_test">Payment Link TEST</label></th>
-                    <td><input type="text" id="payment_link_test" name="payment_link_test" value="<?php echo esc_attr($payment_test); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="secret_key">Secret Key PROD</label></th>
-                    <td><input type="text" id="secret_key" name="secret_key" value="<?php echo esc_attr($secret); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="secret_key_test">Secret Key TEST</label></th>
-                    <td><input type="text" id="secret_key_test" name="secret_key_test" value="<?php echo esc_attr($secret_test); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="recaptcha_key">reCAPTCHA Site Key</label></th>
-                    <td><input type="text" id="recaptcha_key" name="recaptcha_key" value="<?php echo esc_attr($recaptcha); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="admin_email">Email admin</label></th>
-                    <td><input type="email" id="admin_email" name="admin_email" value="<?php echo esc_attr($admin); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="menu_label">Nom du menu</label></th>
-                    <td><input type="text" id="menu_label" name="menu_label" value="<?php echo esc_attr($menu_label); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="menu_icon">Icône du menu</label></th>
-                    <td>
-                        <input type="text" id="menu_icon" name="menu_icon" value="<?php echo esc_attr($menu_icon); ?>" class="regular-text" />
-                        <p class="description">URL ou Dashicon (ex. dashicons-admin-generic)</p>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">Activer le choix du délai de réponse</th>
-                    <td><input type="checkbox" id="enable_delay_step" name="enable_delay_step" value="1" <?php checked($enable_delay, 1); ?> /></td>
-                </tr>
-            </table>
-            <p class="submit"><input type="submit" name="bimbeau_ms_save" id="submit" class="button button-primary" value="Enregistrer" /></p>
-        </form>
-    </div>
-<?php
+
+    bimbeau_ms_enqueue_settings_app();
+
+    echo '<div class="wrap">';
+    echo '<h1>Réglages avancés</h1>';
+    echo '<div id="bimbeau-ms-settings-app"></div>';
+    echo '</div>';
 }
 
 function bimbeau_ms_steps_page() {
