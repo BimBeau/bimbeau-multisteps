@@ -21,7 +21,9 @@ add_action('init', function() {
 define('BIMBEAU_MS_DIR', plugin_dir_path(__FILE__));
 define('BIMBEAU_MS_URL', plugin_dir_url(__FILE__));
 
-if (is_admin()) require_once BIMBEAU_MS_DIR . 'includes/admin/admin-settings.php';
+// Charge toutes les fonctions d'administration, y compris les routes REST
+// peu importe le contexte afin que l'API soit disponible.
+require_once BIMBEAU_MS_DIR . 'includes/admin/admin-settings.php';
 // Enqueue front-end assets
 function bimbeau_ms_enqueue_assets() {
     wp_enqueue_style(
