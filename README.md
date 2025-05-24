@@ -39,3 +39,14 @@ When editing email templates or labels you can use the following placeholders:
 * `{details}` – summary of the request
 
 These tags will be replaced with the relevant values when emails are sent.
+
+## Data Forms and Data Views
+
+The plugin exposes two shortcodes to manage step data from the front‑end:
+
+* `[ms_data_form]` – displays a form to create or edit a step definition. Use
+  `[ms_data_form id="123"]` to edit a specific step.
+* `[ms_data_view]` – lists the existing steps in a searchable table.
+
+Both shortcodes are useful to build custom management pages without accessing
+the WordPress administration directly.

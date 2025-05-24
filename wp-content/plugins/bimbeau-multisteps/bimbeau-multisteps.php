@@ -30,6 +30,12 @@ function bimbeau_ms_enqueue_assets() {
         [],
         '1.0.0'
     );
+    wp_enqueue_style(
+        'bimbeau-ms-data-manager',
+        BIMBEAU_MS_URL . 'assets/css/data-manager.css',
+        [],
+        '1.0.0'
+    );
 
     // Force an absolute path for the checkbox tick image
     wp_add_inline_style(
@@ -46,6 +52,13 @@ function bimbeau_ms_enqueue_assets() {
         '1.0.0',
         true
     );
+    wp_enqueue_script(
+        'bimbeau-ms-data-manager',
+        BIMBEAU_MS_URL . 'assets/js/data-manager.js',
+        [],
+        '1.0.0',
+        true
+    );
     wp_localize_script(
         'bimbeau-ms-form-interactions',
         'bimbeauMsData',
@@ -57,6 +70,7 @@ add_action('wp_enqueue_scripts', 'bimbeau_ms_enqueue_assets');
 // Chargement du coeur du formulaire après l'initialisation de WordPress
 function bimbeau_ms_load_core() {
     require_once BIMBEAU_MS_DIR . 'includes/forms/multi_step-form.php';
+    require_once BIMBEAU_MS_DIR . 'includes/frontend/data-manager.php';
 }
 add_action('init', 'bimbeau_ms_load_core');
 
