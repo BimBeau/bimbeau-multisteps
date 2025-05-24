@@ -98,6 +98,12 @@ function bimbeau_ms_enqueue_settings_app() {
     wp_enqueue_style( 'wp-components' );
 }
 add_action( 'admin_enqueue_scripts', function( $hook ) {
+    // Apply the wp-components style to every admin page of the plugin
+    if ( strpos( $hook, 'bimbeau-ms-' ) !== false ) {
+        wp_enqueue_style( 'wp-components' );
+    }
+
+    // Load the React settings application only on the advanced settings page
     if ( strpos( $hook, 'bimbeau-ms-settings' ) !== false ) {
         bimbeau_ms_enqueue_settings_app();
     }
