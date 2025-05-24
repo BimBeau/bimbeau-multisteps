@@ -7,14 +7,19 @@ on:
 jobs:
   automerge:
     runs-on: ubuntu-latest
-    if: github.actor == 'BimBeau'
+    if: github.actor == 'BimBeau' && github.event.pull_request.base.ref == 'main'
     steps:
-      - uses: "peter-evans/enable-pull-request-automerge@v3"
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Enable auto-merge for PR
+        uses: peter-evans/enable-pull-request-automerge@v3
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
+          token: ${{ secrets.GH_PAT_AUTOMERGE }}
           pull-request-number: ${{ github.event.pull_request.number }}
-          merge-method: "squash"
-      - name: Merge pull request
+          merge-method: squash
+
+      - name: Merge PR with CLI
         run: gh pr merge ${{ github.event.pull_request.number }} --squash --admin --delete-branch
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT_AUTOMERGE }}
