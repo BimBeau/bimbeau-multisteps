@@ -247,6 +247,18 @@ function bimbeau_ms_email_page() {
         if (isset($_POST['reminder_time'])) {
             update_option('bimbeau_ms_reminder_time', sanitize_text_field(wp_unslash($_POST['reminder_time'])));
         }
+        if (isset($_POST['label_required'])) {
+            update_option('bimbeau_ms_label_required', sanitize_text_field(wp_unslash($_POST['label_required'])));
+        }
+        if (isset($_POST['label_select_option'])) {
+            update_option('bimbeau_ms_label_select_option', sanitize_text_field(wp_unslash($_POST['label_select_option'])));
+        }
+        if (isset($_POST['label_continue'])) {
+            update_option('bimbeau_ms_label_continue', sanitize_text_field(wp_unslash($_POST['label_continue'])));
+        }
+        if (isset($_POST['label_unknown_step'])) {
+            update_option('bimbeau_ms_label_unknown_step', sanitize_text_field(wp_unslash($_POST['label_unknown_step'])));
+        }
         echo '<div class="updated"><p>Options enregistrées.</p></div>';
     }
 
@@ -259,9 +271,13 @@ function bimbeau_ms_email_page() {
     $reminderDays          = get_option('bimbeau_ms_reminder_days_before', 1);
     $reminderTime          = get_option('bimbeau_ms_reminder_time', '10:00');
     $enable_delay          = get_option('bimbeau_ms_enable_delay_step', 1);
+    $labelRequired         = get_option('bimbeau_ms_label_required', 'Ce champ est requis.');
+    $labelSelectOption     = get_option('bimbeau_ms_label_select_option', 'Veuillez sélectionner au moins une option.');
+    $labelContinue         = get_option('bimbeau_ms_label_continue', 'Continuer');
+    $labelUnknownStep      = get_option('bimbeau_ms_label_unknown_step', 'Étape inconnue.');
 
     $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'confirmation';
-    if (!$enable_delay) {
+    if (!$enable_delay && $active_tab === 'rappel') {
         $active_tab = 'confirmation';
     }
 
@@ -274,6 +290,7 @@ function bimbeau_ms_email_page() {
             <?php if ($enable_delay) : ?>
                 <a href="?page=bimbeau-ms-emails&tab=rappel" class="nav-tab <?php echo $active_tab == 'rappel' ? 'nav-tab-active' : ''; ?>">Rappel</a>
             <?php endif; ?>
+            <a href="?page=bimbeau-ms-emails&tab=libelles" class="nav-tab <?php echo $active_tab == 'libelles' ? 'nav-tab-active' : ''; ?>">Libellés</a>
         </h2>
         <form method="post">
             <?php if ($active_tab === 'confirmation') : ?>
@@ -300,7 +317,7 @@ function bimbeau_ms_email_page() {
                         <td><?php wp_editor($confirmAdminBody, 'confirm_admin_body_editor', ['textarea_name' => 'confirm_admin_body']); ?></td>
                     </tr>
                 </table>
-            <?php else : ?>
+            <?php elseif ($active_tab === 'rappel') : ?>
                 <?php if ($enable_delay) : ?>
                     <h2>Rappel Admin</h2>
                     <table class="form-table" role="presentation">
@@ -328,6 +345,26 @@ function bimbeau_ms_email_page() {
                 <?php else : ?>
                     <p>La fonctionnalité de rappel est désactivée.</p>
                 <?php endif; ?>
+            <?php else : ?>
+                <h2>Libellés du formulaire</h2>
+                <table class="form-table" role="presentation">
+                    <tr>
+                        <th scope="row"><label for="label_required">Message champ requis</label></th>
+                        <td><input type="text" id="label_required" name="label_required" value="<?php echo esc_attr($labelRequired); ?>" class="regular-text" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="label_select_option">Message option manquante</label></th>
+                        <td><input type="text" id="label_select_option" name="label_select_option" value="<?php echo esc_attr($labelSelectOption); ?>" class="regular-text" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="label_continue">Texte du bouton Continuer</label></th>
+                        <td><input type="text" id="label_continue" name="label_continue" value="<?php echo esc_attr($labelContinue); ?>" class="regular-text" /></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="label_unknown_step">Message étape inconnue</label></th>
+                        <td><input type="text" id="label_unknown_step" name="label_unknown_step" value="<?php echo esc_attr($labelUnknownStep); ?>" class="regular-text" /></td>
+                    </tr>
+                </table>
             <?php endif; ?>
 
             <p class="submit"><input type="submit" name="bimbeau_ms_save_emails" class="button button-primary" value="Enregistrer" /></p>

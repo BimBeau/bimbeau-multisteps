@@ -21,14 +21,14 @@ function bimbeau_ms_handle_generic_post($step) {
     if ($type === 'checkbox') {
         $value = isset($_POST[$key]) ? array_map('sanitize_text_field', (array)$_POST[$key]) : [];
         if (empty($value)) {
-            $_SESSION['multi_step']['errors'][$key] = 'Veuillez sélectionner au moins une option.';
+            $_SESSION['multi_step']['errors'][$key] = get_option('bimbeau_ms_label_select_option', 'Veuillez sélectionner au moins une option.');
         } else {
             $_SESSION['multi_step'][$key] = $value;
         }
     } else {
         $value = isset($_POST[$key]) ? sanitize_text_field(wp_unslash($_POST[$key])) : '';
         if ($value === '') {
-            $_SESSION['multi_step']['errors'][$key] = 'Ce champ est requis.';
+            $_SESSION['multi_step']['errors'][$key] = get_option('bimbeau_ms_label_required', 'Ce champ est requis.');
         } else {
             $_SESSION['multi_step'][$key] = $value;
         }
@@ -43,7 +43,7 @@ function bimbeau_ms_handle_generic_post($step) {
             $fname = $key . '_' . $val . '_' . sanitize_key($extra['name']);
             $fval  = isset($_POST[$fname]) ? sanitize_text_field(wp_unslash($_POST[$fname])) : '';
             if (!empty($extra['required']) && $fval === '') {
-                $_SESSION['multi_step']['errors'][$fname] = 'Ce champ est requis.';
+                $_SESSION['multi_step']['errors'][$fname] = get_option('bimbeau_ms_label_required', 'Ce champ est requis.');
             } else {
                 $_SESSION['multi_step'][$fname] = $fval;
             }
@@ -138,7 +138,7 @@ function bimbeau_ms_render_step($step) {
         <?php else: ?>
             <input type="text" name="<?php echo esc_attr($key); ?>" value="<?php echo esc_attr($value); ?>" required>
         <?php endif; ?>
-        <p class="submit"><button type="submit" class="button button-primary">Continuer</button></p>
+        <p class="submit"><button type="submit" class="button button-primary"><?php echo esc_html(get_option('bimbeau_ms_label_continue', 'Continuer')); ?></button></p>
     </form>
     <?php
     return ob_get_clean();
@@ -153,6 +153,6 @@ function multi_step_form_shortcode($atts) {
             return bimbeau_ms_render_step($step);
         }
     }
-    return 'Étape inconnue.';
+    return get_option('bimbeau_ms_label_unknown_step', 'Étape inconnue.');
 }
 add_shortcode('multi_step_form', 'multi_step_form_shortcode');
