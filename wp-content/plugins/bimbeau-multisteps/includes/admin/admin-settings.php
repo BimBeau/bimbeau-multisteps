@@ -77,14 +77,18 @@ function bimbeau_ms_admin_tabs($current) {
     ];
 
     $data = [];
+    echo '<h2 id="bimbeau-ms-admin-tabs-fallback" class="nav-tab-wrapper">';
     foreach ($tabs as $slug => $label) {
+        $class = 'nav-tab' . ($current === $slug ? ' nav-tab-active' : '');
+        $url   = admin_url('admin.php?page=' . $slug);
+        echo '<a href="' . esc_url($url) . '" class="' . esc_attr($class) . '">' . esc_html($label) . '</a>';
         $data[] = [
             'slug'  => $slug,
             'label' => $label,
-            'url'   => admin_url('admin.php?page=' . $slug),
+            'url'   => $url,
         ];
     }
-
+    echo '</h2>';
     echo '<div id="bimbeau-ms-admin-tabs" data-current="' . esc_attr($current) . '" data-tabs="' . esc_attr(wp_json_encode($data)) . '"></div>';
 }
 
@@ -137,17 +141,6 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
         wp_enqueue_script(
             'bimbeau-ms-admin-tabs',
             BIMBEAU_MS_URL . 'assets/js/admin-tabs.js',
-            [ 'wp-element', 'wp-components' ],
-            '1.0.0',
-            true
-        );
-    }
-
-    // Load the TabPanel handler on the emails page
-    if ( strpos( $hook, 'bimbeau-ms-emails' ) !== false ) {
-        wp_enqueue_script(
-            'bimbeau-ms-email-tabs',
-            BIMBEAU_MS_URL . 'assets/js/email-tabs.js',
             [ 'wp-element', 'wp-components' ],
             '1.0.0',
             true
