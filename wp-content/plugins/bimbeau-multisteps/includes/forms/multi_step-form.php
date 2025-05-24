@@ -59,7 +59,7 @@ function bimbeau_ms_handle_generic_post($step) {
 function bimbeau_ms_get_next_step_url($currentOrder) {
     $steps = bimbeau_ms_get_step_definitions();
     foreach ($steps as $step) {
-        if ($step->step_order == $currentOrder + 1) {
+        if ($step->step_order > $currentOrder) {
             return home_url('/multi_step/step-' . $step->step_order . '/');
         }
     }

@@ -153,6 +153,8 @@ register_activation_hook(__FILE__, function() {
     // Options de délai pour le rappel
     add_option('bimbeau_ms_reminder_days_before', 1);
     add_option('bimbeau_ms_reminder_time', '10:00');
+    // Enable delay selection step by default
+    add_option('bimbeau_ms_enable_delay_step', 1);
 
     // Capability for email management (editor and above)
     $role = get_role('editor');
