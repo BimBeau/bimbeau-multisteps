@@ -13,6 +13,22 @@
         }
         verifierEtActiverClasse();
 
+        function toggleExtras($input) {
+            var target = $input.data('extra-target');
+            if (!target) return;
+            if ($input.is(':radio')) {
+                $('input[name="' + $input.attr('name') + '"][data-extra-target]').each(function(){
+                    var t = $(this).data('extra-target');
+                    if (t) $('#' + t).hide();
+                });
+            }
+            if ($input.is(':checked')) {
+                $('#' + target).show();
+            } else {
+                $('#' + target).hide();
+            }
+        }
+
         $(document).on('click', '.multi_step_form_step div[data-elementor-type="section"]', function() {
             var $this = $(this);
             var $field = $this.find('input[type="text"], input[type="radio"], input[type="checkbox"], input[type="email"], input[type="date"], input[type="tel"], textarea');
@@ -26,6 +42,16 @@
             if ($field.is(':radio')) {
                 $this.siblings().removeClass('active');
             }
+
+            if ($field.is(':radio, :checkbox')) {
+                toggleExtras($field);
+            }
+        });
+
+        $('.multi_step_form_step input[type="radio"], .multi_step_form_step input[type="checkbox"]').each(function(){
+            toggleExtras($(this));
+        }).on('change', function(){
+            toggleExtras($(this));
         });
 
         function animateAndRedirect(url, delay, isFormSubmission, isFinalSubmission) {
