@@ -57,3 +57,16 @@ The plugin exposes two shortcodes to manage step data from the front‑end:
 
 Both shortcodes are useful to build custom management pages without accessing
 the WordPress administration directly.
+
+## Multi-step form
+
+The enquiry form itself is embedded with the `[multi_step_form]` shortcode.
+Use the optional `etape` attribute to display a specific step:
+
+```text
+[multi_step_form etape="1"]  # shows the first step
+[multi_step_form etape="2"]  # shows the second step
+```
+
+Each step should be placed on its own page. When a user submits the form, the
+plugin records the answers and automatically redirects to the next step.
