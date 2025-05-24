@@ -28,3 +28,14 @@ wp-content/plugins/bimbeau-multisteps/
     ├── forms    # form handling logic
     └── utils    # helper functions
 ```
+
+## Email placeholders
+
+When editing email templates or labels you can use the following placeholders:
+
+* `{prenom}` – client's first name
+* `{nom}` – client's last name
+* `{date}` – chosen reply date
+* `{details}` – summary of the request
+
+These tags will be replaced with the relevant values when emails are sent.

@@ -156,6 +156,12 @@ register_activation_hook(__FILE__, function() {
     // Enable delay selection step by default
     add_option('bimbeau_ms_enable_delay_step', 1);
 
+    // Default interface labels
+    add_option('bimbeau_ms_label_required', 'Ce champ est requis.');
+    add_option('bimbeau_ms_label_select_option', 'Veuillez sélectionner au moins une option.');
+    add_option('bimbeau_ms_label_continue', 'Continuer');
+    add_option('bimbeau_ms_label_unknown_step', 'Étape inconnue.');
+
     // Capability for email management (editor and above)
     $role = get_role('editor');
     if ($role && !$role->has_cap('bimbeau_ms_manage_emails')) {
