@@ -29,6 +29,13 @@ wp-content/plugins/bimbeau-multisteps/
     └── utils    # helper functions
 ```
 
+### Admin navigation
+
+Each administration page prints a placeholder for the navigation tabs.  The
+script `assets/js/admin-tabs.js` replaces this markup with Gutenberg’s
+`TabPanel` component so you can switch between dashboard pages with a single
+click.
+
 ## Email placeholders
 
 When editing email templates or labels you can use the following placeholders:
