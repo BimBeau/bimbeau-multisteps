@@ -97,9 +97,32 @@ function bimbeau_ms_enqueue_settings_app() {
     );
     wp_enqueue_style( 'wp-components' );
 }
+
+/**
+ * Enqueue the React labels application on the labels page.
+ */
+function bimbeau_ms_enqueue_labels_app() {
+    wp_enqueue_script(
+        'bimbeau-ms-labels-app',
+        BIMBEAU_MS_URL . 'assets/js/labels-app.js',
+        [ 'wp-element', 'wp-components', 'wp-api-fetch' ],
+        '1.0.0',
+        true
+    );
+    wp_enqueue_style( 'wp-components' );
+}
 add_action( 'admin_enqueue_scripts', function( $hook ) {
+    // Apply the wp-components style to every admin page of the plugin
+    if ( strpos( $hook, 'bimbeau-ms-' ) !== false ) {
+        wp_enqueue_style( 'wp-components' );
+    }
+
+    // Load the React applications on their specific pages
     if ( strpos( $hook, 'bimbeau-ms-settings' ) !== false ) {
         bimbeau_ms_enqueue_settings_app();
+    }
+    if ( strpos( $hook, 'bimbeau-ms-labels' ) !== false ) {
+        bimbeau_ms_enqueue_labels_app();
     }
 } );
 
@@ -146,6 +169,60 @@ function bimbeau_ms_register_rest_routes() {
         },
         'permission_callback' => function() {
             return current_user_can( 'bimbeau_ms_manage_advanced' );
+        },
+    ] );
+
+    register_rest_route( 'bimbeau-ms/v1', '/labels', [
+        'methods'  => 'GET',
+        'callback' => function() {
+            return [
+                'label_required'        => get_option( 'bimbeau_ms_label_required', 'Ce champ est requis.' ),
+                'label_select_option'   => get_option( 'bimbeau_ms_label_select_option', 'Veuillez sélectionner au moins une option.' ),
+                'label_continue'        => get_option( 'bimbeau_ms_label_continue', 'Continuer' ),
+                'label_unknown_step'    => get_option( 'bimbeau_ms_label_unknown_step', 'Étape inconnue.' ),
+                'msg_saved'             => get_option( 'bimbeau_ms_msg_saved', 'Options enregistrées.' ),
+                'msg_elementor_missing' => get_option( 'bimbeau_ms_msg_elementor_missing', 'BimBeau MultiSteps requiert le plugin Elementor pour fonctionner.' ),
+                'msg_reminder_disabled' => get_option( 'bimbeau_ms_msg_reminder_disabled', 'La fonctionnalité de rappel est désactivée.' ),
+                'msg_dashboard_welcome' => get_option( 'bimbeau_ms_msg_dashboard_welcome', 'Bienvenue dans le tableau de bord du plugin.' ),
+            ];
+        },
+        'permission_callback' => function() {
+            return current_user_can( 'bimbeau_ms_manage_emails' );
+        },
+    ] );
+
+    register_rest_route( 'bimbeau-ms/v1', '/labels', [
+        'methods'  => 'POST',
+        'callback' => function( WP_REST_Request $request ) {
+            $data = $request->get_json_params();
+            if ( isset( $data['label_required'] ) ) {
+                update_option( 'bimbeau_ms_label_required', sanitize_text_field( $data['label_required'] ) );
+            }
+            if ( isset( $data['label_select_option'] ) ) {
+                update_option( 'bimbeau_ms_label_select_option', sanitize_text_field( $data['label_select_option'] ) );
+            }
+            if ( isset( $data['label_continue'] ) ) {
+                update_option( 'bimbeau_ms_label_continue', sanitize_text_field( $data['label_continue'] ) );
+            }
+            if ( isset( $data['label_unknown_step'] ) ) {
+                update_option( 'bimbeau_ms_label_unknown_step', sanitize_text_field( $data['label_unknown_step'] ) );
+            }
+            if ( isset( $data['msg_saved'] ) ) {
+                update_option( 'bimbeau_ms_msg_saved', sanitize_text_field( $data['msg_saved'] ) );
+            }
+            if ( isset( $data['msg_elementor_missing'] ) ) {
+                update_option( 'bimbeau_ms_msg_elementor_missing', sanitize_text_field( $data['msg_elementor_missing'] ) );
+            }
+            if ( isset( $data['msg_reminder_disabled'] ) ) {
+                update_option( 'bimbeau_ms_msg_reminder_disabled', sanitize_text_field( $data['msg_reminder_disabled'] ) );
+            }
+            if ( isset( $data['msg_dashboard_welcome'] ) ) {
+                update_option( 'bimbeau_ms_msg_dashboard_welcome', sanitize_text_field( $data['msg_dashboard_welcome'] ) );
+            }
+            return [ 'success' => true ];
+        },
+        'permission_callback' => function() {
+            return current_user_can( 'bimbeau_ms_manage_emails' );
         },
     ] );
 }
@@ -393,91 +470,15 @@ function bimbeau_ms_email_page() {
 }
 
 function bimbeau_ms_labels_page() {
-    if (!current_user_can('bimbeau_ms_manage_emails')) {
+    if ( ! current_user_can( 'bimbeau_ms_manage_emails' ) ) {
         return;
     }
 
-    if (isset($_POST['bimbeau_ms_save_labels'])) {
-        if (isset($_POST['label_required'])) {
-            update_option('bimbeau_ms_label_required', sanitize_text_field(wp_unslash($_POST['label_required'])));
-        }
-        if (isset($_POST['label_select_option'])) {
-            update_option('bimbeau_ms_label_select_option', sanitize_text_field(wp_unslash($_POST['label_select_option'])));
-        }
-        if (isset($_POST['label_continue'])) {
-            update_option('bimbeau_ms_label_continue', sanitize_text_field(wp_unslash($_POST['label_continue'])));
-        }
-        if (isset($_POST['label_unknown_step'])) {
-            update_option('bimbeau_ms_label_unknown_step', sanitize_text_field(wp_unslash($_POST['label_unknown_step'])));
-        }
-        if (isset($_POST['msg_saved'])) {
-            update_option('bimbeau_ms_msg_saved', sanitize_text_field(wp_unslash($_POST['msg_saved'])));
-        }
-        if (isset($_POST['msg_elementor_missing'])) {
-            update_option('bimbeau_ms_msg_elementor_missing', sanitize_text_field(wp_unslash($_POST['msg_elementor_missing'])));
-        }
-        if (isset($_POST['msg_reminder_disabled'])) {
-            update_option('bimbeau_ms_msg_reminder_disabled', sanitize_text_field(wp_unslash($_POST['msg_reminder_disabled'])));
-        }
-        if (isset($_POST['msg_dashboard_welcome'])) {
-            update_option('bimbeau_ms_msg_dashboard_welcome', sanitize_text_field(wp_unslash($_POST['msg_dashboard_welcome'])));
-        }
-        echo '<div class="updated"><p>' . esc_html(get_option(
-            'bimbeau_ms_msg_saved',
-            'Options enregistrées.'
-        )) . '</p></div>';
-    }
+    bimbeau_ms_enqueue_labels_app();
 
-    $labelRequired     = get_option('bimbeau_ms_label_required', 'Ce champ est requis.');
-    $labelSelectOption = get_option('bimbeau_ms_label_select_option', 'Veuillez sélectionner au moins une option.');
-    $labelContinue     = get_option('bimbeau_ms_label_continue', 'Continuer');
-    $labelUnknownStep  = get_option('bimbeau_ms_label_unknown_step', 'Étape inconnue.');
-    $msgSaved          = get_option('bimbeau_ms_msg_saved', 'Options enregistrées.');
-    $msgElementor      = get_option('bimbeau_ms_msg_elementor_missing', 'BimBeau MultiSteps requiert le plugin Elementor pour fonctionner.');
-    $msgReminderOff    = get_option('bimbeau_ms_msg_reminder_disabled', 'La fonctionnalité de rappel est désactivée.');
-    $msgDashboard      = get_option('bimbeau_ms_msg_dashboard_welcome', 'Bienvenue dans le tableau de bord du plugin.');
-
-    ?>
-    <div class="wrap">
-        <h1>Messages personnalisés</h1>
-        <?php bimbeau_ms_admin_tabs('bimbeau-ms-labels'); ?>
-        <form method="post">
-            <table class="form-table" role="presentation">
-                <tr>
-                    <th scope="row"><label for="label_required">Message champ requis</label></th>
-                    <td><input type="text" id="label_required" name="label_required" value="<?php echo esc_attr($labelRequired); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="label_select_option">Message option manquante</label></th>
-                    <td><input type="text" id="label_select_option" name="label_select_option" value="<?php echo esc_attr($labelSelectOption); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="label_continue">Texte du bouton Continuer</label></th>
-                    <td><input type="text" id="label_continue" name="label_continue" value="<?php echo esc_attr($labelContinue); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="label_unknown_step">Message étape inconnue</label></th>
-                    <td><input type="text" id="label_unknown_step" name="label_unknown_step" value="<?php echo esc_attr($labelUnknownStep); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="msg_saved">Message de confirmation d'enregistrement</label></th>
-                    <td><input type="text" id="msg_saved" name="msg_saved" value="<?php echo esc_attr($msgSaved); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="msg_elementor_missing">Message Elementor manquant</label></th>
-                    <td><input type="text" id="msg_elementor_missing" name="msg_elementor_missing" value="<?php echo esc_attr($msgElementor); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="msg_reminder_disabled">Message rappel désactivé</label></th>
-                    <td><input type="text" id="msg_reminder_disabled" name="msg_reminder_disabled" value="<?php echo esc_attr($msgReminderOff); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="msg_dashboard_welcome">Message accueil du tableau de bord</label></th>
-                    <td><input type="text" id="msg_dashboard_welcome" name="msg_dashboard_welcome" value="<?php echo esc_attr($msgDashboard); ?>" class="regular-text" /></td>
-                </tr>
-            </table>
-            <p class="submit"><input type="submit" name="bimbeau_ms_save_labels" class="button button-primary" value="Enregistrer" /></p>
-        </form>
-    </div>
-    <?php
+    echo '<div class="wrap">';
+    echo '<h1>Messages personnalisés</h1>';
+    bimbeau_ms_admin_tabs( 'bimbeau-ms-labels' );
+    echo '<div id="bimbeau-ms-labels-app"></div>';
+    echo '</div>';
 }
