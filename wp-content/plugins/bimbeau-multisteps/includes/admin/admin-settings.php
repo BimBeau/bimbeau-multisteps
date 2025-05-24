@@ -179,6 +179,8 @@ function bimbeau_ms_register_rest_routes() {
                 'payment_link_test' => get_option( 'bimbeau_ms_payment_link_test', '' ),
                 'admin_email'       => get_option( 'bimbeau_ms_admin_email', '' ),
                 'enable_delay_step' => (bool) get_option( 'bimbeau_ms_enable_delay_step', 1 ),
+                'menu_label'        => get_option( 'bimbeau_ms_menu_label', 'BimBeau MultiSteps' ),
+                'menu_icon'         => get_option( 'bimbeau_ms_menu_icon', 'dashicons-admin-generic' ),
             ];
         },
         'permission_callback' => function() {
@@ -204,6 +206,12 @@ function bimbeau_ms_register_rest_routes() {
             }
             if ( isset( $data['enable_delay_step'] ) ) {
                 update_option( 'bimbeau_ms_enable_delay_step', $data['enable_delay_step'] ? 1 : 0 );
+            }
+            if ( isset( $data['menu_label'] ) ) {
+                update_option( 'bimbeau_ms_menu_label', sanitize_text_field( $data['menu_label'] ) );
+            }
+            if ( isset( $data['menu_icon'] ) ) {
+                update_option( 'bimbeau_ms_menu_icon', sanitize_text_field( $data['menu_icon'] ) );
             }
             return [ 'success' => true ];
         },

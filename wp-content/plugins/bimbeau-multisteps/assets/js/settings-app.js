@@ -59,6 +59,16 @@
                 value: options.admin_email,
                 onChange: (admin_email) => setOptions({ ...options, admin_email })
             }),
+            wp.element.createElement(TextControl, {
+                label: 'Nom du menu',
+                value: options.menu_label,
+                onChange: (menu_label) => setOptions({ ...options, menu_label })
+            }),
+            wp.element.createElement(TextControl, {
+                label: 'Dashicon du menu',
+                value: options.menu_icon,
+                onChange: (menu_icon) => setOptions({ ...options, menu_icon })
+            }),
             wp.element.createElement(CheckboxControl, {
                 label: 'Activer le choix du d\u00e9lai de r\u00e9ponse',
                 checked: !!options.enable_delay_step,

@@ -70,3 +70,7 @@ Use the optional `etape` attribute to display a specific step:
 
 Each step should be placed on its own page. When a user submits the form, the
 plugin records the answers and automatically redirects to the next step.
+
+## Menu customization
+
+The advanced settings page lets you change the label and Dashicon used for the plugin's admin menu. Update these fields and save the options to see the new menu name and icon.
