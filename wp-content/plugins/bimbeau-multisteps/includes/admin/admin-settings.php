@@ -117,7 +117,8 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
         wp_enqueue_style( 'wp-components' );
     }
 
-    // Load the React applications on their specific pages
+
+ // Load the React applications on their specific pages
     if ( strpos( $hook, 'bimbeau-ms-settings' ) !== false ) {
         bimbeau_ms_enqueue_settings_app();
     }
