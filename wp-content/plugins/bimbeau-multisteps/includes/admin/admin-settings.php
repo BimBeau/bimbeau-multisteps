@@ -6,17 +6,27 @@ if (!defined('ABSPATH')) {
 function bimbeau_ms_register_admin_menu() {
     $label = get_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
     $icon  = get_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
+
     add_menu_page(
-        'Emails',
+        'Dashboard',
         $label,
         'bimbeau_ms_manage_emails',
-        'bimbeau-ms-emails',
-        'bimbeau_ms_email_page',
+        'bimbeau-ms-dashboard',
+        'bimbeau_ms_dashboard_page',
         $icon
     );
 
     add_submenu_page(
-        'bimbeau-ms-emails',
+        'bimbeau-ms-dashboard',
+        'Dashboard',
+        'Dashboard',
+        'bimbeau_ms_manage_emails',
+        'bimbeau-ms-dashboard',
+        'bimbeau_ms_dashboard_page'
+    );
+
+    add_submenu_page(
+        'bimbeau-ms-dashboard',
         'Emails',
         'Emails',
         'bimbeau_ms_manage_emails',
@@ -25,7 +35,7 @@ function bimbeau_ms_register_admin_menu() {
     );
 
     add_submenu_page(
-        'bimbeau-ms-emails',
+        'bimbeau-ms-dashboard',
         'Réglages avancés',
         'Réglages avancés',
         'bimbeau_ms_manage_advanced',
@@ -34,7 +44,7 @@ function bimbeau_ms_register_admin_menu() {
     );
 
     add_submenu_page(
-        'bimbeau-ms-emails',
+        'bimbeau-ms-dashboard',
         'Gérer les étapes',
         'Gérer les étapes',
         'manage_options',
@@ -43,7 +53,7 @@ function bimbeau_ms_register_admin_menu() {
     );
 
     add_submenu_page(
-        'bimbeau-ms-emails',
+        'bimbeau-ms-dashboard',
         'Messages personnalisés',
         'Messages personnalisés',
         'bimbeau_ms_manage_emails',
@@ -51,7 +61,28 @@ function bimbeau_ms_register_admin_menu() {
         'bimbeau_ms_labels_page'
     );
 }
+
 add_action('admin_menu', 'bimbeau_ms_register_admin_menu');
+
+/**
+ * Display navigation tabs across all plugin pages.
+ */
+function bimbeau_ms_admin_tabs($current) {
+    $tabs = [
+        'bimbeau-ms-dashboard' => 'Dashboard',
+        'bimbeau-ms-emails'    => 'Emails',
+        'bimbeau-ms-settings'  => 'Réglages avancés',
+        'bimbeau-ms-steps'     => 'Gérer les étapes',
+        'bimbeau-ms-labels'    => 'Messages personnalisés',
+    ];
+    echo '<h2 class="nav-tab-wrapper">';
+    foreach ($tabs as $slug => $label) {
+        $class = 'nav-tab' . ($current === $slug ? ' nav-tab-active' : '');
+        $url   = admin_url('admin.php?page=' . $slug);
+        echo '<a href="' . esc_url($url) . '" class="' . esc_attr($class) . '">' . esc_html($label) . '</a>';
+    }
+    echo '</h2>';
+}
 
 /**
  * Enqueue the React settings application on the options page.
@@ -126,6 +157,7 @@ function bimbeau_ms_dashboard_page() {
     }
     echo '<div class="wrap">';
     echo '<h1>Tableau de bord</h1>';
+    bimbeau_ms_admin_tabs('bimbeau-ms-dashboard');
     echo '<p>' . esc_html(get_option(
         'bimbeau_ms_msg_dashboard_welcome',
         'Bienvenue dans le tableau de bord du plugin.'
@@ -142,6 +174,7 @@ function bimbeau_ms_options_page() {
 
     echo '<div class="wrap">';
     echo '<h1>Réglages avancés</h1>';
+    bimbeau_ms_admin_tabs('bimbeau-ms-settings');
     echo '<div id="bimbeau-ms-settings-app"></div>';
     echo '</div>';
 }
@@ -190,6 +223,7 @@ function bimbeau_ms_steps_page() {
 
     echo '<div class="wrap">';
     echo '<h1>Gestion des étapes</h1>';
+    bimbeau_ms_admin_tabs('bimbeau-ms-steps');
     echo '<form method="post" id="order-form">';
     echo '<input type="hidden" name="order" id="step-order" value="">';
     echo '<table class="wp-list-table widefat fixed striped"><thead><tr><th></th><th>Étape</th><th>Type</th><th>Actions</th></tr></thead><tbody id="steps-sortable">';
@@ -286,6 +320,7 @@ function bimbeau_ms_email_page() {
     ?>
     <div class="wrap">
         <h1>Emails</h1>
+        <?php bimbeau_ms_admin_tabs('bimbeau-ms-emails'); ?>
         <p>Utilisez les raccourcis {prenom}, {nom}, {date} et {details} pour insérer les valeurs correspondantes.</p>
         <h2 class="nav-tab-wrapper">
             <a href="?page=bimbeau-ms-emails&tab=confirmation" class="nav-tab <?php echo $active_tab == 'confirmation' ? 'nav-tab-active' : ''; ?>">Confirmation</a>
@@ -405,6 +440,7 @@ function bimbeau_ms_labels_page() {
     ?>
     <div class="wrap">
         <h1>Messages personnalisés</h1>
+        <?php bimbeau_ms_admin_tabs('bimbeau-ms-labels'); ?>
         <form method="post">
             <table class="form-table" role="presentation">
                 <tr>
