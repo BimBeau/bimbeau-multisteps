@@ -10,7 +10,7 @@ function bimbeau_ms_register_admin_menu() {
     add_menu_page(
         'Dashboard',
         $label,
-        'bimbeau_ms_manage_emails',
+        'edit_others_posts',
         'bimbeau-ms-dashboard',
         'bimbeau_ms_dashboard_page',
         $icon
@@ -20,7 +20,7 @@ function bimbeau_ms_register_admin_menu() {
         'bimbeau-ms-dashboard',
         'Dashboard',
         'Dashboard',
-        'bimbeau_ms_manage_emails',
+        'edit_others_posts',
         'bimbeau-ms-dashboard',
         'bimbeau_ms_dashboard_page'
     );
@@ -29,7 +29,7 @@ function bimbeau_ms_register_admin_menu() {
         'bimbeau-ms-dashboard',
         'Emails',
         'Emails',
-        'bimbeau_ms_manage_emails',
+        'edit_others_posts',
         'bimbeau-ms-emails',
         'bimbeau_ms_email_page'
     );
@@ -38,7 +38,7 @@ function bimbeau_ms_register_admin_menu() {
         'bimbeau-ms-dashboard',
         'Réglages avancés',
         'Réglages avancés',
-        'bimbeau_ms_manage_advanced',
+        'manage_options',
         'bimbeau-ms-settings',
         'bimbeau_ms_options_page'
     );
@@ -47,7 +47,7 @@ function bimbeau_ms_register_admin_menu() {
         'bimbeau-ms-dashboard',
         'Gérer les étapes',
         'Gérer les étapes',
-        'manage_options',
+        'edit_others_posts',
         'bimbeau-ms-steps',
         'bimbeau_ms_steps_page'
     );
@@ -56,7 +56,7 @@ function bimbeau_ms_register_admin_menu() {
         'bimbeau-ms-dashboard',
         'Messages personnalisés',
         'Messages personnalisés',
-        'bimbeau_ms_manage_emails',
+        'edit_others_posts',
         'bimbeau-ms-labels',
         'bimbeau_ms_labels_page'
     );
@@ -69,19 +69,23 @@ add_action('admin_menu', 'bimbeau_ms_register_admin_menu');
  */
 function bimbeau_ms_admin_tabs($current) {
     $tabs = [
-        'bimbeau-ms-dashboard' => 'Dashboard',
-        'bimbeau-ms-emails'    => 'Emails',
-        'bimbeau-ms-settings'  => 'Réglages avancés',
-        'bimbeau-ms-steps'     => 'Gérer les étapes',
-        'bimbeau-ms-labels'    => 'Messages personnalisés',
+        'bimbeau-ms-dashboard' => [ 'label' => 'Dashboard',          'cap' => 'edit_others_posts' ],
+        'bimbeau-ms-emails'    => [ 'label' => 'Emails',             'cap' => 'edit_others_posts' ],
+        'bimbeau-ms-settings'  => [ 'label' => 'Réglages avancés',    'cap' => 'manage_options' ],
+        'bimbeau-ms-steps'     => [ 'label' => 'Gérer les étapes',    'cap' => 'edit_others_posts' ],
+        'bimbeau-ms-labels'    => [ 'label' => 'Messages personnalisés', 'cap' => 'edit_others_posts' ],
     ];
 
     $data = [];
     echo '<h2 id="bimbeau-ms-admin-tabs-fallback" class="nav-tab-wrapper">';
-    foreach ($tabs as $slug => $label) {
-        $class = 'nav-tab' . ($current === $slug ? ' nav-tab-active' : '');
-        $url   = admin_url('admin.php?page=' . $slug);
-        echo '<a href="' . esc_url($url) . '" class="' . esc_attr($class) . '">' . esc_html($label) . '</a>';
+    foreach ($tabs as $slug => $tab) {
+        if ( ! current_user_can( $tab['cap'] ) ) {
+            continue;
+        }
+        $label = $tab['label'];
+        $class = 'nav-tab' . ( $current === $slug ? ' nav-tab-active' : '' );
+        $url   = admin_url( 'admin.php?page=' . $slug );
+        echo '<a href="' . esc_url( $url ) . '" class="' . esc_attr( $class ) . '">' . esc_html( $label ) . '</a>';
         $data[] = [
             'slug'  => $slug,
             'label' => $label,
@@ -178,7 +182,7 @@ function bimbeau_ms_register_rest_routes() {
             ];
         },
         'permission_callback' => function() {
-            return current_user_can( 'bimbeau_ms_manage_advanced' );
+            return current_user_can( 'manage_options' );
         },
     ] );
 
@@ -204,7 +208,7 @@ function bimbeau_ms_register_rest_routes() {
             return [ 'success' => true ];
         },
         'permission_callback' => function() {
-            return current_user_can( 'bimbeau_ms_manage_advanced' );
+            return current_user_can( 'manage_options' );
         },
     ] );
 
@@ -217,7 +221,7 @@ function bimbeau_ms_register_rest_routes() {
             return $wpdb->get_results( "SELECT * FROM {$table} ORDER BY step_order ASC", ARRAY_A );
         },
         'permission_callback' => function() {
-            return current_user_can( 'manage_options' );
+            return current_user_can( 'edit_others_posts' );
         },
     ] );
 
@@ -253,7 +257,7 @@ function bimbeau_ms_register_rest_routes() {
             return new WP_Error( 'invalid_request', 'Invalid request', [ 'status' => 400 ] );
         },
         'permission_callback' => function() {
-            return current_user_can( 'manage_options' );
+            return current_user_can( 'edit_others_posts' );
         },
     ] );
 
@@ -273,7 +277,7 @@ function bimbeau_ms_register_rest_routes() {
             ];
         },
         'permission_callback' => function() {
-            return current_user_can( 'bimbeau_ms_manage_emails' );
+            return current_user_can( 'edit_others_posts' );
         },
     ] );
 
@@ -308,14 +312,14 @@ function bimbeau_ms_register_rest_routes() {
             return [ 'success' => true ];
         },
         'permission_callback' => function() {
-            return current_user_can( 'bimbeau_ms_manage_emails' );
+            return current_user_can( 'edit_others_posts' );
         },
     ] );
 }
 add_action( 'rest_api_init', 'bimbeau_ms_register_rest_routes' );
 
 function bimbeau_ms_dashboard_page() {
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can('edit_others_posts')) {
         return;
     }
     echo '<div class="wrap">';
@@ -329,7 +333,7 @@ function bimbeau_ms_dashboard_page() {
 }
 
 function bimbeau_ms_options_page() {
-    if (!current_user_can('bimbeau_ms_manage_advanced')) {
+    if (!current_user_can('manage_options')) {
         return;
     }
 
@@ -343,7 +347,7 @@ function bimbeau_ms_options_page() {
 }
 
 function bimbeau_ms_steps_page() {
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can('edit_others_posts')) {
         return;
     }
 
@@ -357,7 +361,7 @@ function bimbeau_ms_steps_page() {
 }
 
 function bimbeau_ms_email_page() {
-    if (!current_user_can('bimbeau_ms_manage_emails')) {
+    if (!current_user_can('edit_others_posts')) {
         return;
     }
 
@@ -486,7 +490,7 @@ function bimbeau_ms_email_page() {
 }
 
 function bimbeau_ms_labels_page() {
-    if ( ! current_user_can( 'bimbeau_ms_manage_emails' ) ) {
+    if ( ! current_user_can( 'edit_others_posts' ) ) {
         return;
     }
 
