@@ -99,12 +99,13 @@ function bimbeau_ms_enqueue_settings_app() {
 }
 
 /**
- * Enqueue the React labels application on the labels page.
+
+ * Enqueue the React steps application on the steps page.
  */
-function bimbeau_ms_enqueue_labels_app() {
+function bimbeau_ms_enqueue_steps_app() {
     wp_enqueue_script(
-        'bimbeau-ms-labels-app',
-        BIMBEAU_MS_URL . 'assets/js/labels-app.js',
+        'bimbeau-ms-steps-app',
+        BIMBEAU_MS_URL . 'assets/js/steps-app.js',
         [ 'wp-element', 'wp-components', 'wp-api-fetch' ],
         '1.0.0',
         true
@@ -118,12 +119,13 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
     }
 
 
- // Load the React applications on their specific pages
+    // Load the React settings application only on the advanced settings page
     if ( strpos( $hook, 'bimbeau-ms-settings' ) !== false ) {
         bimbeau_ms_enqueue_settings_app();
     }
-    if ( strpos( $hook, 'bimbeau-ms-labels' ) !== false ) {
-        bimbeau_ms_enqueue_labels_app();
+    // Load the React steps application only on the steps page
+    if ( strpos( $hook, 'bimbeau-ms-steps' ) !== false ) {
+        bimbeau_ms_enqueue_steps_app();
     }
 } );
 
@@ -173,57 +175,52 @@ function bimbeau_ms_register_rest_routes() {
         },
     ] );
 
-    register_rest_route( 'bimbeau-ms/v1', '/labels', [
+    // Routes for the React steps page
+    register_rest_route( 'bimbeau-ms/v1', '/steps', [
         'methods'  => 'GET',
         'callback' => function() {
-            return [
-                'label_required'        => get_option( 'bimbeau_ms_label_required', 'Ce champ est requis.' ),
-                'label_select_option'   => get_option( 'bimbeau_ms_label_select_option', 'Veuillez sélectionner au moins une option.' ),
-                'label_continue'        => get_option( 'bimbeau_ms_label_continue', 'Continuer' ),
-                'label_unknown_step'    => get_option( 'bimbeau_ms_label_unknown_step', 'Étape inconnue.' ),
-                'msg_saved'             => get_option( 'bimbeau_ms_msg_saved', 'Options enregistrées.' ),
-                'msg_elementor_missing' => get_option( 'bimbeau_ms_msg_elementor_missing', 'BimBeau MultiSteps requiert le plugin Elementor pour fonctionner.' ),
-                'msg_reminder_disabled' => get_option( 'bimbeau_ms_msg_reminder_disabled', 'La fonctionnalité de rappel est désactivée.' ),
-                'msg_dashboard_welcome' => get_option( 'bimbeau_ms_msg_dashboard_welcome', 'Bienvenue dans le tableau de bord du plugin.' ),
-            ];
+            global $wpdb;
+            $table = $wpdb->prefix . 'bimbeau_ms_steps';
+            return $wpdb->get_results( "SELECT * FROM {$table} ORDER BY step_order ASC", ARRAY_A );
         },
         'permission_callback' => function() {
-            return current_user_can( 'bimbeau_ms_manage_emails' );
+            return current_user_can( 'manage_options' );
         },
     ] );
 
-    register_rest_route( 'bimbeau-ms/v1', '/labels', [
+    register_rest_route( 'bimbeau-ms/v1', '/steps', [
         'methods'  => 'POST',
         'callback' => function( WP_REST_Request $request ) {
+            global $wpdb;
+            $table = $wpdb->prefix . 'bimbeau_ms_steps';
             $data = $request->get_json_params();
-            if ( isset( $data['label_required'] ) ) {
-                update_option( 'bimbeau_ms_label_required', sanitize_text_field( $data['label_required'] ) );
+            if ( isset( $data['action'] ) && 'create' === $data['action'] ) {
+                $order = (int) $wpdb->get_var( "SELECT MAX(step_order) FROM {$table}" ) + 1;
+                $wpdb->insert( $table, [
+                    'step_order'    => $order,
+                    'step_key'      => sanitize_title( $data['label'] ),
+                    'label'         => sanitize_text_field( $data['label'] ),
+                    'question_type' => sanitize_text_field( $data['question_type'] ),
+                    'choices'       => isset( $data['choices'] ) ? sanitize_textarea_field( $data['choices'] ) : ''
+                ] );
+                return [ 'success' => true ];
             }
-            if ( isset( $data['label_select_option'] ) ) {
-                update_option( 'bimbeau_ms_label_select_option', sanitize_text_field( $data['label_select_option'] ) );
+            if ( isset( $data['action'] ) && 'delete' === $data['action'] && isset( $data['id'] ) ) {
+                $wpdb->delete( $table, [ 'id' => intval( $data['id'] ) ] );
+                return [ 'success' => true ];
             }
-            if ( isset( $data['label_continue'] ) ) {
-                update_option( 'bimbeau_ms_label_continue', sanitize_text_field( $data['label_continue'] ) );
+            if ( isset( $data['action'] ) && 'update_order' === $data['action'] && ! empty( $data['order'] ) ) {
+                $ids = array_map( 'intval', (array) $data['order'] );
+                $pos = 1;
+                foreach ( $ids as $id ) {
+                    $wpdb->update( $table, [ 'step_order' => $pos++ ], [ 'id' => $id ] );
+                }
+                return [ 'success' => true ];
             }
-            if ( isset( $data['label_unknown_step'] ) ) {
-                update_option( 'bimbeau_ms_label_unknown_step', sanitize_text_field( $data['label_unknown_step'] ) );
-            }
-            if ( isset( $data['msg_saved'] ) ) {
-                update_option( 'bimbeau_ms_msg_saved', sanitize_text_field( $data['msg_saved'] ) );
-            }
-            if ( isset( $data['msg_elementor_missing'] ) ) {
-                update_option( 'bimbeau_ms_msg_elementor_missing', sanitize_text_field( $data['msg_elementor_missing'] ) );
-            }
-            if ( isset( $data['msg_reminder_disabled'] ) ) {
-                update_option( 'bimbeau_ms_msg_reminder_disabled', sanitize_text_field( $data['msg_reminder_disabled'] ) );
-            }
-            if ( isset( $data['msg_dashboard_welcome'] ) ) {
-                update_option( 'bimbeau_ms_msg_dashboard_welcome', sanitize_text_field( $data['msg_dashboard_welcome'] ) );
-            }
-            return [ 'success' => true ];
+            return new WP_Error( 'invalid_request', 'Invalid request', [ 'status' => 400 ] );
         },
         'permission_callback' => function() {
-            return current_user_can( 'bimbeau_ms_manage_emails' );
+            return current_user_can( 'manage_options' );
         },
     ] );
 }
@@ -262,83 +259,13 @@ function bimbeau_ms_steps_page() {
         return;
     }
 
-    global $wpdb;
-    $table = $wpdb->prefix . 'bimbeau_ms_steps';
-
-    // Handle add step
-    if (isset($_POST['add_step'])) {
-        $label = sanitize_text_field(wp_unslash($_POST['step_label']));
-        $type  = sanitize_text_field(wp_unslash($_POST['question_type']));
-        $choices = isset($_POST['choices']) ? sanitize_textarea_field(wp_unslash($_POST['choices'])) : '';
-        $order = (int)$wpdb->get_var("SELECT MAX(step_order) FROM {$table}") + 1;
-        $wpdb->insert($table, [
-            'step_order' => $order,
-            'step_key' => sanitize_title($label),
-            'label' => $label,
-            'question_type' => $type,
-            'choices' => $choices
-        ]);
-    }
-
-    // Handle delete
-    if (isset($_POST['delete_step'])) {
-        $wpdb->delete($table, ['id' => intval($_POST['delete_step'])]);
-    }
-
-    // Handle order save
-    if (isset($_POST['save_order']) && isset($_POST['order'])) {
-        $order_raw = sanitize_text_field(wp_unslash($_POST['order']));
-        $ids = array_filter(array_map('intval', explode(',', $order_raw)));
-        $pos = 1;
-        foreach ($ids as $id) {
-            $wpdb->update($table, ['step_order' => $pos++], ['id' => $id]);
-        }
-    }
-
-    $steps = $wpdb->get_results("SELECT * FROM {$table} ORDER BY step_order ASC");
-
-    wp_enqueue_script('jquery-ui-sortable');
+    bimbeau_ms_enqueue_steps_app();
 
     echo '<div class="wrap">';
     echo '<h1>Gestion des étapes</h1>';
     bimbeau_ms_admin_tabs('bimbeau-ms-steps');
-    echo '<form method="post" id="order-form">';
-    echo '<input type="hidden" name="order" id="step-order" value="">';
-    echo '<table class="wp-list-table widefat fixed striped"><thead><tr><th></th><th>Étape</th><th>Type</th><th>Actions</th></tr></thead><tbody id="steps-sortable">';
-    foreach ($steps as $step) {
-        echo '<tr data-id="' . esc_attr($step->id) . '">';
-        echo '<td class="handle">&#9776;</td>';
-        echo '<td>' . esc_html($step->label) . '</td>';
-        echo '<td>' . esc_html($step->question_type) . '</td>';
-        echo '<td><button type="submit" name="delete_step" value="' . esc_attr($step->id) . '" class="button-link-delete">Supprimer</button></td>';
-        echo '</tr>';
-    }
-    echo '</tbody></table>';
-    echo '<p><button type="submit" name="save_order" class="button button-primary">Enregistrer l\'ordre</button></p>';
-    echo '</form>';
-
-    echo '<h2>Ajouter une étape</h2>';
-    echo '<form method="post">';
-    echo '<p><input type="text" name="step_label" class="regular-text" placeholder="Label" required></p>';
-    echo '<p><select name="question_type"><option value="text">Texte</option><option value="radio">Radio</option><option value="checkbox">Checkbox</option></select></p>';
-    echo '<p><textarea name="choices" class="large-text" placeholder="option:value, ..."></textarea></p>';
-    echo '<p class="submit"><input type="submit" name="add_step" class="button button-primary" value="Ajouter"></p>';
-    echo '</form>';
+    echo '<div id="bimbeau-ms-steps-app"></div>';
     echo '</div>';
-
-    ?>
-    <script>
-    jQuery(function($){
-        $('#steps-sortable').sortable({
-            handle: '.handle',
-            update: function(){
-                var order = $('#steps-sortable').sortable('toArray',{attribute:'data-id'});
-                $('#step-order').val(order.join(','));
-            }
-        });
-    });
-    </script>
-    <?php
 }
 
 function bimbeau_ms_email_page() {
