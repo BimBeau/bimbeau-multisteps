@@ -290,3 +290,14 @@ function bimbeau_ms_send_multi_step_reminder($uniqueId) {
     delete_option('multi_step_reminder_' . $uniqueId);
 }
 add_action('send_multi_step_reminder', 'bimbeau_ms_send_multi_step_reminder', 10, 1);
+
+
+/**
+ * Retrieve step definitions from database ordered by step_order.
+ * @return array
+ */
+function bimbeau_ms_get_step_definitions() {
+    global $wpdb;
+    $table = $wpdb->prefix . 'bimbeau_ms_steps';
+    return $wpdb->get_results("SELECT * FROM {$table} ORDER BY step_order ASC");
+}

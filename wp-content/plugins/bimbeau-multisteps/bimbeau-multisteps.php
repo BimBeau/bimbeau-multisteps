@@ -69,6 +69,43 @@ register_activation_hook(__FILE__, function() {
     add_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
     add_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
 
+    // Create steps table
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'bimbeau_ms_steps';
+    $charset_collate = $wpdb->get_charset_collate();
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    $sql = "CREATE TABLE {$table_name} (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        step_order int NOT NULL,
+        step_key varchar(100) NOT NULL,
+        label varchar(200) NOT NULL,
+        question_type varchar(20) NOT NULL,
+        choices text,
+        PRIMARY KEY  (id)
+    ) {$charset_collate};";
+    dbDelta($sql);
+
+    // Insert default steps if table empty
+    if (!$wpdb->get_var("SELECT COUNT(*) FROM {$table_name}")) {
+        $defaults = [
+            ['profil', 'Mon profil', 'radio', json_encode(['proprietaire' => 'Propriétaire', 'compromis' => 'En train de signer mon compromis', 'renseignements' => 'Juste à la recherche de renseignements'])],
+            ['projet', 'Mon projet', 'radio', json_encode(['maison' => 'Maison', 'appartement' => 'Appartement'])],
+            ['accompagnement', 'Mon accompagnement', 'radio', json_encode(['renovation' => 'Rénovation', 'construction' => 'Construction'])],
+            ['besoins', 'Mes besoins', 'checkbox', json_encode(['restructurer' => 'Restructurer', 'decorer' => 'Décorer'])],
+            ['coordonnees', 'Mes coordonnées', 'text', '']
+        ];
+        $order = 1;
+        foreach ($defaults as $def) {
+            $wpdb->insert($table_name, [
+                'step_order' => $order++,
+                'step_key' => $def[0],
+                'label' => $def[1],
+                'question_type' => $def[2],
+                'choices' => $def[3]
+            ]);
+        }
+    }
+
     // Default email templates
     add_option('bimbeau_ms_confirm_client_subject', '[Secret Déco] Confirmation de votre demande');
     add_option('bimbeau_ms_confirm_client_body', "<h2>Bonjour {prenom},</h2><p>Nous avons bien reçu votre demande. Voici un récapitulatif :</p>{details}<p>Nous reviendrons vers vous avant le {date}.</p>");

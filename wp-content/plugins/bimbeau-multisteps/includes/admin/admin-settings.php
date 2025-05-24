@@ -134,49 +134,81 @@ function bimbeau_ms_steps_page() {
         return;
     }
 
-    $custom_steps = get_option('bimbeau_ms_custom_steps', []);
+    global $wpdb;
+    $table = $wpdb->prefix . 'bimbeau_ms_steps';
 
-    if (isset($_POST['bimbeau_ms_add_step']) && !empty($_POST['step_name'])) {
-        $step_name = sanitize_text_field(wp_unslash($_POST['step_name']));
-        $custom_steps[] = $step_name;
-        update_option('bimbeau_ms_custom_steps', $custom_steps);
-        echo '<div class="updated"><p>Étape ajoutée.</p></div>';
+    // Handle add step
+    if (isset($_POST['add_step'])) {
+        $label = sanitize_text_field(wp_unslash($_POST['step_label']));
+        $type  = sanitize_text_field($_POST['question_type']);
+        $choices = isset($_POST['choices']) ? sanitize_textarea_field(wp_unslash($_POST['choices'])) : '';
+        $order = (int)$wpdb->get_var("SELECT MAX(step_order) FROM {$table}") + 1;
+        $wpdb->insert($table, [
+            'step_order' => $order,
+            'step_key' => sanitize_title($label),
+            'label' => $label,
+            'question_type' => $type,
+            'choices' => $choices
+        ]);
     }
 
-    $default_steps = [
-        'Mon profil',
-        'Mon projet',
-        'Mon accompagnement',
-        'Mes besoins',
-        'Informations complémentaires',
-        'Superficie',
-        'Démarrage du projet',
-        'Mon budget',
-        'Mes coordonnées',
-        'Envoyer ma demande',
-        'Remerciement'
-    ];
+    // Handle delete
+    if (isset($_POST['delete_step'])) {
+        $wpdb->delete($table, ['id' => intval($_POST['delete_step'])]);
+    }
 
-    $all_steps = array_merge($default_steps, $custom_steps);
+    // Handle order save
+    if (isset($_POST['save_order']) && isset($_POST['order'])) {
+        $ids = array_filter(array_map('intval', explode(',', $_POST['order'])));
+        $pos = 1;
+        foreach ($ids as $id) {
+            $wpdb->update($table, ['step_order' => $pos++], ['id' => $id]);
+        }
+    }
+
+    $steps = $wpdb->get_results("SELECT * FROM {$table} ORDER BY step_order ASC");
+
+    wp_enqueue_script('jquery-ui-sortable');
 
     echo '<div class="wrap">';
     echo '<h1>Gestion des étapes</h1>';
-    echo '<table class="widefat">';
-    echo '<thead><tr><th>#</th><th>Nom de l\'étape</th></tr></thead>';
-    echo '<tbody>';
-    $index = 1;
-    foreach ($all_steps as $step) {
-        echo '<tr><td>' . $index . '</td><td>' . esc_html($step) . '</td></tr>';
-        $index++;
+    echo '<form method="post" id="order-form">';
+    echo '<input type="hidden" name="order" id="step-order" value="">';
+    echo '<table class="wp-list-table widefat fixed striped"><thead><tr><th></th><th>Étape</th><th>Type</th><th>Actions</th></tr></thead><tbody id="steps-sortable">';
+    foreach ($steps as $step) {
+        echo '<tr data-id="' . esc_attr($step->id) . '">';
+        echo '<td class="handle">&#9776;</td>';
+        echo '<td>' . esc_html($step->label) . '</td>';
+        echo '<td>' . esc_html($step->question_type) . '</td>';
+        echo '<td><button type="submit" name="delete_step" value="' . esc_attr($step->id) . '" class="button-link-delete">Supprimer</button></td>';
+        echo '</tr>';
     }
     echo '</tbody></table>';
+    echo '<p><button type="submit" name="save_order" class="button button-primary">Enregistrer l\'ordre</button></p>';
+    echo '</form>';
 
     echo '<h2>Ajouter une étape</h2>';
     echo '<form method="post">';
-    echo '<input type="text" name="step_name" class="regular-text" required />';
-    echo '<p class="submit"><input type="submit" name="bimbeau_ms_add_step" class="button button-primary" value="Ajouter" /></p>';
+    echo '<p><input type="text" name="step_label" class="regular-text" placeholder="Label" required></p>';
+    echo '<p><select name="question_type"><option value="text">Texte</option><option value="radio">Radio</option><option value="checkbox">Checkbox</option></select></p>';
+    echo '<p><textarea name="choices" class="large-text" placeholder="option:value, ..."></textarea></p>';
+    echo '<p class="submit"><input type="submit" name="add_step" class="button button-primary" value="Ajouter"></p>';
     echo '</form>';
     echo '</div>';
+
+    ?>
+    <script>
+    jQuery(function($){
+        $('#steps-sortable').sortable({
+            handle: '.handle',
+            update: function(){
+                var order = $('#steps-sortable').sortable('toArray',{attribute:'data-id'});
+                $('#step-order').val(order.join(','));
+            }
+        });
+    });
+    </script>
+    <?php
 }
 
 function bimbeau_ms_email_page() {
