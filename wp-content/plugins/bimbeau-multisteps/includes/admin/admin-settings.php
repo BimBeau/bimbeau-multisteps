@@ -59,7 +59,10 @@ function bimbeau_ms_dashboard_page() {
     }
     echo '<div class="wrap">';
     echo '<h1>Tableau de bord</h1>';
-    echo '<p>Bienvenue dans le tableau de bord du plugin.</p>';
+    echo '<p>' . esc_html(get_option(
+        'bimbeau_ms_msg_dashboard_welcome',
+        'Bienvenue dans le tableau de bord du plugin.'
+    )) . '</p>';
     echo '</div>';
 }
 
@@ -80,7 +83,10 @@ function bimbeau_ms_options_page() {
             update_option('bimbeau_ms_recaptcha_key', sanitize_text_field(wp_unslash($_POST['recaptcha_key'])));
         }
         update_option('bimbeau_ms_enable_delay_step', isset($_POST['enable_delay_step']) ? 1 : 0);
-        echo '<div class="updated"><p>Options enregistrées.</p></div>';
+        echo '<div class="updated"><p>' . esc_html(get_option(
+            'bimbeau_ms_msg_saved',
+            'Options enregistrées.'
+        )) . '</p></div>';
     }
     $mode = get_option('bimbeau_ms_mode', 'PROD');
     $payment_prod = get_option('bimbeau_ms_payment_link', '');
@@ -265,7 +271,10 @@ function bimbeau_ms_email_page() {
         if (isset($_POST['reminder_time'])) {
             update_option('bimbeau_ms_reminder_time', sanitize_text_field(wp_unslash($_POST['reminder_time'])));
         }
-        echo '<div class="updated"><p>Options enregistrées.</p></div>';
+        echo '<div class="updated"><p>' . esc_html(get_option(
+            'bimbeau_ms_msg_saved',
+            'Options enregistrées.'
+        )) . '</p></div>';
     }
 
     $confirmClientSubject  = get_option('bimbeau_ms_confirm_client_subject');
@@ -347,7 +356,10 @@ function bimbeau_ms_email_page() {
                         </tr>
                     </table>
                 <?php else : ?>
-                    <p>La fonctionnalité de rappel est désactivée.</p>
+                    <p><?php echo esc_html(get_option(
+                        'bimbeau_ms_msg_reminder_disabled',
+                        'La fonctionnalité de rappel est désactivée.'
+                    )); ?></p>
                 <?php endif; ?>
             <?php endif; ?>
 
@@ -375,13 +387,32 @@ function bimbeau_ms_labels_page() {
         if (isset($_POST['label_unknown_step'])) {
             update_option('bimbeau_ms_label_unknown_step', sanitize_text_field(wp_unslash($_POST['label_unknown_step'])));
         }
-        echo '<div class="updated"><p>Options enregistrées.</p></div>';
+        if (isset($_POST['msg_saved'])) {
+            update_option('bimbeau_ms_msg_saved', sanitize_text_field(wp_unslash($_POST['msg_saved'])));
+        }
+        if (isset($_POST['msg_elementor_missing'])) {
+            update_option('bimbeau_ms_msg_elementor_missing', sanitize_text_field(wp_unslash($_POST['msg_elementor_missing'])));
+        }
+        if (isset($_POST['msg_reminder_disabled'])) {
+            update_option('bimbeau_ms_msg_reminder_disabled', sanitize_text_field(wp_unslash($_POST['msg_reminder_disabled'])));
+        }
+        if (isset($_POST['msg_dashboard_welcome'])) {
+            update_option('bimbeau_ms_msg_dashboard_welcome', sanitize_text_field(wp_unslash($_POST['msg_dashboard_welcome'])));
+        }
+        echo '<div class="updated"><p>' . esc_html(get_option(
+            'bimbeau_ms_msg_saved',
+            'Options enregistrées.'
+        )) . '</p></div>';
     }
 
     $labelRequired     = get_option('bimbeau_ms_label_required', 'Ce champ est requis.');
     $labelSelectOption = get_option('bimbeau_ms_label_select_option', 'Veuillez sélectionner au moins une option.');
     $labelContinue     = get_option('bimbeau_ms_label_continue', 'Continuer');
     $labelUnknownStep  = get_option('bimbeau_ms_label_unknown_step', 'Étape inconnue.');
+    $msgSaved          = get_option('bimbeau_ms_msg_saved', 'Options enregistrées.');
+    $msgElementor      = get_option('bimbeau_ms_msg_elementor_missing', 'BimBeau MultiSteps requiert le plugin Elementor pour fonctionner.');
+    $msgReminderOff    = get_option('bimbeau_ms_msg_reminder_disabled', 'La fonctionnalité de rappel est désactivée.');
+    $msgDashboard      = get_option('bimbeau_ms_msg_dashboard_welcome', 'Bienvenue dans le tableau de bord du plugin.');
 
     ?>
     <div class="wrap">
@@ -403,6 +434,22 @@ function bimbeau_ms_labels_page() {
                 <tr>
                     <th scope="row"><label for="label_unknown_step">Message étape inconnue</label></th>
                     <td><input type="text" id="label_unknown_step" name="label_unknown_step" value="<?php echo esc_attr($labelUnknownStep); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="msg_saved">Message de confirmation d'enregistrement</label></th>
+                    <td><input type="text" id="msg_saved" name="msg_saved" value="<?php echo esc_attr($msgSaved); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="msg_elementor_missing">Message Elementor manquant</label></th>
+                    <td><input type="text" id="msg_elementor_missing" name="msg_elementor_missing" value="<?php echo esc_attr($msgElementor); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="msg_reminder_disabled">Message rappel désactivé</label></th>
+                    <td><input type="text" id="msg_reminder_disabled" name="msg_reminder_disabled" value="<?php echo esc_attr($msgReminderOff); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="msg_dashboard_welcome">Message accueil du tableau de bord</label></th>
+                    <td><input type="text" id="msg_dashboard_welcome" name="msg_dashboard_welcome" value="<?php echo esc_attr($msgDashboard); ?>" class="regular-text" /></td>
                 </tr>
             </table>
             <p class="submit"><input type="submit" name="bimbeau_ms_save_labels" class="button button-primary" value="Enregistrer" /></p>

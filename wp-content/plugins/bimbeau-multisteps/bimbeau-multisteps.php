@@ -182,6 +182,12 @@ register_activation_hook(__FILE__, function() {
     add_option('bimbeau_ms_label_continue', 'Continuer');
     add_option('bimbeau_ms_label_unknown_step', 'Étape inconnue.');
 
+    // Misc interface messages
+    add_option('bimbeau_ms_msg_saved', 'Options enregistrées.');
+    add_option('bimbeau_ms_msg_elementor_missing', 'BimBeau MultiSteps requiert le plugin Elementor pour fonctionner.');
+    add_option('bimbeau_ms_msg_reminder_disabled', 'La fonctionnalité de rappel est désactivée.');
+    add_option('bimbeau_ms_msg_dashboard_welcome', 'Bienvenue dans le tableau de bord du plugin.');
+
     // Capability for email management (editor and above)
     $role = get_role('editor');
     if ($role && !$role->has_cap('bimbeau_ms_manage_emails')) {
@@ -204,7 +210,10 @@ register_activation_hook(__FILE__, function() {
 
 function bimbeau_ms_elementor_missing_notice_main() {
     echo '<div class="notice notice-error"><p>' .
-        'BimBeau MultiSteps requiert le plugin Elementor pour fonctionner.' .
+        esc_html(get_option(
+            'bimbeau_ms_msg_elementor_missing',
+            'BimBeau MultiSteps requiert le plugin Elementor pour fonctionner.'
+        )) .
         '</p></div>';
 }
 
