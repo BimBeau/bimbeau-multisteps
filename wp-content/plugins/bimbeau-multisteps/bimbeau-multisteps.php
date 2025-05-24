@@ -46,6 +46,11 @@ function bimbeau_ms_enqueue_assets() {
         '1.0.0',
         true
     );
+    wp_localize_script(
+        'bimbeau-ms-form-interactions',
+        'bimbeauMsData',
+        ['recaptchaKey' => get_option('bimbeau_ms_recaptcha_key', '')]
+    );
 }
 add_action('wp_enqueue_scripts', 'bimbeau_ms_enqueue_assets');
 
@@ -68,6 +73,7 @@ register_activation_hook(__FILE__, function() {
     add_option('bimbeau_ms_admin_email', 'hello@secretdeco.fr');
     add_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
     add_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
+    add_option('bimbeau_ms_recaptcha_key', '');
 
     // Create steps table
     global $wpdb;

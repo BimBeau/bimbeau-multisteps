@@ -67,6 +67,9 @@ function bimbeau_ms_options_page() {
         update_option('bimbeau_ms_admin_email', sanitize_email(wp_unslash($_POST['admin_email'])));
         update_option('bimbeau_ms_menu_label', sanitize_text_field(wp_unslash($_POST['menu_label'])));
         update_option('bimbeau_ms_menu_icon', sanitize_text_field(wp_unslash($_POST['menu_icon'])));
+        if (isset($_POST['recaptcha_key'])) {
+            update_option('bimbeau_ms_recaptcha_key', sanitize_text_field(wp_unslash($_POST['recaptcha_key'])));
+        }
         update_option('bimbeau_ms_enable_delay_step', isset($_POST['enable_delay_step']) ? 1 : 0);
         echo '<div class="updated"><p>Options enregistrées.</p></div>';
     }
@@ -78,6 +81,7 @@ function bimbeau_ms_options_page() {
     $admin = get_option('bimbeau_ms_admin_email', '');
     $menu_label = get_option('bimbeau_ms_menu_label', 'BimBeau MultiSteps');
     $menu_icon  = get_option('bimbeau_ms_menu_icon', 'dashicons-admin-generic');
+    $recaptcha   = get_option('bimbeau_ms_recaptcha_key', '');
     $enable_delay = get_option('bimbeau_ms_enable_delay_step', 1);
     ?>
     <div class="wrap">
@@ -108,6 +112,10 @@ function bimbeau_ms_options_page() {
                 <tr>
                     <th scope="row"><label for="secret_key_test">Secret Key TEST</label></th>
                     <td><input type="text" id="secret_key_test" name="secret_key_test" value="<?php echo esc_attr($secret_test); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="recaptcha_key">reCAPTCHA Site Key</label></th>
+                    <td><input type="text" id="recaptcha_key" name="recaptcha_key" value="<?php echo esc_attr($recaptcha); ?>" class="regular-text" /></td>
                 </tr>
                 <tr>
                     <th scope="row"><label for="admin_email">Email admin</label></th>
@@ -146,7 +154,7 @@ function bimbeau_ms_steps_page() {
     // Handle add step
     if (isset($_POST['add_step'])) {
         $label = sanitize_text_field(wp_unslash($_POST['step_label']));
-        $type  = sanitize_text_field($_POST['question_type']);
+        $type  = sanitize_text_field(wp_unslash($_POST['question_type']));
         $choices = isset($_POST['choices']) ? sanitize_textarea_field(wp_unslash($_POST['choices'])) : '';
         $order = (int)$wpdb->get_var("SELECT MAX(step_order) FROM {$table}") + 1;
         $wpdb->insert($table, [
@@ -165,7 +173,8 @@ function bimbeau_ms_steps_page() {
 
     // Handle order save
     if (isset($_POST['save_order']) && isset($_POST['order'])) {
-        $ids = array_filter(array_map('intval', explode(',', $_POST['order'])));
+        $order_raw = sanitize_text_field(wp_unslash($_POST['order']));
+        $ids = array_filter(array_map('intval', explode(',', $order_raw)));
         $pos = 1;
         foreach ($ids as $id) {
             $wpdb->update($table, ['step_order' => $pos++], ['id' => $id]);

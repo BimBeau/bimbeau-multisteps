@@ -59,12 +59,17 @@
             setTimeout(function() {
                 if (isFormSubmission) {
                     if (isFinalSubmission) {
-                        grecaptcha.ready(function() {
-                            grecaptcha.execute("6LdmaecoAAAAADI-XWX738fvkmXIN3Oq0lXqZutN", { action: "submit" }).then(function(token) {
-                                $('#recaptchaResponse').val(token);
-                                $('form').submit();
+                        var key = window.bimbeauMsData ? bimbeauMsData.recaptchaKey : '';
+                        if (key) {
+                            grecaptcha.ready(function() {
+                                grecaptcha.execute(key, { action: "submit" }).then(function(token) {
+                                    $('#recaptchaResponse').val(token);
+                                    $('form').submit();
+                                });
                             });
-                        });
+                        } else {
+                            $('form').submit();
+                        }
                     } else {
                         $('form').submit();
                     }
